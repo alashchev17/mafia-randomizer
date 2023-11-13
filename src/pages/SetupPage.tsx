@@ -12,6 +12,7 @@ import {
 const SetupPage: FC = () => {
   const navigate = useNavigate();
   const locationOnLoad = document.location.href.split("/")[4];
+  // @ts-ignore
   const [playersAmount, setPlayersAmount] = useState(6);
 
   const [players, setPlayers] = useState(initialPlayers as IPlayers[]);
