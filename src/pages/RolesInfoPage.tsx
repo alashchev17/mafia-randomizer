@@ -2,7 +2,6 @@ import { FC, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import Title from "../components/Title";
-import DescriptionParagraph from "../components/DescriptionParagraph";
 
 import { database, IDatabaseRoles } from "../assets/database";
 import RolesCard from "../components/RolesCard";
