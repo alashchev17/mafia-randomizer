@@ -37,7 +37,7 @@ const MainPage: FC = () => {
           Информация о ролях
         </Link>
         <a
-          href="https://github.com/alashchev17"
+          href="https://github.com/alashchev17/mafia-randomizer"
           target="_blank"
           className="button button--third"
         >
