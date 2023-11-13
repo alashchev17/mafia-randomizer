@@ -8,9 +8,6 @@ const Header: FC = () => {
       <Link className="header__logo" to={"/welcome"}>
         Mafia (roles randomizer) + React
       </Link>
-      <Link className="button button--secondary" to={"/settings"}>
-        Настройки
-      </Link>
     </header>
   );
 };

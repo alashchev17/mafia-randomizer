@@ -9,7 +9,6 @@ import App from "./App.tsx";
 import MainPage from "./pages/MainPage.tsx";
 import RolesInfoPage from "./pages/RolesInfoPage.tsx";
 import SetupPage from "./pages/SetupPage.tsx";
-import SettingsPage from "./pages/SettingsPage.tsx";
 
 import "./reset.scss";
 import "./settings.scss";
@@ -30,10 +29,6 @@ const router = createBrowserRouter([
       {
         path: "setup/:setupId",
         element: <SetupPage />,
-      },
-      {
-        path: "settings",
-        element: <SettingsPage />,
       },
     ],
   },
