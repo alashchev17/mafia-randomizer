@@ -1,0 +1,10 @@
+.backside {
+  z-index: 10;
+  transition: transform 1s ease-in-out;
+  transform: rotate3d(0, 1, 0, 0deg);
+  transition-delay: 1s;
+  &.active {
+    transition-delay: 0s;
+    transform: rotate3d(0, 1, 0, 90deg);
+  }
+}

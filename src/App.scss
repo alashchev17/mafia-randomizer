@@ -1,0 +1,48 @@
+#root {
+  background-color: var(--main-color);
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 920px;
+  margin: 0 auto;
+  color: var(--main-text-color);
+  padding: 76px 40px;
+}
+
+.flex-center-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 48px;
+}
+
+.flew-row-wrapper {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  .button {
+    flex: 1 1;
+    text-align: center;
+  }
+}
+
+.flex-column-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+}
+
+.roles-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 48px;
+  max-width: 433px;
+  user-select: unset;
+}
