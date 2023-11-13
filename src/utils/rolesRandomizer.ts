@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 export interface IPlayers {
   role: string;
   roleSrc: string;
