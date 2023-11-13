@@ -12,7 +12,7 @@ import {
 const SetupPage: FC = () => {
   const navigate = useNavigate();
   const locationOnLoad = document.location.href.split("/")[4];
-  // @ts-ignore
+
   const [playersAmount, setPlayersAmount] = useState(6);
 
   const [players, setPlayers] = useState(initialPlayers as IPlayers[]);
@@ -21,6 +21,10 @@ const SetupPage: FC = () => {
   const [isRevealing, setIsRevealing] = useState(true);
 
   const playerCount = playerId + 1;
+
+  const playersAmountHandler = () => {
+    setPlayersAmount((prev) => prev + 1);
+  };
 
   const linkHandler = (event: MouseEvent<HTMLAnchorElement>) => {
     if (!isRevealed || isRevealing) {
@@ -75,6 +79,9 @@ const SetupPage: FC = () => {
         <Link to={"/welcome"} className="button button--secondary">
           Выйти
         </Link>
+        <button className="button button--third" onClick={playersAmountHandler}>
+          НЕ НАЖИМАТЬ
+        </button>
       </div>
     </div>
   );
