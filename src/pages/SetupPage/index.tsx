@@ -8,6 +8,7 @@ import {
   rolesRandomizer,
   initialPlayers,
 } from "../../utils/rolesRandomizer";
+import { motion } from "framer-motion";
 
 const SetupPage: FC = () => {
   const navigate = useNavigate();
@@ -37,8 +38,20 @@ const SetupPage: FC = () => {
   useEffect(() => {
     document.title = "Мафия | Игровая сессия";
     locationOnLoad !== "1" ? navigate("/setup/1") : null; // проверяем на айдишник игрока при загрузке страницы setup
-    setPlayersAmount(Number(window.prompt("Введите количество игроков")));
-    setPlayers(rolesRandomizer(playersAmount));
+    const introducedAmountOfPlayers = window.prompt(
+      "Введите количество игроков",
+    );
+    if (
+      !isNaN(Number(introducedAmountOfPlayers)) &&
+      introducedAmountOfPlayers !== null &&
+      introducedAmountOfPlayers.length !== 0
+    ) {
+      setPlayersAmount(Number(introducedAmountOfPlayers));
+      setPlayers(rolesRandomizer(playersAmount));
+    } else {
+      alert("Вы ввели некорректное значение!");
+      navigate("/welcome");
+    }
   }, []);
 
   useEffect(() => {
@@ -56,7 +69,22 @@ const SetupPage: FC = () => {
   }, [players]);
 
   return (
-    <div className="flex-center-column">
+    <motion.div
+      className="flex-center-column"
+      initial={{
+        opacity: 0,
+        y: -50,
+      }}
+      animate={{
+        opacity: 1,
+        y: 0,
+      }}
+      transition={{
+        delay: 0.3,
+        duration: 0.8,
+        type: "spring",
+      }}
+    >
       <Title text={`Игрок №${playerCount}`} />
       <PlayerCard
         isRevealed={isRevealed}
@@ -81,7 +109,7 @@ const SetupPage: FC = () => {
           Выйти
         </Link>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
