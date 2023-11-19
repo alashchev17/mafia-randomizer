@@ -1,0 +1,61 @@
+@media screen and (max-width: 992px) {
+  .header {
+    padding: 20px 15px;
+    &__logo {
+      font-size: 16px;
+    }
+  }
+
+  .container {
+    padding: 30px 15px;
+  }
+
+  .flex-center-column {
+    gap: 24px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .description {
+    text-align: justify;
+    font-size: 14px;
+  }
+
+  .flex-row-wrapper {
+    flex-direction: column;
+    align-items: center;
+    max-width: 75%;
+    .button {
+      font-size: 12px;
+      padding: 12.5px 20px;
+      width: 100%;
+    }
+  }
+
+  .roles-wrapper {
+    flex-direction: column;
+  }
+  .roles-card {
+    width: 80%;
+    height: 100%;
+    &__image {
+      object-fit: cover;
+    }
+    &__information {
+      padding: 25px;
+      border: 3.25px solid var(--main-text-color);
+    }
+    &__text {
+      font-size: 14px;
+    }
+  }
+  .player-card {
+    width: 316px;
+    height: 410.4px;
+    img {
+      object-fit: cover;
+    }
+  }
+}

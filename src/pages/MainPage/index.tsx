@@ -1,10 +1,11 @@
 import { FC, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
-import Title from "../components/Title";
-import DescriptionParagraph from "../components/DescriptionParagraph";
+import Title from "../../components/Title";
+import DescriptionParagraph from "../../components/DescriptionParagraph";
 
-import { database, IDatabaseDescriptions } from "../assets/database";
+import { database, IDatabaseDescriptions } from "../../assets/database";
 
 const MainPage: FC = () => {
   const [description, setDescription] = useState<IDatabaseDescriptions>(
@@ -23,13 +24,28 @@ const MainPage: FC = () => {
   }, []);
 
   return (
-    <div className="flex-center-column">
+    <motion.div
+      className="flex-center-column"
+      initial={{
+        y: -50,
+        opacity: 0,
+      }}
+      animate={{
+        y: 0,
+        opacity: 1,
+      }}
+      transition={{
+        delay: 0.3,
+        duration: 0.8,
+        type: "spring",
+      }}
+    >
       <Title text="Мафия (рандомизатор ролей)" />
       <DescriptionParagraph
         descriptionText={description.text}
         descriptionStrong={description.title}
       />
-      <div className="flew-row-wrapper">
+      <div className="flex-row-wrapper">
         <Link to={"/setup/1"} className="button button--primary">
           Начать игру
         </Link>
@@ -44,7 +60,7 @@ const MainPage: FC = () => {
           Исходный код
         </a>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

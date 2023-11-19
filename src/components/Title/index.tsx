@@ -7,6 +7,7 @@ interface TitleProps {
 }
 const Title: FC<TitleProps> = (props: TitleProps) => {
   const { text } = props;
+
   return <h1 className="title">{text}</h1>;
 };
 

@@ -1,13 +1,13 @@
 import { FC, useEffect, useState, MouseEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import Title from "../components/Title";
-import PlayerCard from "../components/PlayerCard";
+import Title from "../../components/Title";
+import PlayerCard from "../../components/PlayerCard";
 import {
   IPlayers,
   rolesRandomizer,
   initialPlayers,
-} from "../utils/rolesRandomizer";
+} from "../../utils/rolesRandomizer";
 
 const SetupPage: FC = () => {
   const navigate = useNavigate();

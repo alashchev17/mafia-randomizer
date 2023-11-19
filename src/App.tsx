@@ -1,10 +1,14 @@
 import { FC, useEffect } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { useNavigate, Route, Routes } from "react-router-dom";
 
 import "./App.scss";
 import "./components/Button/index.scss";
 
 import Header from "./components/Header";
+import MainPage from "./pages/MainPage";
+import RolesInfoPage from "./pages/RolesInfoPage";
+import SetupPage from "./pages/SetupPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 const App: FC = () => {
   const locationOnLoad = document.location.href.split("/")[3];
@@ -20,7 +24,12 @@ const App: FC = () => {
     <>
       <Header />
       <div className="container">
-        <Outlet />
+        <Routes>
+          <Route path="/welcome" element={<MainPage />} />
+          <Route path="/information" element={<RolesInfoPage />} />
+          <Route path="/setup/:setupId" element={<SetupPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
       </div>
     </>
   );
