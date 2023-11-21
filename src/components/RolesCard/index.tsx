@@ -10,9 +10,12 @@ interface RolesCardProps {
   index: number;
 }
 
-const RolesCard: FC<RolesCardProps> = (props: RolesCardProps) => {
-  const { title, description, roleSrc, index } = props;
-
+const RolesCard: FC<RolesCardProps> = ({
+  title,
+  description,
+  roleSrc,
+  index,
+}) => {
   const cardsVariants = {
     hidden: {
       opacity: 0,

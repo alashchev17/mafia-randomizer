@@ -7,11 +7,7 @@ interface PlayerCardBacksideProps {
   isRevealed: boolean;
 }
 
-const PlayerCardBackside: FC<PlayerCardBacksideProps> = (
-  props: PlayerCardBacksideProps,
-) => {
-  const { isRevealed } = props;
-
+const PlayerCardBackside: FC<PlayerCardBacksideProps> = ({ isRevealed }) => {
   const classes = `backside ${isRevealed ? "active" : ""}`;
 
   return <img className={classes} src={backsideSvg} alt="Backside Card" />;

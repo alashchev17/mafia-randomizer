@@ -7,11 +7,10 @@ interface DescriptionParagraphProps {
   descriptionStrong?: string;
 }
 
-const DescriptionParagraph: FC<DescriptionParagraphProps> = (
-  props: DescriptionParagraphProps,
-) => {
-  const { descriptionStrong, descriptionText } = props;
-
+const DescriptionParagraph: FC<DescriptionParagraphProps> = ({
+  descriptionStrong,
+  descriptionText,
+}) => {
   return (
     <p className="description">
       {descriptionStrong ? (
