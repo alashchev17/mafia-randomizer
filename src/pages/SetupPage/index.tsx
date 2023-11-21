@@ -1,5 +1,5 @@
-import { FC, useEffect, useState, MouseEvent } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { FC, useEffect, useState, MouseEvent, memo } from "react";
+import { Link, useNavigate, useLocation, useParams } from "react-router-dom";
 
 import Title from "../../components/Title";
 import PlayerCard from "../../components/PlayerCard";
@@ -12,7 +12,11 @@ import { motion } from "framer-motion";
 
 const SetupPage: FC = () => {
   const navigate = useNavigate();
-  const locationOnLoad = document.location.href.split("/")[4];
+  const location = useLocation();
+  const { setupId } = useParams();
+
+  console.warn(location);
+  console.warn(setupId);
 
   const [playersAmount, setPlayersAmount] = useState(10);
 
@@ -37,9 +41,9 @@ const SetupPage: FC = () => {
 
   useEffect(() => {
     document.title = "Мафия | Игровая сессия";
-    locationOnLoad !== "1" ? navigate("/setup/1") : null; // проверяем на айдишник игрока при загрузке страницы setup
+    setupId !== "1" ? navigate("/setup/1") : null; // проверяем на айдишник игрока при загрузке страницы setup
     const introducedAmountOfPlayers = window.prompt(
-      "Введите количество игроков",
+      "Введите количество игроков (число):",
     );
     if (
       !isNaN(Number(introducedAmountOfPlayers)) &&
@@ -113,4 +117,4 @@ const SetupPage: FC = () => {
   );
 };
 
-export default SetupPage;
+export default memo(SetupPage);

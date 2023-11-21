@@ -1,5 +1,5 @@
 import { FC, useEffect } from "react";
-import { useNavigate, Route, Routes } from "react-router-dom";
+import { useLocation, useNavigate, Route, Routes } from "react-router-dom";
 
 import "./App.scss";
 import "./components/Button/index.scss";
@@ -11,14 +11,16 @@ import SetupPage from "./pages/SetupPage";
 import NotFoundPage from "./pages/NotFoundPage";
 
 const App: FC = () => {
-  const locationOnLoad = document.location.href.split("/")[3];
   const navigate = useNavigate();
+  const location = useLocation();
+
+  console.warn("location.pathname: " + location.pathname);
 
   useEffect(() => {
-    if (locationOnLoad.length === 0) {
+    if (location.pathname === "/") {
       navigate("/welcome");
     }
-  }, [locationOnLoad]);
+  }, [location]);
 
   return (
     <>

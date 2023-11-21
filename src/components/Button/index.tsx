@@ -8,8 +8,7 @@ interface ButtonProps {
   clickHandle?: () => void;
 }
 
-const Button: FC<ButtonProps> = (props: ButtonProps) => {
-  const { className, text, clickHandle } = props;
+const Button: FC<ButtonProps> = ({ className, text, clickHandle }) => {
   return (
     <button
       className={`button ${className ? className : ""}`}

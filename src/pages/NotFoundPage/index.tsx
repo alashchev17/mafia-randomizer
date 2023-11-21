@@ -30,7 +30,7 @@ const NotFoundPage: FC = () => {
           Страница, которую вы пытаетесь открыть, была удалена, её имя
           изменилось или она является временно недоступной.
         </p>
-        <Link to={"/welcome"} className="button button--secondary">
+        <Link to="/welcome" className="button button--secondary">
           Вернуться на главную
         </Link>
       </div>

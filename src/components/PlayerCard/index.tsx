@@ -15,15 +15,13 @@ interface PlayerCardProps {
   currentPlayer: IPlayers;
 }
 
-const PlayerCard: FC<PlayerCardProps> = (props: PlayerCardProps) => {
-  const {
-    currentPlayer,
-    isRevealed,
-    isRevealing,
-    setIsRevealed,
-    setIsRevealing,
-  } = props;
-
+const PlayerCard: FC<PlayerCardProps> = ({
+  currentPlayer,
+  isRevealed,
+  isRevealing,
+  setIsRevealed,
+  setIsRevealing,
+}) => {
   const roleRevealHandler = () => {
     if (!isRevealed && !isRevealing) {
       setIsRevealing(true);
