@@ -17,7 +17,7 @@ export const rolesRandomizer = (playersAmount: number) => {
     mafiaPlayers: number,
     innocentPlayers: number,
   ): IPlayers[] => {
-    let arrayOfRoles = [] as IPlayers[];
+    const arrayOfRoles = [] as IPlayers[];
 
     if (mafiaPlayers === 1) {
       arrayOfRoles.push({
@@ -56,7 +56,7 @@ export const rolesRandomizer = (playersAmount: number) => {
   };
 
   const shuffleArray = (array: IPlayers[]) => {
-    let shuffledArray = array;
+    const shuffledArray = array;
 
     for (let i = shuffledArray.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));

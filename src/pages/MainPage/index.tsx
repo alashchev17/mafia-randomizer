@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 
 import Title from "../../components/Title";
@@ -8,6 +8,8 @@ import DescriptionParagraph from "../../components/DescriptionParagraph";
 import { database, IDatabaseDescriptions } from "../../assets/database";
 
 const MainPage: FC = () => {
+  const location = useLocation();
+
   const [description, setDescription] = useState<IDatabaseDescriptions>(
     {} as IDatabaseDescriptions,
   );
@@ -15,13 +17,13 @@ const MainPage: FC = () => {
   useEffect(() => {
     document.title = "Мафия | Рандомизатор ролей";
 
-    let currentLocation = "welcome";
+    const currentLocation = location.pathname.split("/")[1];
 
     const description: IDatabaseDescriptions = database.descriptions.find(
       (d) => d.path === currentLocation,
     )!;
     setDescription(description);
-  }, []);
+  }, [location]);
 
   return (
     <motion.div

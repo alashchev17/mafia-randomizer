@@ -52,6 +52,7 @@ const SetupContent: FC = () => {
       alert("Вы ввели некорректное значение!");
       navigate("/welcome");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

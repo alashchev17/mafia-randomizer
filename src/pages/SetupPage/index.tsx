@@ -1,20 +1,17 @@
 import { FC, useEffect } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 
 import { SetupContent } from "./Content.tsx";
 
 const SetupPage: FC = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const { setupId } = useParams();
-
-  console.warn(setupId);
-  console.warn(location);
 
   useEffect(() => {
     document.title = "Мафия | Игровая сессия";
     setupId !== "1" ? navigate("/setup/1") : null; // проверяем на айдишник игрока при загрузке страницы setup
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

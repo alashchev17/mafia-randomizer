@@ -14,13 +14,11 @@ const App: FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  console.warn("location.pathname: " + location.pathname);
-
   useEffect(() => {
     if (location.pathname === "/") {
       navigate("/welcome");
     }
-  }, [location]);
+  }, [location, navigate]);
 
   return (
     <>
