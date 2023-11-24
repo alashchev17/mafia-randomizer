@@ -10,6 +10,7 @@ import RolesInfoPage from "./pages/RolesInfoPage";
 import SetupPage from "./pages/SetupPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import SettingsPage from "./pages/SettingsPage";
+
 import { ISettings } from "./models";
 
 const App: FC = () => {

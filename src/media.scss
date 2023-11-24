@@ -1,13 +1,18 @@
 @media screen and (max-width: 992px) {
   .header {
+    position: fixed;
+    top: 0;
+    left: 0;
     padding: 20px 15px;
+    z-index: 1000;
     &__logo {
-      font-size: 16px;
+      font-size: 14px;
+      display: inline-block;
     }
   }
 
   .container {
-    padding: 30px 15px;
+    padding: 110px 15px 30px 15px;
   }
 
   .flex-center-column {
@@ -16,6 +21,11 @@
 
   .title {
     font-size: 24px;
+  }
+
+  .button {
+    font-size: 12px;
+    padding: 12.5px 20px;
   }
 
   .description {
@@ -28,8 +38,6 @@
     align-items: center;
     max-width: 75%;
     .button {
-      font-size: 12px;
-      padding: 12.5px 20px;
       width: 100%;
     }
   }

@@ -46,7 +46,6 @@ const SettingsPage: FC<SettingsPageProps> = ({ settings, setSettings }) => {
         gameMode,
       };
     });
-    // alert("Вы сохранили настройки!");
     navigate("/");
   };
 
