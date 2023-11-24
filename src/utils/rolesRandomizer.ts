@@ -21,6 +21,10 @@ export const rolesRandomizer = (playersAmount: number, gameMode: string) => {
       break;
   }
 
+  const generateRole = (role: string, roleSrc: string): IPlayers => {
+    return { role, roleSrc };
+  };
+
   const generateArrayOfPlayers = (
     mafiaPlayers: number,
     innocentPlayers: number,
@@ -28,56 +32,40 @@ export const rolesRandomizer = (playersAmount: number, gameMode: string) => {
     const arrayOfRoles = [] as IPlayers[];
 
     if (mafiaPlayers === 1) {
-      arrayOfRoles.push({
-        role: "Дон",
-        roleSrc: "/cards/headOfMafia.svg",
-      });
+      arrayOfRoles.push(generateRole("Дон", "/cards/headOfMafia.svg"));
     } else {
       for (let i = 0; i < mafiaPlayers; i++) {
-        if (i === 0) {
-          arrayOfRoles.push({
-            role: "Дон",
-            roleSrc: "/cards/headOfMafia.svg",
-          });
-        } else {
-          arrayOfRoles.push({
-            role: "Мафия",
-            roleSrc: "/cards/mafia.svg",
-          });
-        }
+        arrayOfRoles.push(
+          generateRole(
+            i === 0 ? "Дон" : "Мафия",
+            i === 0 ? "/cards/headOfMafia.svg" : "/cards/mafia.svg",
+          ),
+        );
       }
     }
 
     for (let j = 0; j < innocentPlayers; j++) {
-      arrayOfRoles.push({
-        role: "Мирный житель",
-        roleSrc: "/cards/innocent.svg",
-      });
+      arrayOfRoles.push(generateRole("Мирный житель", "/cards/innocent.svg"));
     }
 
-    arrayOfRoles.push({
-      role: "Шериф",
-      roleSrc: "/cards/sheriff.svg",
-    });
+    arrayOfRoles.push(generateRole("Шериф", "/cards/sheriff.svg"));
 
     if (gameMode === "Расширенный") {
-      arrayOfRoles.push({
-        role: "Доктор",
-        roleSrc: "/cards/doctor.svg",
-      });
+      arrayOfRoles.push(generateRole("Доктор", "/cards/doctor.svg"));
     }
 
     return arrayOfRoles;
   };
 
   const shuffleArray = (array: IPlayers[]) => {
-    const shuffledArray = array;
+    const shuffledArray = [...array];
 
     for (let i = shuffledArray.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      const temp = shuffledArray[i];
-      shuffledArray[i] = shuffledArray[j];
-      shuffledArray[j] = temp;
+      [shuffledArray[i], shuffledArray[j]] = [
+        shuffledArray[j],
+        shuffledArray[i],
+      ];
     }
     return shuffledArray;
   };
