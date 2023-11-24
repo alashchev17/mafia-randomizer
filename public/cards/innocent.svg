@@ -1,20 +1,5 @@
 <svg width="395" height="513" viewBox="0 0 395 513" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="395" height="513" fill="#1E1E1E"/>
-<g filter="url(#filter0_d_0_1)">
-<rect width="395" height="513" rx="10" fill="#B11F1F"/>
+<rect x="2.5" y="2.5" width="390" height="508" rx="7.5" fill="#B11F1F"/>
 <rect x="2.5" y="2.5" width="390" height="508" rx="7.5" stroke="white" stroke-width="5"/>
 <path d="M141.489 274V240.4H147.921L162.225 264.112H158.817L172.881 240.4H179.313L179.361 274H172.065L172.017 251.584H173.409L162.129 270.448H158.673L147.153 251.584H148.785V274H141.489ZM187.707 274V240.4H195.435V262.288L211.467 240.4H218.763V274H211.083V252.16L195.051 274H187.707ZM227.129 274V240.4H241.673C244.681 240.4 247.273 240.896 249.449 241.888C251.625 242.848 253.305 244.24 254.489 246.064C255.673 247.888 256.265 250.064 256.265 252.592C256.265 255.088 255.673 257.248 254.489 259.072C253.305 260.896 251.625 262.304 249.449 263.296C247.273 264.256 244.681 264.736 241.673 264.736H231.449L234.905 261.232V274H227.129ZM234.905 262.096L231.449 258.4H241.241C243.641 258.4 245.433 257.888 246.617 256.864C247.801 255.84 248.393 254.416 248.393 252.592C248.393 250.736 247.801 249.296 246.617 248.272C245.433 247.248 243.641 246.736 241.241 246.736H231.449L234.905 243.04V262.096Z" fill="white"/>
-</g>
-<defs>
-<filter id="filter0_d_0_1" x="-20" y="-20" width="435" height="553" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-<feFlood flood-opacity="0" result="BackgroundImageFix"/>
-<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-<feOffset/>
-<feGaussianBlur stdDeviation="10"/>
-<feComposite in2="hardAlpha" operator="out"/>
-<feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.25 0"/>
-<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_0_1"/>
-<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_0_1" result="shape"/>
-</filter>
-</defs>
 </svg>

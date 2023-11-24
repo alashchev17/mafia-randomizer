@@ -3,8 +3,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 
 import { SetupContent } from "./Content.tsx";
+import { ISettings } from "../../models";
 
-const SetupPage: FC = () => {
+interface SetupPageProps {
+  settings: ISettings;
+}
+
+const SetupPage: FC<SetupPageProps> = ({ settings }) => {
   const navigate = useNavigate();
   const { setupId } = useParams();
 
@@ -31,7 +36,7 @@ const SetupPage: FC = () => {
         type: "spring",
       }}
     >
-      <SetupContent />
+      <SetupContent settings={settings} />
     </motion.div>
   );
 };

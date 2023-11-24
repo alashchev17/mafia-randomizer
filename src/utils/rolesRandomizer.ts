@@ -9,9 +9,17 @@ export const initialPlayers: IPlayers[] = [
     roleSrc: "/cards/innocent.svg",
   },
 ];
-export const rolesRandomizer = (playersAmount: number) => {
+export const rolesRandomizer = (playersAmount: number, gameMode: string) => {
   const mafiaPlayers: number = Math.floor(playersAmount / 3);
-  const innocentPlayers = playersAmount - mafiaPlayers - 1;
+  let innocentPlayers = playersAmount - mafiaPlayers - 1;
+
+  switch (gameMode) {
+    case "Классический":
+      break;
+    case "Расширенный":
+      innocentPlayers = innocentPlayers - 1;
+      break;
+  }
 
   const generateArrayOfPlayers = (
     mafiaPlayers: number,
@@ -51,6 +59,13 @@ export const rolesRandomizer = (playersAmount: number) => {
       role: "Шериф",
       roleSrc: "/cards/sheriff.svg",
     });
+
+    if (gameMode === "Расширенный") {
+      arrayOfRoles.push({
+        role: "Доктор",
+        roleSrc: "/cards/doctor.svg",
+      });
+    }
 
     return arrayOfRoles;
   };

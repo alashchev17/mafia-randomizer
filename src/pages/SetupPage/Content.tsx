@@ -9,12 +9,15 @@ import {
   IPlayers,
   rolesRandomizer,
 } from "../../utils/rolesRandomizer.ts";
+import { ISettings } from "../../models";
 
-const SetupContent: FC = () => {
+interface SetupContentProps {
+  settings: ISettings;
+}
+
+const SetupContent: FC<SetupContentProps> = ({ settings }) => {
   const navigate = useNavigate();
   const { setupId } = useParams();
-
-  const [playersAmount, setPlayersAmount] = useState(10);
 
   const [players, setPlayers] = useState(initialPlayers as IPlayers[]);
   const [playerId, setPlayerId] = useState(0);
@@ -38,26 +41,11 @@ const SetupContent: FC = () => {
   useEffect(() => {
     document.title = "Мафия | Игровая сессия";
     setupId !== "1" ? navigate("/setup/1") : null; // проверяем на айдишник игрока при загрузке страницы setup
-    const introducedAmountOfPlayers = window.prompt(
-      "Введите количество игроков (число):",
-    );
-    if (
-      !isNaN(Number(introducedAmountOfPlayers)) &&
-      introducedAmountOfPlayers !== null &&
-      introducedAmountOfPlayers.length !== 0
-    ) {
-      setPlayersAmount(Number(introducedAmountOfPlayers));
-      setPlayers(rolesRandomizer(playersAmount));
-    } else {
-      alert("Вы ввели некорректное значение!");
-      navigate("/welcome");
-    }
+
+    setPlayers(rolesRandomizer(settings.amountOfPlayers, settings.gameMode));
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    setPlayers(rolesRandomizer(playersAmount));
-  }, [playersAmount]);
 
   useEffect(() => {
     setIsRevealed(false);
@@ -80,7 +68,7 @@ const SetupContent: FC = () => {
         currentPlayer={players[playerId]}
       />
       <div className="flex-column-wrapper">
-        {playersAmount !== playerCount && (
+        {settings.amountOfPlayers !== playerCount && (
           <Link
             to={`/setup/${playerCount + 1}`}
             className={`button button--primary ${

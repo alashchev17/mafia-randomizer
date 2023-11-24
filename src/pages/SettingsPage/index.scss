@@ -1,0 +1,43 @@
+.settings {
+  &__form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+}
+
+.select-wrapper {
+  position: relative;
+  width: 100%;
+  margin: 20px 0;
+  border: 2px solid var(--main-text-color);
+  border-radius: 5px;
+  -webkit-transition: box-shadow 0.3s ease-in-out;
+  -moz-transition: box-shadow 0.3s ease-in-out;
+  -ms-transition: box-shadow 0.3s ease-in-out;
+  -o-transition: box-shadow 0.3s ease-in-out;
+  transition: box-shadow 0.3s ease-in-out;
+  &:hover {
+    box-shadow: var(--shadow-white)
+  }
+  select {
+    outline: none;
+    width: 150px;
+    font-size: 18px;
+    height: 48px;
+    padding: 0 15px 0 15px;
+    background: transparent;
+    color: var(--main-text-color);
+    border: 0;
+    appearance: none;            /* remove arrow        */
+    -webkit-appearance: none;    /* remove arrow Chrome */
+    -moz-appearance: none;       /* remove arrow FF     */
+    cursor: pointer;
+    &::-ms-expand{
+      display: none;             /* remove arrow IE     */
+    }
+  }
+}
