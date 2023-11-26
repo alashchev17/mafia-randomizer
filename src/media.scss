@@ -66,4 +66,19 @@
       object-fit: cover;
     }
   }
+
+  .notification {
+    top: unset;
+    bottom: 5px;
+    right: 5px;
+    left: 5px;
+    max-width: unset;
+    gap: 7px;
+    &__title {
+      font-size: 14px;
+    }
+    &__text {
+      font-size: 12px;
+    }
+  }
 }

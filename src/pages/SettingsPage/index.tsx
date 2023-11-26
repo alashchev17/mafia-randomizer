@@ -19,6 +19,12 @@ import { ISettings } from "../../models";
 interface SettingsPageProps {
   settings: ISettings;
   setSettings: Dispatch<SetStateAction<ISettings>>;
+  handleNotification: (
+    state: boolean,
+    title: string,
+    text: string,
+    information: string,
+  ) => void;
 }
 
 type FormFields = {
@@ -26,7 +32,11 @@ type FormFields = {
   gameMode: HTMLInputElement;
 };
 
-const SettingsPage: FC<SettingsPageProps> = ({ settings, setSettings }) => {
+const SettingsPage: FC<SettingsPageProps> = ({
+  settings,
+  setSettings,
+  handleNotification,
+}) => {
   const navigate = useNavigate();
 
   const [isValid, setIsValid] = useState(true);
@@ -39,6 +49,12 @@ const SettingsPage: FC<SettingsPageProps> = ({ settings, setSettings }) => {
     const amountOfPlayers = Number(form.players.value);
     const gameMode = form.gameMode.value;
 
+    handleNotification(
+      true,
+      "Уведомление",
+      "Настройки были сохранены успешно!",
+      `Игровой режим: ${gameMode}, кол-во игроков: ${amountOfPlayers}`,
+    );
     setSettings((prev: ISettings): ISettings => {
       return {
         ...prev,
@@ -88,12 +104,16 @@ const SettingsPage: FC<SettingsPageProps> = ({ settings, setSettings }) => {
               {database.gameModes.map((item) => {
                 if (item.title === settings.gameMode) {
                   return (
-                    <option value={item.title} selected>
+                    <option key={item.title} value={item.title} selected>
                       {item.title}
                     </option>
                   );
                 }
-                return <option value={item.title}>{item.title}</option>;
+                return (
+                  <option key={item.title} value={item.title}>
+                    {item.title}
+                  </option>
+                );
               })}
             </select>
           </div>

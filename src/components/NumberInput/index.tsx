@@ -21,7 +21,9 @@ const NumberInput: FC<NumberInputProps> = ({
     if (event.target.value.length !== 0) {
       if (Number(event.target.value) && Number(event.target.value) <= 12) {
         setValue(event.target.value);
-        setButtonValid(true);
+        if (Number(event.target.value) > 4) {
+          setButtonValid(true);
+        }
       }
     } else {
       setValue("");
