@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { motion } from "framer-motion";
 
 import closeSvg from "./close.svg";
@@ -34,6 +34,14 @@ const Notification: FC<NotificationProps> = ({
     },
   };
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setVisible(false);
+    }, 5000);
+
+    return () => clearTimeout(timeout);
+  }, [setVisible]);
+
   return (
     <motion.div
       className="notification"
@@ -46,6 +54,19 @@ const Notification: FC<NotificationProps> = ({
       }}
       exit="hidden"
     >
+      <motion.span
+        className="notification__status-bar"
+        initial={{
+          width: "0%",
+        }}
+        animate={{
+          width: "100%",
+        }}
+        transition={{
+          duration: 5,
+          type: "tween",
+        }}
+      ></motion.span>
       <div className="notification__header">
         <h2 className="notification__title">{title}</h2>
         <img

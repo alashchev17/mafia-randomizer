@@ -1,6 +1,7 @@
 .notification {
   z-index: 10000;
   position: fixed;
+  overflow: hidden;
   top: 40px;
   right: 40px;
   padding: 25px 30px;
@@ -12,6 +13,16 @@
   border: 4px solid var(--secondary-color);
   border-radius: 10px;
   box-shadow: var(--shadow-red);
+
+  &__status-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: inline-block;
+    height: 5px;
+    background-color: var(--main-text-color);
+  }
+
   &__header {
     display: flex;
     justify-content: space-between;
