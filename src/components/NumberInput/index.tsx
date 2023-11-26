@@ -19,11 +19,13 @@ const NumberInput: FC<NumberInputProps> = ({
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.value.length !== 0) {
-      if (Number(event.target.value) && Number(event.target.value) <= 12) {
+      if (Number(event.target.value)) {
         setValue(event.target.value);
-        if (Number(event.target.value) > 4) {
-          setButtonValid(true);
-        }
+        Number(event.target.value) >= 6 && Number(event.target.value) <= 12
+          ? setButtonValid(true)
+          : setButtonValid(false);
+      } else {
+        setValue("");
       }
     } else {
       setValue("");

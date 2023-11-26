@@ -44,25 +44,34 @@ const SettingsPage: FC<SettingsPageProps> = ({
     event,
   ) => {
     event.preventDefault();
-    const form = event.currentTarget;
+    if (isValid) {
+      const form = event.currentTarget;
 
-    const amountOfPlayers = Number(form.players.value);
-    const gameMode = form.gameMode.value;
+      const amountOfPlayers = Number(form.players.value);
+      const gameMode = form.gameMode.value;
 
-    handleNotification(
-      true,
-      "Уведомление",
-      "Настройки были сохранены успешно!",
-      `Игровой режим: ${gameMode}, кол-во игроков: ${amountOfPlayers}`,
-    );
-    setSettings((prev: ISettings): ISettings => {
-      return {
-        ...prev,
-        amountOfPlayers,
-        gameMode,
-      };
-    });
-    navigate("/");
+      handleNotification(
+        true,
+        "Уведомление",
+        "Настройки были сохранены успешно!",
+        `Игровой режим: ${gameMode}, кол-во игроков: ${amountOfPlayers}`,
+      );
+      setSettings((prev: ISettings): ISettings => {
+        return {
+          ...prev,
+          amountOfPlayers,
+          gameMode,
+        };
+      });
+      navigate("/");
+    } else {
+      handleNotification(
+        true,
+        "Ошибка",
+        "В процессе сохранения настроек произошла ошибка!",
+        `Ошибка: какой-то элемент формы был отредактирован вручную`,
+      );
+    }
   };
 
   const buttonClassNames = `button button--primary ${
