@@ -1,0 +1,14 @@
+.gamedesk {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  &__cards {
+    &--6 {}
+    &--7 {}
+    &--8 {}
+    &--9 {}
+    &--10 {}
+    &--11 {}
+    &--12 {}
+  }
+}

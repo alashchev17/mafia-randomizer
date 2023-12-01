@@ -37,7 +37,7 @@ const Notification: FC<NotificationProps> = ({
   useEffect(() => {
     const timeout = setTimeout(() => {
       setVisible(false);
-    }, 5000);
+    }, 3000);
 
     return () => clearTimeout(timeout);
   }, [setVisible]);
@@ -63,7 +63,7 @@ const Notification: FC<NotificationProps> = ({
           width: "100%",
         }}
         transition={{
-          duration: 5,
+          duration: 3,
           type: "tween",
         }}
       ></motion.span>

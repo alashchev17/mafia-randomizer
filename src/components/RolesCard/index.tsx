@@ -38,6 +38,7 @@ const RolesCard: FC<RolesCardProps> = ({
       variants={cardsVariants}
       initial="hidden"
       animate="visible"
+      whileInView="visible"
       custom={index}
     >
       <img className="roles-card__image" src={roleSrc} alt={title} />
