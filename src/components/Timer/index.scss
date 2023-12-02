@@ -21,6 +21,15 @@
       top: 50%;
       right: 10%;
       transform: translateY(-45%);
+      &.disabled {
+        path {
+          opacity: 0.2;
+          cursor: not-allowed;
+          &:hover {
+            opacity: 0.2;
+          }
+        }
+      }
       path {
         opacity: 0.2;
         transition: opacity 0.3s ease-in-out;

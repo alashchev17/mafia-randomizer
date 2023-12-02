@@ -37,7 +37,7 @@ const RolesCard: FC<RolesCardProps> = ({
       className="roles-card"
       variants={cardsVariants}
       initial="hidden"
-      animate="visible"
+      // animate="visible"
       whileInView="visible"
       custom={index}
     >

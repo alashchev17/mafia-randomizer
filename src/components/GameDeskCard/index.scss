@@ -1,0 +1,49 @@
+.player {
+  &__title {
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+
+  &__actions {
+    position: relative;
+  }
+
+  &__context-menu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+    transition: opacity 0.15s ease-in-out;
+    z-index: 20;
+    cursor: pointer;
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  &__status {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--main-color-transparent);
+    transition: opacity 0.15s ease-in-out;
+    z-index: 10;
+    &.visible {
+      opacity: 1;
+    }
+  }
+
+  &__image {
+    width: 100%;
+  }
+}

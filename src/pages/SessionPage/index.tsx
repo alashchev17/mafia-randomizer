@@ -14,12 +14,7 @@ import {
 import "./index.scss";
 
 interface SessionPageProps {
-  handleNotification: (
-    state: boolean,
-    title: string,
-    text: string,
-    information: string,
-  ) => void;
+  handleNotification: (state: boolean, text: string) => void;
 }
 
 const SessionPage: FC<SessionPageProps> = ({ handleNotification }) => {
@@ -28,12 +23,7 @@ const SessionPage: FC<SessionPageProps> = ({ handleNotification }) => {
     const listOfPlayers = location.state.players;
 
     if (listOfPlayers.length > 12 || listOfPlayers.length < 6) {
-      handleNotification(
-        true,
-        "Ошибка",
-        "Некорректное количество игроков!",
-        `Пересохраните настройки партии`,
-      );
+      handleNotification(true, "Некорректное количество игроков!");
       return <Navigate to="/settings" replace={true} />;
     }
 

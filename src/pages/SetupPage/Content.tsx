@@ -6,10 +6,9 @@ import PlayerCard from "../../components/PlayerCard";
 
 import {
   initialPlayers,
-  IPlayers,
   rolesRandomizer,
 } from "../../utils/rolesRandomizer.ts";
-import { ISettings } from "../../models";
+import { ISettings, IPlayers } from "../../models";
 
 interface SetupContentProps {
   settings: ISettings;

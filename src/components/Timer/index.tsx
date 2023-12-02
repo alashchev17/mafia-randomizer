@@ -6,12 +6,7 @@ import Button from "../Button";
 import "./index.scss";
 
 interface TimerProps {
-  handleNotification: (
-    state: boolean,
-    title: string,
-    text: string,
-    information: string,
-  ) => void;
+  handleNotification: (state: boolean, text: string) => void;
 }
 
 const Timer: FC<TimerProps> = ({ handleNotification }) => {
@@ -20,7 +15,9 @@ const Timer: FC<TimerProps> = ({ handleNotification }) => {
   const [isTimerActive, setIsTimerActive] = useState(false);
 
   const startTimer = () => {
-    setIsTimerActive((prev) => !prev);
+    if (!isTimerActive) {
+      setIsTimerActive((prev) => !prev);
+    }
   };
 
   const handleTimer = useCallback(() => {
@@ -30,12 +27,7 @@ const Timer: FC<TimerProps> = ({ handleNotification }) => {
       } else {
         setIsTimerActive((prev) => !prev);
         setSeconds(initialSeconds);
-        handleNotification(
-          true,
-          "Уведомление",
-          "Таймер завершил свою работу успешно!",
-          "",
-        );
+        handleNotification(true, "Таймер завершил свою работу успешно!");
       }
     }
   }, [seconds, isTimerActive, handleNotification, initialSeconds]);
@@ -44,12 +36,7 @@ const Timer: FC<TimerProps> = ({ handleNotification }) => {
     if (isTimerActive) {
       setIsTimerActive((prev) => !prev);
       setSeconds(initialSeconds);
-      handleNotification(
-        true,
-        "Уведомление",
-        "Таймер был пропущен успешно!",
-        "",
-      );
+      handleNotification(true, "Таймер был пропущен успешно!");
     }
   };
 
@@ -72,14 +59,18 @@ const Timer: FC<TimerProps> = ({ handleNotification }) => {
       <div className="timer__clock">
         <span>{timerSeconds}</span>
         <svg
-          onClick={startTimer}
           width="35"
           height="45"
           viewBox="0 0 35 45"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
+          className={`${isTimerActive ? "disabled" : ""}`}
         >
-          <path d="M0 22.5V0L35 22.5L0 45V22.5Z" fill="white" />
+          <path
+            onClick={startTimer}
+            d="M0 22.5V0L35 22.5L0 45V22.5Z"
+            fill="white"
+          />
         </svg>
       </div>
       <div className="timer__controls">

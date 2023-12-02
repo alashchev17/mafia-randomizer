@@ -36,19 +36,12 @@ const App: FC = () => {
     }
   }, [location, navigate]);
 
-  const handleNotification = (
-    state: boolean,
-    title: string,
-    text: string,
-    information: string,
-  ) => {
+  const handleNotification = (state: boolean, text: string) => {
     setIsNotificationVisible(state);
     setNotificationData((prevState: INotification) => {
       return {
         ...prevState,
-        title,
         text,
-        information,
       };
     });
   };
@@ -60,9 +53,7 @@ const App: FC = () => {
         <AnimatePresence>
           {isNotificationVisible && (
             <Notification
-              title={notificationData.title}
               text={notificationData.text}
-              information={notificationData.information}
               setVisible={setIsNotificationVisible}
             />
           )}

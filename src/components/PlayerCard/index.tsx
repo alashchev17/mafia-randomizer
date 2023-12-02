@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-import { IPlayers } from "../../utils/rolesRandomizer";
+import { IPlayers } from "../../models";
 
 import PlayerCardBackside from "./PlayerCardBackside";
 import PlayerCardFrontside from "./PlayerCardFrontside";

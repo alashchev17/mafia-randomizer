@@ -24,12 +24,7 @@ import {
 interface SettingsPageProps {
   settings: ISettings;
   setSettings: Dispatch<SetStateAction<ISettings>>;
-  handleNotification: (
-    state: boolean,
-    title: string,
-    text: string,
-    information: string,
-  ) => void;
+  handleNotification: (state: boolean, text: string) => void;
 }
 
 type FormFields = {
@@ -55,12 +50,7 @@ const SettingsPage: FC<SettingsPageProps> = ({
       const amountOfPlayers = Number(form.players.value);
       const gameMode = form.gameMode.value;
       if (amountOfPlayers >= 6 && amountOfPlayers <= 12) {
-        handleNotification(
-          true,
-          "Уведомление",
-          "Настройки были сохранены успешно!",
-          `Игровой режим: ${gameMode}, кол-во игроков: ${amountOfPlayers}`,
-        );
+        handleNotification(true, "Настройки были сохранены успешно!");
         setSettings((prev: ISettings): ISettings => {
           return {
             ...prev,
@@ -70,19 +60,12 @@ const SettingsPage: FC<SettingsPageProps> = ({
         });
         navigate("/");
       } else {
-        handleNotification(
-          true,
-          "Ошибка",
-          "Указано некорректное количество игроков",
-          `Ошибка: поле ввода формы было отредактировано вручную`,
-        );
+        handleNotification(true, "Указано некорректное количество игроков");
       }
     } else {
       handleNotification(
         true,
-        "Ошибка",
         "В процессе сохранения настроек произошла ошибка!",
-        `Ошибка: какой-то элемент формы был отредактирован вручную`,
       );
     }
   };

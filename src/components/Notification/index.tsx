@@ -6,18 +6,11 @@ import closeSvg from "./close.svg";
 import "./index.scss";
 
 interface NotificationProps {
-  title: string;
   text: string;
-  information: string;
   setVisible: (state: boolean) => void;
 }
 
-const Notification: FC<NotificationProps> = ({
-  title,
-  text,
-  information,
-  setVisible,
-}) => {
+const Notification: FC<NotificationProps> = ({ text, setVisible }) => {
   const handleClose = () => {
     setVisible(false);
   };
@@ -68,7 +61,7 @@ const Notification: FC<NotificationProps> = ({
         }}
       ></motion.span>
       <div className="notification__header">
-        <h2 className="notification__title">{title}</h2>
+        <h2 className="notification__title">{text}</h2>
         <img
           onClick={handleClose}
           src={closeSvg}
@@ -76,10 +69,6 @@ const Notification: FC<NotificationProps> = ({
           className="notification__close"
         />
       </div>
-      <p className="notification__text">{text}</p>
-      {information.length > 0 && (
-        <p className="notification__text">{information}</p>
-      )}
     </motion.div>
   );
 };
