@@ -1,6 +1,5 @@
 import { FC, useCallback, useEffect, useState } from "react";
 
-import Title from "../Title";
 import Button from "../Button";
 
 import "./index.scss";
@@ -55,7 +54,6 @@ const Timer: FC<TimerProps> = ({ handleNotification }) => {
 
   return (
     <div className="timer">
-      <Title text="Таймер" />
       <div className="timer__clock">
         <span>{timerSeconds}</span>
         <svg

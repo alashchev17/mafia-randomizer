@@ -5,7 +5,7 @@
   width: 634px;
   &__clock {
     position: relative;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
     span {
       text-align: center;
       display: block;
@@ -13,7 +13,7 @@
       font-size: 128px;
       font-style: normal;
       font-weight: 900;
-      line-height: 125%;
+      line-height: 100%;
     }
     svg {
       position: absolute;

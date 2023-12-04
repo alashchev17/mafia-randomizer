@@ -5,12 +5,12 @@
   width: 100%;
   $self: &;
   &__cards {
-    margin-top: 75px;
+    margin-bottom: 25px;
     display: grid;
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    grid-row-gap: 50px;
+    grid-row-gap: 25px;
     &--6 {
       grid-template-rows: 1fr;
       grid-template-columns: repeat(6, 118.5px);

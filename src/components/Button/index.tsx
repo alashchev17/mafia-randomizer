@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { motion } from "framer-motion";
 
 import "./index.scss";
 
@@ -15,16 +16,29 @@ const Button: FC<ButtonProps> = ({
   clickHandle,
   disabled,
 }) => {
+  const buttonVariants = {
+    hidden: {
+      opacity: 0,
+    },
+    visible: {
+      opacity: 1,
+    },
+  };
+
   return (
-    <button
+    <motion.button
       className={`button ${className ? className : ""} ${
         disabled ? "disabled" : ""
       }`}
       onClick={clickHandle}
       disabled={disabled}
+      variants={buttonVariants}
+      initial="hidden"
+      animate="visible"
+      exit="hidden"
     >
       {text}
-    </button>
+    </motion.button>
   );
 };
 

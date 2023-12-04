@@ -3,5 +3,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 48px;
+  gap: 20px;
+  &__controls {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+  }
 }
