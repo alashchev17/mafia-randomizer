@@ -96,13 +96,16 @@ const SessionPage: FC<SessionPageProps> = ({ handleNotification }) => {
         <AnimatePresence mode="wait">
           {!isQueueing && (
             <GameDesk
+              key="gameDesk"
               players={listOfPlayers}
               queueingPlayers={queueingPlayers}
               setQueueingPlayers={setQueueingPlayers}
               gameTime={gameStats.type}
             />
           )}
-          {isQueueing && <Queueing queueingPlayers={queueingPlayers} />}
+          {isQueueing && (
+            <Queueing key="queueing" queueingPlayers={queueingPlayers} />
+          )}
         </AnimatePresence>
         <div className="session__controls">
           <Button
