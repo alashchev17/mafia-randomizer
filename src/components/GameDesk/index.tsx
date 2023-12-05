@@ -1,11 +1,11 @@
-import React, { FC, useEffect } from "react";
+import React, { FC } from "react";
 
 import GameDeskCard from "../GameDeskCard";
 
 import "./index.scss";
 
 import { IPlayers, IGameDeskPlayers } from "../../models";
-import { motion, usePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 interface GameDeskProps {
   players: IPlayers[];
@@ -20,8 +20,6 @@ const GameDesk: FC<GameDeskProps> = ({
   gameTime,
   setQueueingPlayers,
 }) => {
-  const [isPresent, safeToRemove] = usePresence();
-
   const listOfPlayers: IGameDeskPlayers[] = players.map(
     (player: IPlayers, index: number) => {
       return {
@@ -42,10 +40,6 @@ const GameDesk: FC<GameDeskProps> = ({
       opacity: 0,
     },
   };
-
-  useEffect(() => {
-    !isPresent && setTimeout(safeToRemove, 1000);
-  }, [isPresent, safeToRemove]);
   return (
     <motion.div
       className="game-desk"

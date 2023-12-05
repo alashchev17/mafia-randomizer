@@ -6,6 +6,7 @@ import Title from "../../components/Title";
 import Button from "../../components/Button";
 import Timer from "../../components/Timer";
 import GameDesk from "../../components/GameDesk";
+import Queueing from "../../components/Queueing";
 
 import {
   pagesAnimate,
@@ -14,7 +15,7 @@ import {
 } from "../../utils/pagesAnimation";
 
 import "./index.scss";
-import Queueing from "../../components/Queueing";
+import { IPlayers } from "../../models";
 
 interface SessionPageProps {
   handleNotification: (state: boolean, text: string) => void;
@@ -24,34 +25,50 @@ const SessionPage: FC<SessionPageProps> = ({ handleNotification }) => {
   const location = useLocation();
 
   // remove next line on production
-  // location.state = {
-  //   players: [
-  //     {
-  //       role: "Мирный житель",
-  //       roleSrc: "/cards/innocent.svg",
-  //     },
-  //     {
-  //       role: "Шериф",
-  //       roleSrc: "/cards/sheriff.svg",
-  //     },
-  //     {
-  //       role: "Мафия",
-  //       roleSrc: "/cards/mafia.svg",
-  //     },
-  //     {
-  //       role: "Мирный житель",
-  //       roleSrc: "/cards/innocent.svg",
-  //     },
-  //     {
-  //       role: "Дон",
-  //       roleSrc: "/cards/headOfMafia.svg",
-  //     },
-  //     {
-  //       role: "Мирный житель",
-  //       roleSrc: "/cards/innocent.svg",
-  //     },
-  //   ],
-  // };
+  location.state = {
+    players: [
+      {
+        role: "Мирный житель",
+        roleSrc: "/cards/innocent.svg",
+      },
+      {
+        role: "Шериф",
+        roleSrc: "/cards/sheriff.svg",
+      },
+      {
+        role: "Мафия",
+        roleSrc: "/cards/mafia.svg",
+      },
+      {
+        role: "Мирный житель",
+        roleSrc: "/cards/innocent.svg",
+      },
+      {
+        role: "Дон",
+        roleSrc: "/cards/headOfMafia.svg",
+      },
+      {
+        role: "Мирный житель",
+        roleSrc: "/cards/innocent.svg",
+      },
+      {
+        role: "Мирный житель",
+        roleSrc: "/cards/innocent.svg",
+      },
+      {
+        role: "Мирный житель",
+        roleSrc: "/cards/innocent.svg",
+      },
+      {
+        role: "Мафия",
+        roleSrc: "/cards/mafia.svg",
+      },
+      {
+        role: "Мирный житель",
+        roleSrc: "/cards/innocent.svg",
+      },
+    ],
+  };
 
   const [gameStats, setGameStats] = useState({
     type: "Ночь",
@@ -59,10 +76,11 @@ const SessionPage: FC<SessionPageProps> = ({ handleNotification }) => {
   });
 
   const [queueingPlayers, setQueueingPlayers] = useState<number[]>([]);
+
   const [isQueueing, setIsQueueing] = useState(false);
 
   if (location.state) {
-    const listOfPlayers = location.state.players;
+    const listOfPlayers: IPlayers[] = location.state.players;
 
     const handleStats = () => {
       setGameStats((prev) => {
@@ -93,20 +111,23 @@ const SessionPage: FC<SessionPageProps> = ({ handleNotification }) => {
         <Title text="Таймер & Игровое поле" />
         <Timer handleNotification={handleNotification} />
         <Title text={`${gameStats.type} – ${gameStats.counter}`} />
-        <AnimatePresence mode="wait">
-          {!isQueueing && (
-            <GameDesk
-              key="gameDesk"
-              players={listOfPlayers}
-              queueingPlayers={queueingPlayers}
-              setQueueingPlayers={setQueueingPlayers}
-              gameTime={gameStats.type}
-            />
-          )}
-          {isQueueing && (
-            <Queueing key="queueing" queueingPlayers={queueingPlayers} />
-          )}
-        </AnimatePresence>
+        <div className="session__wrapper">
+          <GameDesk
+            players={listOfPlayers}
+            queueingPlayers={queueingPlayers}
+            setQueueingPlayers={setQueueingPlayers}
+            gameTime={gameStats.type}
+          />
+          <AnimatePresence>
+            {isQueueing && (
+              <Queueing
+                key="queueing"
+                queueingPlayers={queueingPlayers}
+                amountOfPlayers={listOfPlayers.length}
+              />
+            )}
+          </AnimatePresence>
+        </div>
         <div className="session__controls">
           <Button
             className={
@@ -116,21 +137,26 @@ const SessionPage: FC<SessionPageProps> = ({ handleNotification }) => {
               gameStats.type === "День" ? "Следующая ночь" : "Следующий день"
             }
             clickHandle={handleStats}
+            disabled={isQueueing}
           />
           <AnimatePresence>
             {gameStats.type === "День" && (
               <Button
                 className="button--primary"
-                text={isQueueing ? "Игровое поле" : "Голосование"}
+                text={isQueueing ? "Скрыть голосование" : "Голосование"}
                 clickHandle={handleQueue}
                 disabled={queueingPlayers.length < 1}
               ></Button>
             )}
           </AnimatePresence>
+          <Link
+            className="button button--secondary"
+            to="/welcome"
+            replace={true}
+          >
+            Завершить партию
+          </Link>
         </div>
-        <Link className="button button--secondary" to="/welcome" replace={true}>
-          Завершить партию
-        </Link>
       </motion.section>
     );
   } else {
