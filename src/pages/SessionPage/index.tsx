@@ -24,52 +24,6 @@ interface SessionPageProps {
 const SessionPage: FC<SessionPageProps> = ({ handleNotification }) => {
   const location = useLocation();
 
-  // remove next line on production
-  location.state = {
-    players: [
-      {
-        role: "Мирный житель",
-        roleSrc: "/cards/innocent.svg",
-      },
-      {
-        role: "Шериф",
-        roleSrc: "/cards/sheriff.svg",
-      },
-      {
-        role: "Мафия",
-        roleSrc: "/cards/mafia.svg",
-      },
-      {
-        role: "Мирный житель",
-        roleSrc: "/cards/innocent.svg",
-      },
-      {
-        role: "Дон",
-        roleSrc: "/cards/headOfMafia.svg",
-      },
-      {
-        role: "Мирный житель",
-        roleSrc: "/cards/innocent.svg",
-      },
-      {
-        role: "Мирный житель",
-        roleSrc: "/cards/innocent.svg",
-      },
-      {
-        role: "Мирный житель",
-        roleSrc: "/cards/innocent.svg",
-      },
-      {
-        role: "Мафия",
-        roleSrc: "/cards/mafia.svg",
-      },
-      {
-        role: "Мирный житель",
-        roleSrc: "/cards/innocent.svg",
-      },
-    ],
-  };
-
   const [gameStats, setGameStats] = useState({
     type: "Ночь",
     counter: 0,
