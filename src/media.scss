@@ -81,6 +81,42 @@
       font-size: 14px;
     }
   }
+
+  .game-desk {
+    $self: &;
+    &__cards {
+      justify-content: space-around;
+      grid-template-rows: auto;
+      &--6, &--12 {
+        grid-template-columns: repeat(3, 118.5px);
+
+      }
+
+      &--8 {
+        grid-template-columns: repeat(4, 118.5px);
+      }
+
+      &--10 {
+        grid-template-columns: repeat(3, 118.5px);
+        #{$self}__player:last-child {
+          grid-column-start: 2;
+          grid-column-end: 3;
+        }
+      }
+
+      &--11 {
+        grid-template-columns: repeat(3, 118.5px);
+        grid-template-rows: auto;
+        #{$self}__player:last-child {
+          grid-column-start: auto;
+          grid-column-end: auto;
+        }
+      }
+
+    }
+  }
+
+
 }
 
 @media screen and (max-width: 700px) {
@@ -90,6 +126,16 @@
       span {
         font-size: 80px;
       }
+    }
+  }
+
+  .session {
+    &__controls {
+      width: 65%;
+      flex-direction: column;
+      align-items: stretch;
+      text-align: center;
+      gap: 10px;
     }
   }
 }
@@ -121,6 +167,46 @@
       button {
         flex: 40%;
       }
+    }
+  }
+
+  .game-desk {
+    margin: 0 auto;
+    max-width: 300px;
+    justify-content: center;
+    $self: &;
+    &__cards {
+      justify-content: space-around;
+      &--6, &--7, &--8, &--9, &--10, &--11, &--12 {
+        grid-template-columns: repeat(2, 118.5px);
+        grid-template-rows: auto;
+      }
+
+      &--7, &--9, &--11 {
+        #{$self}__player:last-child {
+          grid-column-start: 1;
+          grid-column-end: 2;
+        }
+      }
+    }
+  }
+
+  .queueing {
+    &__players {
+      gap: 25px;
+    }
+    &__number {
+      font-size: 18px;
+    }
+    &__controls {
+      max-width: 135px;
+    }
+    &__count {
+      font-size: 18px;
+    }
+    &__button {
+      width: 30px;
+      height: 30px;
     }
   }
 }

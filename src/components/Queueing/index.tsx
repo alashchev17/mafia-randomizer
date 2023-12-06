@@ -32,8 +32,8 @@ const Queueing: FC<QueueingProps> = ({ queueingPlayers, amountOfPlayers }) => {
       initial="hidden"
       animate="visible"
       transition={{
-        duration: queueingPlayers.length,
-        type: "spring",
+        duration: 0.35 * queueingPlayers.length,
+        type: "tween",
       }}
       exit="hidden"
     >

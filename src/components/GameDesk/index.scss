@@ -11,6 +11,9 @@
     justify-content: space-between;
     width: 100%;
     grid-row-gap: 25px;
+    &--7, &--9, &--11 {
+      justify-content: space-around;
+    }
     &--6 {
       grid-template-rows: 1fr;
       grid-template-columns: repeat(6, 118.5px);

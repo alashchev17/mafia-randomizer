@@ -24,6 +24,35 @@ interface SessionPageProps {
 const SessionPage: FC<SessionPageProps> = ({ handleNotification }) => {
   const location = useLocation();
 
+  location.state = {
+    players: [
+      {
+        role: "Мирный житель",
+        roleSrc: "/cards/innocent.svg",
+      },
+      {
+        role: "Шериф",
+        roleSrc: "/cards/sheriff.svg",
+      },
+      {
+        role: "Мафия",
+        roleSrc: "/cards/mafia.svg",
+      },
+      {
+        role: "Мирный житель",
+        roleSrc: "/cards/innocent.svg",
+      },
+      {
+        role: "Дон",
+        roleSrc: "/cards/headOfMafia.svg",
+      },
+      {
+        role: "Мирный житель",
+        roleSrc: "/cards/innocent.svg",
+      },
+    ],
+  };
+
   const [gameStats, setGameStats] = useState({
     type: "Ночь",
     counter: 0,
@@ -46,7 +75,6 @@ const SessionPage: FC<SessionPageProps> = ({ handleNotification }) => {
     };
 
     const handleQueue = () => {
-      // alert("[" + queueingPlayers + "]");
       setIsQueueing((prev) => !prev);
     };
 
@@ -71,6 +99,7 @@ const SessionPage: FC<SessionPageProps> = ({ handleNotification }) => {
             queueingPlayers={queueingPlayers}
             setQueueingPlayers={setQueueingPlayers}
             gameTime={gameStats.type}
+            cycleCount={gameStats.counter}
           />
           <AnimatePresence>
             {isQueueing && (
@@ -114,6 +143,7 @@ const SessionPage: FC<SessionPageProps> = ({ handleNotification }) => {
       </motion.section>
     );
   } else {
+    handleNotification(true, "Игровое поле доступно только после старта!");
     return <Navigate to="/welcome" replace={true} />;
   }
 };

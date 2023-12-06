@@ -11,6 +11,7 @@ interface GameDeskProps {
   players: IPlayers[];
   queueingPlayers: number[];
   gameTime: string;
+  cycleCount: number;
   setQueueingPlayers: React.Dispatch<React.SetStateAction<number[]>>;
 }
 
@@ -18,6 +19,7 @@ const GameDesk: FC<GameDeskProps> = ({
   players,
   queueingPlayers,
   gameTime,
+  cycleCount,
   setQueueingPlayers,
 }) => {
   const listOfPlayers: IGameDeskPlayers[] = players.map(
@@ -58,6 +60,7 @@ const GameDesk: FC<GameDeskProps> = ({
             player={player}
             queueingPlayers={queueingPlayers}
             setQueueingPlayers={setQueueingPlayers}
+            cycleCount={cycleCount}
             gameTime={gameTime}
           />
         ))}

@@ -20,6 +20,7 @@ interface GameDeskCardProps {
   player: IGameDeskPlayers;
   queueingPlayers: number[];
   gameTime: string;
+  cycleCount: number;
   setQueueingPlayers: React.Dispatch<React.SetStateAction<number[]>>;
 }
 
@@ -27,6 +28,7 @@ const GameDeskCard: FC<GameDeskCardProps> = ({
   player,
   queueingPlayers,
   gameTime,
+  cycleCount,
   setQueueingPlayers,
 }) => {
   const [playerStatus, setPlayerStatus] = useState({
@@ -35,6 +37,8 @@ const GameDeskCard: FC<GameDeskCardProps> = ({
     isDeleted: false,
     isQueued: false,
   });
+
+  const [mutedTime, setMutedTime] = useState<number>(undefined!);
 
   const [isPromoted, setIsPromoted] = useState(
     queueingPlayers.indexOf(player.id) !== -1,
@@ -121,8 +125,22 @@ const GameDeskCard: FC<GameDeskCardProps> = ({
     if (gameTime === "Ночь") {
       setIsPromoted(false);
       setQueueingPlayers([]);
+      if (mutedTime + 2 === cycleCount) {
+        setMutedTime(undefined!);
+        setPlayerStatus((prev) => ({
+          ...prev,
+          isMuted: false,
+        }));
+      }
     }
-  }, [gameTime, setQueueingPlayers]);
+  }, [mutedTime, cycleCount, gameTime, setQueueingPlayers]);
+
+  useEffect(() => {
+    if (playerStatus.isMuted) {
+      setMutedTime(cycleCount);
+    }
+    // eslint-disable-next-line
+  }, [playerStatus.isMuted]);
 
   return (
     <motion.div
