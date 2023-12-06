@@ -14,8 +14,9 @@ import {
   pagesTransition,
 } from "../../utils/pagesAnimation";
 
-import "./index.scss";
 import { IPlayers } from "../../models";
+
+import "./index.scss";
 
 interface SessionPageProps {
   handleNotification: (state: boolean, text: string) => void;
@@ -23,35 +24,6 @@ interface SessionPageProps {
 
 const SessionPage: FC<SessionPageProps> = ({ handleNotification }) => {
   const location = useLocation();
-
-  location.state = {
-    players: [
-      {
-        role: "Мирный житель",
-        roleSrc: "/cards/innocent.svg",
-      },
-      {
-        role: "Шериф",
-        roleSrc: "/cards/sheriff.svg",
-      },
-      {
-        role: "Мафия",
-        roleSrc: "/cards/mafia.svg",
-      },
-      {
-        role: "Мирный житель",
-        roleSrc: "/cards/innocent.svg",
-      },
-      {
-        role: "Дон",
-        roleSrc: "/cards/headOfMafia.svg",
-      },
-      {
-        role: "Мирный житель",
-        roleSrc: "/cards/innocent.svg",
-      },
-    ],
-  };
 
   const [gameStats, setGameStats] = useState({
     type: "Ночь",
