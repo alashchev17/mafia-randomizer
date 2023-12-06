@@ -1,27 +1,37 @@
-# React + TypeScript + Vite
+# Mafia (roles randomizer)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Проект, созданный для упрощения процесса ведения игры “Мафия” для ведущих. Является готовым инструментом для удобного мониторинга игрового процесса с приятной визуальной составляющей.
 
-Currently, two official plugins are available:
+# ℹ️ Список изменений
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+***Changelog 24.11 v0.2:***
 
-## Expanding the ESLint configuration
+- Реализована страница “Настройки”;
+- Добавлен выбор игрового режима;
+- Вынесен функционал определения количества игроков в страницу “Настройки”;
+- Добавлена новая роль: “Доктор”.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+***Changelog 26.11 v0.2.1:***
 
-- Configure the top-level `parserOptions` property like this:
+- Реализованы уведомления при сохранении настроек.
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
+***Changelog 06.12 v1.0-pre-release:***
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+- Добавлена страница “Игровое поле”;
+- Добавлен игровой таймер с несколькими параметрами;
+- Реализована система отслеживания статусов игроков;
+- Реализована система голосований;
+- Реализована система фиксации нарушения игровых правил;
+- Устранены незначительные баги отображения интерфейса.
+
+# 🧑🏼‍💻 Технический стек
+
+- React
+- TypeScript
+- React-Router v6
+- Framer Motion
+
+# 📁 Источники
+
+- [Github Repository](https://github.com/alashchev17/mafia-randomizer)
+- [Deploy on Vercel](https://mafia-randomizer-react.vercel.app)
