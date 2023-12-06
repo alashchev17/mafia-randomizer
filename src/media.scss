@@ -112,10 +112,15 @@
           grid-column-end: auto;
         }
       }
-
     }
   }
-
+  .penalty {
+    &__point {
+      padding: unset;
+      width: 25px;
+      height: 25px;
+    }
+  }
 
 }
 
