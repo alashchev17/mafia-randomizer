@@ -1,0 +1,48 @@
+.timer {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 634px;
+  &__clock {
+    position: relative;
+    margin-bottom: 40px;
+    span {
+      text-align: center;
+      display: block;
+      width: 100%;
+      font-size: 128px;
+      font-style: normal;
+      font-weight: 900;
+      line-height: 100%;
+    }
+    svg {
+      position: absolute;
+      display: inline-block;
+      top: 50%;
+      right: 10%;
+      transform: translateY(-45%);
+      &.disabled {
+        path {
+          opacity: 0.2;
+          cursor: not-allowed;
+          &:hover {
+            opacity: 0.2;
+          }
+        }
+      }
+      path {
+        opacity: 0.2;
+        transition: opacity 0.3s ease-in-out;
+        cursor: pointer;
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+  }
+  &__controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}

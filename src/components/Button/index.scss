@@ -1,25 +1,29 @@
 .button {
-  font-family: "Montserrat", sans-serif;
+  font-family: "lato", sans-serif;
   font-size: 16px;
   font-style: normal;
-  font-weight: 700;
+  font-weight: 800;
   line-height: normal;
   padding: 15px 30px;
   border-radius: 10px;
   cursor: pointer;
-  transition: box-shadow 0.3s ease-in-out, color 0.3s ease-in-out;
+  transition: box-shadow 0.3s ease-in-out, color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+  &.disabled {
+    cursor: not-allowed;
+    background-color: var(--disabled-bg-color);
+    color: var(--disabled-text-color);
+    box-shadow: unset;
+    &:hover {
+      box-shadow: inherit;
+      color: var(--disabled-text-color);
+    }
+  }
   &--primary {
     background-color: var(--secondary-color);
     color: var(--main-text-color);
     box-shadow: var(--shadow-red);
     &:hover {
       box-shadow: var(--shadow-red-hover);
-    }
-    &.disabled {
-      cursor: not-allowed;
-      background-color: var(--disabled-bg-color);
-      color: var(--disabled-text-color);
-      box-shadow: unset;
     }
   }
   &--secondary {

@@ -5,7 +5,11 @@
 }
 
 body, * {
-  font-family: "Montserrat", sans-serif;
+  font-family: "lato", sans-serif;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 a {
@@ -25,7 +29,9 @@ button {
 // COLORS VARIABLES
 :root {
   --main-color: #2C2C2C;
+  --main-color-transparent: rgba(44, 44, 44, 50%);
   --secondary-color: #B11F1F;
+  --secondary-color-transparent: rgba(177, 31, 31, 35%);
   --third-color: rgba(255, 255, 255, 0.25);
   --main-text-color: #FFFFFF;
   --disabled-bg-color: #676767;

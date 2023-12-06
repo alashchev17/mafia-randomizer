@@ -1,7 +1,4 @@
-export interface IPlayers {
-  role: string;
-  roleSrc: string;
-}
+import { IPlayers } from "../models";
 
 export const initialPlayers: IPlayers[] = [
   {

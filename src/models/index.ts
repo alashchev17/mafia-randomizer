@@ -4,7 +4,16 @@ export interface ISettings {
 }
 
 export interface INotification {
-  title: string;
   text: string;
-  information: string;
+}
+
+export interface IPlayers {
+  role: string;
+  roleSrc: string;
+}
+
+export interface IGameDeskPlayers {
+  id: number;
+  role: string;
+  roleSrc: string;
 }

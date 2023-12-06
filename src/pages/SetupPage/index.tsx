@@ -3,7 +3,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 
 import { SetupContent } from "./Content.tsx";
+
 import { ISettings } from "../../models";
+import {
+  pagesAnimate,
+  pagesInitial,
+  pagesTransition,
+} from "../../utils/pagesAnimation.ts";
 
 interface SetupPageProps {
   settings: ISettings;
@@ -22,19 +28,9 @@ const SetupPage: FC<SetupPageProps> = ({ settings }) => {
   return (
     <motion.div
       className="flex-center-column"
-      initial={{
-        opacity: 0,
-        y: -50,
-      }}
-      animate={{
-        opacity: 1,
-        y: 0,
-      }}
-      transition={{
-        delay: 0.3,
-        duration: 0.8,
-        type: "spring",
-      }}
+      initial={pagesInitial}
+      animate={pagesAnimate}
+      transition={pagesTransition}
     >
       <SetupContent settings={settings} />
     </motion.div>

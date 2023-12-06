@@ -5,23 +5,18 @@ import { motion } from "framer-motion";
 import Title from "../../components/Title";
 
 import "./index.scss";
+import {
+  pagesAnimate,
+  pagesInitial,
+  pagesTransition,
+} from "../../utils/pagesAnimation.ts";
 
 const NotFoundPage: FC = () => {
   return (
     <motion.div
-      initial={{
-        y: -50,
-        opacity: 0,
-      }}
-      animate={{
-        y: 0,
-        opacity: 1,
-      }}
-      transition={{
-        delay: 0.3,
-        duration: 0.8,
-        type: "spring",
-      }}
+      initial={pagesInitial}
+      animate={pagesAnimate}
+      transition={pagesTransition}
     >
       <Title text="Упс!" />
       <div className="not-found">

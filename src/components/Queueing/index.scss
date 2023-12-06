@@ -1,0 +1,49 @@
+.queueing {
+  overflow: hidden;
+  &__players {
+    margin: 25px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+  &__player {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  &__number {
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 125%;
+  }
+  &__controls {
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 180px;
+    width: 100%;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+  }
+  &__count {
+    font-size: 24px;
+    line-height: 100%;
+    font-weight: 900;
+  }
+  &__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 50%;
+    cursor: pointer;
+    background-color: var(--secondary-color);
+    border: 1px solid var(--secondary-color);
+    transition: background-color 0.3s ease-in-out, border 0.3s ease-in-out;
+    &:disabled {
+      background-color: var(--main-color);
+      border: 1px solid rgba(255,255,255,25%);
+    }
+  }
+}

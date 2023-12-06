@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 
-import { IPlayers } from "../../../utils/rolesRandomizer";
+import { IPlayers } from "../../../models";
 
 import "./index.scss";
 

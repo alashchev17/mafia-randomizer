@@ -10,7 +10,11 @@
 }
 
 .container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   max-width: 920px;
+  min-height: calc(100vh - 100px);
   margin: 0 auto;
   color: var(--main-text-color);
   padding: 76px 40px;

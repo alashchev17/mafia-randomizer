@@ -1,19 +1,20 @@
 import { FC, useEffect, useState } from "react";
 import { useLocation, useNavigate, Route, Routes } from "react-router-dom";
-
-import "./App.scss";
-import "./components/Button/index.scss";
+import { AnimatePresence } from "framer-motion";
 
 import Header from "./components/Header";
 import MainPage from "./pages/MainPage";
 import RolesInfoPage from "./pages/RolesInfoPage";
 import SetupPage from "./pages/SetupPage";
-import NotFoundPage from "./pages/NotFoundPage";
 import SettingsPage from "./pages/SettingsPage";
+import SessionPage from "./pages/SessionPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 import { INotification, ISettings } from "./models";
 import Notification from "./components/Notification";
-import { AnimatePresence } from "framer-motion";
+
+import "./App.scss";
+import "./components/Button/index.scss";
 
 const App: FC = () => {
   const navigate = useNavigate();
@@ -35,19 +36,12 @@ const App: FC = () => {
     }
   }, [location, navigate]);
 
-  const handleNotification = (
-    state: boolean,
-    title: string,
-    text: string,
-    information: string,
-  ) => {
+  const handleNotification = (state: boolean, text: string) => {
     setIsNotificationVisible(state);
     setNotificationData((prevState: INotification) => {
       return {
         ...prevState,
-        title,
         text,
-        information,
       };
     });
   };
@@ -59,9 +53,7 @@ const App: FC = () => {
         <AnimatePresence>
           {isNotificationVisible && (
             <Notification
-              title={notificationData.title}
               text={notificationData.text}
-              information={notificationData.information}
               setVisible={setIsNotificationVisible}
             />
           )}
@@ -73,6 +65,10 @@ const App: FC = () => {
             <Route
               path="/setup/:setupId"
               element={<SetupPage settings={settings} />}
+            />
+            <Route
+              path="/session"
+              element={<SessionPage handleNotification={handleNotification} />}
             />
             <Route
               path="/settings"

@@ -6,10 +6,9 @@ import PlayerCard from "../../components/PlayerCard";
 
 import {
   initialPlayers,
-  IPlayers,
   rolesRandomizer,
 } from "../../utils/rolesRandomizer.ts";
-import { ISettings } from "../../models";
+import { ISettings, IPlayers } from "../../models";
 
 interface SetupContentProps {
   settings: ISettings;
@@ -68,7 +67,7 @@ const SetupContent: FC<SetupContentProps> = ({ settings }) => {
         currentPlayer={players[playerId]}
       />
       <div className="flex-column-wrapper">
-        {settings.amountOfPlayers !== playerCount && (
+        {settings.amountOfPlayers !== playerCount ? (
           <Link
             to={`/setup/${playerCount + 1}`}
             className={`button button--primary ${
@@ -77,6 +76,19 @@ const SetupContent: FC<SetupContentProps> = ({ settings }) => {
             onClick={linkHandler}
           >
             Следующий игрок
+          </Link>
+        ) : (
+          <Link
+            to="/session"
+            state={{ players }}
+            className={`button button--primary ${
+              isRevealing || !isRevealed ? "disabled" : ""
+            }`}
+            onClick={(event) =>
+              !isRevealed || isRevealing ? event.preventDefault() : null
+            }
+          >
+            Перейти к игровому полю
           </Link>
         )}
         <Link to={"/welcome"} className="button button--secondary">

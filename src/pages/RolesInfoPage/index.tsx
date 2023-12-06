@@ -6,6 +6,11 @@ import Title from "../../components/Title";
 
 import { database, IDatabaseRoles } from "../../assets/database";
 import RolesCard from "../../components/RolesCard";
+import {
+  pagesAnimate,
+  pagesInitial,
+  pagesTransition,
+} from "../../utils/pagesAnimation.ts";
 
 const RolesInfoPage: FC = () => {
   useEffect(() => {
@@ -15,19 +20,9 @@ const RolesInfoPage: FC = () => {
   return (
     <motion.div
       className="flex-center-column"
-      initial={{
-        y: -50,
-        opacity: 0,
-      }}
-      animate={{
-        y: 0,
-        opacity: 1,
-      }}
-      transition={{
-        delay: 0.3,
-        duration: 0.8,
-        type: "spring",
-      }}
+      initial={pagesInitial}
+      animate={pagesAnimate}
+      transition={pagesTransition}
     >
       <Title text="Информация о ролях" />
       <div className="roles-wrapper">

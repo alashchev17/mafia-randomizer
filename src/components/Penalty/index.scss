@@ -1,0 +1,24 @@
+.penalty {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  &__point {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    border: 2px solid var(--secondary-color);
+    border-radius: 50%;
+    transition: background-color 0.15s ease-in-out, filter 0.15s ease-in-out;
+    &:hover {
+      background-color: var(--secondary-color-transparent);
+    }
+    &.pressed {
+      background-color: var(--secondary-color);
+    }
+    &.disabled {
+      pointer-events: none;
+      filter: grayscale(100%);
+    }
+  }
+}
