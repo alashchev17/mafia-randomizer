@@ -91,9 +91,6 @@ const SetupContent: FC<SetupContentProps> = ({ settings }) => {
             Перейти к игровому полю
           </Link>
         )}
-        <Link to={"/welcome"} className="button button--secondary">
-          Выйти
-        </Link>
       </div>
     </>
   );
