@@ -22,6 +22,10 @@ const SetupContent: FC<SetupContentProps> = ({ settings }) => {
   const [playerId, setPlayerId] = useState(0);
   const [isRevealed, setIsRevealed] = useState(false);
   const [isRevealing, setIsRevealing] = useState(true);
+  const { mafiaPlayers, innocentPlayers, generatedArray } = rolesRandomizer(
+    settings.amountOfPlayers,
+    settings.gameMode,
+  );
 
   const playerCount = playerId + 1;
 
@@ -41,7 +45,7 @@ const SetupContent: FC<SetupContentProps> = ({ settings }) => {
     document.title = "Мафия | Игровая сессия";
     setupId !== "1" ? navigate("/setup/1") : null; // проверяем на айдишник игрока при загрузке страницы setup
 
-    setPlayers(rolesRandomizer(settings.amountOfPlayers, settings.gameMode));
+    setPlayers(generatedArray);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -80,7 +84,7 @@ const SetupContent: FC<SetupContentProps> = ({ settings }) => {
         ) : (
           <Link
             to="/session"
-            state={{ players }}
+            state={{ players, innocentPlayers, mafiaPlayers }}
             className={`button button--primary ${
               isRevealing || !isRevealed ? "disabled" : ""
             }`}

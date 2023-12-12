@@ -87,9 +87,9 @@
     &__cards {
       justify-content: space-around;
       grid-template-rows: auto;
-      &--6, &--12 {
+      &--6,
+      &--12 {
         grid-template-columns: repeat(3, 118.5px);
-
       }
 
       &--8 {
@@ -121,7 +121,6 @@
       height: 25px;
     }
   }
-
 }
 
 @media screen and (max-width: 700px) {
@@ -182,12 +181,20 @@
     $self: &;
     &__cards {
       justify-content: space-around;
-      &--6, &--7, &--8, &--9, &--10, &--11, &--12 {
+      &--6,
+      &--7,
+      &--8,
+      &--9,
+      &--10,
+      &--11,
+      &--12 {
         grid-template-columns: repeat(2, 118.5px);
         grid-template-rows: auto;
       }
 
-      &--7, &--9, &--11 {
+      &--7,
+      &--9,
+      &--11 {
         #{$self}__player:last-child {
           grid-column-start: 1;
           grid-column-end: 2;
@@ -212,6 +219,19 @@
     &__button {
       width: 30px;
       height: 30px;
+    }
+  }
+
+  .gameover {
+    position: fixed;
+    padding: 0 25px;
+    text-align: center;
+    height: calc(100vh - 73px);
+    top: 73px;
+    width: 100vw;
+    &__winner {
+      font-size: 18px;
+      line-height: 150%;
     }
   }
 }

@@ -67,7 +67,11 @@ export const rolesRandomizer = (playersAmount: number, gameMode: string) => {
     return shuffledArray;
   };
 
-  const generatedArray = generateArrayOfPlayers(mafiaPlayers, innocentPlayers);
+  const generatedArray = shuffleArray(
+    generateArrayOfPlayers(mafiaPlayers, innocentPlayers),
+  );
 
-  return shuffleArray(generatedArray);
+  innocentPlayers = generatedArray.length - mafiaPlayers;
+
+  return { mafiaPlayers, innocentPlayers, generatedArray };
 };

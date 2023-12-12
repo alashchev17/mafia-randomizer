@@ -16,4 +16,5 @@ export interface IGameDeskPlayers {
   id: number;
   role: string;
   roleSrc: string;
+  isMafia: boolean;
 }

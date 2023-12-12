@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Link, Navigate, useLocation } from "react-router-dom";
 
@@ -17,6 +17,7 @@ import {
 import { IPlayers } from "../../models";
 
 import "./index.scss";
+import GameOver from "../../components/GameOver";
 
 interface SessionPageProps {
   handleNotification: (state: boolean, text: string) => void;
@@ -24,15 +25,25 @@ interface SessionPageProps {
 
 const SessionPage: FC<SessionPageProps> = ({ handleNotification }) => {
   const location = useLocation();
+  const innocentPlayers: number = location.state.innocentPlayers
+    ? location.state.innocentPlayers
+    : 0;
+  const mafiaPlayers: number = location.state.mafiaPlayers
+    ? location.state.mafiaPlayers
+    : 0;
 
   const [gameStats, setGameStats] = useState({
     type: "Ночь",
     counter: 0,
   });
-
   const [queueingPlayers, setQueueingPlayers] = useState<number[]>([]);
-
   const [isQueueing, setIsQueueing] = useState(false);
+
+  const [innocentPlayersAlive, setInnocentPlayersAlive] =
+    useState(innocentPlayers);
+  const [mafiaPlayersAlive, setMafiaPlayersAlive] = useState(mafiaPlayers);
+
+  const [isGameOver, setIsGameOver] = useState(false);
 
   if (location.state) {
     const listOfPlayers: IPlayers[] = location.state.players;
@@ -55,21 +66,48 @@ const SessionPage: FC<SessionPageProps> = ({ handleNotification }) => {
       return <Navigate to="/settings" replace={true} />;
     }
 
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEffect(() => {
+      if (mafiaPlayersAlive < 1 || mafiaPlayersAlive === innocentPlayersAlive) {
+        setIsGameOver(true);
+      }
+    }, [isGameOver, mafiaPlayersAlive, innocentPlayersAlive]);
+
+    const sessionStyles = {
+      overflow: isGameOver ? "hidden" : "auto",
+      height: isGameOver ? "calc(100vh - 85px)" : "auto",
+    };
+
     return (
       <motion.section
         initial={pagesInitial}
         animate={pagesAnimate}
         transition={pagesTransition}
         className="session"
+        style={sessionStyles}
       >
         <Title text="Таймер & Игровое поле" />
         <Timer handleNotification={handleNotification} />
         <Title text={`${gameStats.type} – ${gameStats.counter}`} />
+        <AnimatePresence>
+          {isGameOver && (
+            <GameOver
+              key="gameover"
+              winner={
+                mafiaPlayersAlive === innocentPlayersAlive
+                  ? "Мафия"
+                  : "Мирные жители"
+              }
+            />
+          )}
+        </AnimatePresence>
         <div className="session__wrapper">
           <GameDesk
             players={listOfPlayers}
             queueingPlayers={queueingPlayers}
             setQueueingPlayers={setQueueingPlayers}
+            setInnocentPlayersAlive={setInnocentPlayersAlive}
+            setMafiaPlayersAlive={setMafiaPlayersAlive}
             gameTime={gameStats.type}
             cycleCount={gameStats.counter}
           />

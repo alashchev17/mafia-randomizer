@@ -22,6 +22,7 @@ interface GameDeskCardProps {
   gameTime: string;
   cycleCount: number;
   setQueueingPlayers: React.Dispatch<React.SetStateAction<number[]>>;
+  setPlayerDead: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const GameDeskCard: FC<GameDeskCardProps> = ({
@@ -30,6 +31,7 @@ const GameDeskCard: FC<GameDeskCardProps> = ({
   gameTime,
   cycleCount,
   setQueueingPlayers,
+  setPlayerDead,
 }) => {
   const [playerStatus, setPlayerStatus] = useState({
     isMuted: false,
@@ -82,6 +84,7 @@ const GameDeskCard: FC<GameDeskCardProps> = ({
       isQueued: false,
       isMuted: false,
     });
+    setPlayerDead((prev) => prev - 1);
   };
 
   const handleDelete = () => {
@@ -91,6 +94,7 @@ const GameDeskCard: FC<GameDeskCardProps> = ({
       isQueued: false,
       isMuted: false,
     });
+    setPlayerDead((prev) => prev - 1);
   };
 
   const handleQueue = () => {
@@ -100,6 +104,7 @@ const GameDeskCard: FC<GameDeskCardProps> = ({
       isQueued: true,
       isMuted: false,
     });
+    setPlayerDead((prev) => prev - 1);
   };
 
   const setupOnQueue = () => {

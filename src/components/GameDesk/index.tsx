@@ -13,6 +13,8 @@ interface GameDeskProps {
   gameTime: string;
   cycleCount: number;
   setQueueingPlayers: React.Dispatch<React.SetStateAction<number[]>>;
+  setInnocentPlayersAlive: React.Dispatch<React.SetStateAction<number>>;
+  setMafiaPlayersAlive: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const GameDesk: FC<GameDeskProps> = ({
@@ -21,6 +23,8 @@ const GameDesk: FC<GameDeskProps> = ({
   gameTime,
   cycleCount,
   setQueueingPlayers,
+  setInnocentPlayersAlive,
+  setMafiaPlayersAlive,
 }) => {
   const listOfPlayers: IGameDeskPlayers[] = players.map(
     (player: IPlayers, index: number) => {
@@ -28,6 +32,7 @@ const GameDesk: FC<GameDeskProps> = ({
         id: index + 1,
         role: player.role,
         roleSrc: player.roleSrc,
+        isMafia: player.role === "Мафия" || player.role === "Дон",
       };
     },
   );
@@ -59,6 +64,9 @@ const GameDesk: FC<GameDeskProps> = ({
             key={player.id}
             player={player}
             queueingPlayers={queueingPlayers}
+            setPlayerDead={
+              player.isMafia ? setMafiaPlayersAlive : setInnocentPlayersAlive
+            }
             setQueueingPlayers={setQueueingPlayers}
             cycleCount={cycleCount}
             gameTime={gameTime}
