@@ -43,6 +43,7 @@ const App: FC = () => {
   useEffect(() => {
     if (location.state?.page === "session") {
       handleNotification(true, location.state.notificationMessage);
+      navigate(location.pathname);
     }
 
     if (location.pathname === "/") {
