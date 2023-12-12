@@ -30,12 +30,6 @@ const App: FC = () => {
     gameMode: "Классический",
   });
 
-  useEffect(() => {
-    if (location.pathname === "/") {
-      navigate("/welcome");
-    }
-  }, [location, navigate]);
-
   const handleNotification = (state: boolean, text: string) => {
     setIsNotificationVisible(state);
     setNotificationData((prevState: INotification) => {
@@ -45,6 +39,16 @@ const App: FC = () => {
       };
     });
   };
+
+  useEffect(() => {
+    if (location.state?.page === "session") {
+      handleNotification(true, location.state.notificationMessage);
+    }
+
+    if (location.pathname === "/") {
+      navigate("/welcome");
+    }
+  }, [location, navigate]);
 
   return (
     <>

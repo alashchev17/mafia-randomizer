@@ -25,10 +25,10 @@ interface SessionPageProps {
 
 const SessionPage: FC<SessionPageProps> = ({ handleNotification }) => {
   const location = useLocation();
-  const innocentPlayers: number = location.state.innocentPlayers
+  const innocentPlayers: number = location.state?.innocentPlayers
     ? location.state.innocentPlayers
     : 0;
-  const mafiaPlayers: number = location.state.mafiaPlayers
+  const mafiaPlayers: number = location.state?.mafiaPlayers
     ? location.state.mafiaPlayers
     : 0;
 
@@ -153,8 +153,16 @@ const SessionPage: FC<SessionPageProps> = ({ handleNotification }) => {
       </motion.section>
     );
   } else {
-    handleNotification(true, "Игровое поле доступно только после старта!");
-    return <Navigate to="/welcome" replace={true} />;
+    return (
+      <Navigate
+        to="/welcome"
+        replace={true}
+        state={{
+          page: "session",
+          notificationMessage: "Игровое поле доступно только после старта!",
+        }}
+      />
+    );
   }
 };
 
