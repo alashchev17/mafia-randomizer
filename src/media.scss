@@ -1,8 +1,5 @@
 @media screen and (max-width: 992px) {
   .header {
-    position: fixed;
-    top: 0;
-    left: 0;
     padding: 15px;
     z-index: 1000;
     &__logo {
@@ -12,7 +9,8 @@
   }
 
   .container {
-    padding: 100px 15px 30px 15px;
+    padding: 30px 15px 30px 15px;
+    min-height: calc(100vh - 72px);
   }
 
   .flex-center-column {
@@ -226,8 +224,8 @@
     position: fixed;
     padding: 0 25px;
     text-align: center;
-    height: calc(100vh - 73px);
-    top: 73px;
+    height: 100vh;
+    top: 0;
     width: 100vw;
     &__winner {
       font-size: 18px;

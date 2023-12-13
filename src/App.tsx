@@ -53,7 +53,9 @@ const App: FC = () => {
 
   return (
     <>
-      <Header />
+      <AnimatePresence>
+        {location.pathname !== "/session" && <Header />}
+      </AnimatePresence>
       <div className="wrapper">
         <AnimatePresence>
           {isNotificationVisible && (
