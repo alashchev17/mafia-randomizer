@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 
 import Penalty from "../Penalty";
 
-import { IGameDeskPlayers } from "../../models";
+import { IGameDeskPlayers, IGameHistory, IGameStats } from "../../models";
 
 import "./index.scss";
 
@@ -19,8 +19,8 @@ import deleteBtnSvg from "./assets/buttons/delete.svg";
 interface GameDeskCardProps {
   player: IGameDeskPlayers;
   queueingPlayers: number[];
-  gameTime: string;
-  cycleCount: number;
+  gameStats: IGameStats;
+  setGameStats: React.Dispatch<React.SetStateAction<IGameStats>>;
   setQueueingPlayers: React.Dispatch<React.SetStateAction<number[]>>;
   setPlayerDead: React.Dispatch<React.SetStateAction<number>>;
 }
@@ -28,8 +28,8 @@ interface GameDeskCardProps {
 const GameDeskCard: FC<GameDeskCardProps> = ({
   player,
   queueingPlayers,
-  gameTime,
-  cycleCount,
+  gameStats,
+  setGameStats,
   setQueueingPlayers,
   setPlayerDead,
 }) => {
@@ -85,6 +85,24 @@ const GameDeskCard: FC<GameDeskCardProps> = ({
       isMuted: false,
     });
     setPlayerDead((prev) => prev - 1);
+    setGameStats((prev) => {
+      const updatedHistory = prev.history;
+      updatedHistory.push({
+        playerId: player.id,
+        playerCard: player.roleSrc,
+        reason: "Отстрелен ночью представителями Мафии",
+        timestamp: {
+          type: gameStats.type,
+          cycle: gameStats.counter,
+        },
+      });
+
+      return {
+        type: prev.type,
+        counter: prev.counter,
+        history: updatedHistory,
+      };
+    });
   };
 
   const handleDelete = () => {
@@ -95,6 +113,25 @@ const GameDeskCard: FC<GameDeskCardProps> = ({
       isMuted: false,
     });
     setPlayerDead((prev) => prev - 1);
+    setGameStats((prev) => {
+      const updatedHistory: IGameHistory[] = prev.history;
+
+      updatedHistory.push({
+        playerId: player.id,
+        playerCard: player.roleSrc,
+        reason: "Удалён ведущим после 4-го фолла",
+        timestamp: {
+          type: gameStats.type,
+          cycle: gameStats.counter,
+        },
+      });
+
+      return {
+        type: prev.type,
+        counter: prev.counter,
+        history: updatedHistory,
+      };
+    });
   };
 
   const handleQueue = () => {
@@ -105,10 +142,29 @@ const GameDeskCard: FC<GameDeskCardProps> = ({
       isMuted: false,
     });
     setPlayerDead((prev) => prev - 1);
+    setGameStats((prev) => {
+      const updatedHistory = prev.history;
+
+      updatedHistory.push({
+        playerId: player.id,
+        playerCard: player.roleSrc,
+        reason: "Снят во время дневного голосования",
+        timestamp: {
+          type: gameStats.type,
+          cycle: gameStats.counter,
+        },
+      });
+
+      return {
+        type: prev.type,
+        counter: prev.counter,
+        history: updatedHistory,
+      };
+    });
   };
 
   const setupOnQueue = () => {
-    if (gameTime === "День") {
+    if (gameStats.type === "День") {
       if (!isPromoted) {
         setIsPromoted((prev) => !prev);
         setQueueingPlayers((prev) => {
@@ -127,10 +183,10 @@ const GameDeskCard: FC<GameDeskCardProps> = ({
   };
 
   useEffect(() => {
-    if (gameTime === "Ночь") {
+    if (gameStats.type === "Ночь") {
       setIsPromoted(false);
       setQueueingPlayers([]);
-      if (mutedTime + 2 === cycleCount) {
+      if (mutedTime + 2 === gameStats.counter) {
         setMutedTime(undefined!);
         setPlayerStatus((prev) => ({
           ...prev,
@@ -138,11 +194,11 @@ const GameDeskCard: FC<GameDeskCardProps> = ({
         }));
       }
     }
-  }, [mutedTime, cycleCount, gameTime, setQueueingPlayers]);
+  }, [mutedTime, gameStats.type, gameStats.counter, setQueueingPlayers]);
 
   useEffect(() => {
     if (playerStatus.isMuted) {
-      setMutedTime(cycleCount);
+      setMutedTime(gameStats.counter);
     }
     // eslint-disable-next-line
   }, [playerStatus.isMuted]);
@@ -159,7 +215,7 @@ const GameDeskCard: FC<GameDeskCardProps> = ({
       <div className="player__card">
         <span
           className={`player__queue ${isPromoted ? "pressed" : ""} ${
-            gameTime === "Ночь" ||
+            gameStats.type === "Ночь" ||
             playerStatus.isKilled ||
             playerStatus.isDeleted ||
             playerStatus.isQueued

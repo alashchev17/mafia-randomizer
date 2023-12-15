@@ -227,9 +227,57 @@
     height: 100vh;
     top: 0;
     width: 100vw;
+    gap: 15px;
     &__winner {
       font-size: 18px;
       line-height: 150%;
+      max-width: 95%;
+    }
+    &__row {
+      flex-direction: column;
+    }
+  }
+
+  .stats {
+    gap: 15px;
+    &__subtitle {
+      font-size: 18px;
+    }
+    &__winner {
+      font-size: 18px;
+      padding: 10px 15px;
+    }
+    &__list {
+      margin: 15px 0;
+      gap: 25px;
+      &-item {
+        gap: 25px;
+        padding: 15px;
+        border-radius: 10px;
+      }
+      &-player {
+        font-size: 14px;
+        img {
+          width: 94.8px;
+          height: 123.12px;
+        }
+      }
+      &-description {
+        font-size: 14px;
+        text-align: left;
+        line-height: 125%;
+        gap: 10px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 375px) {
+  .timer {
+    &__clock {
+      svg {
+        right: 0;
+      }
     }
   }
 }

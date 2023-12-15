@@ -1,15 +1,19 @@
 import { FC } from "react";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+
+import Title from "../Title";
+
+import { IGameHistory } from "../../models";
 
 import "./index.scss";
-import Title from "../Title";
-import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 
 interface GameOverProps {
   winner: string;
+  stats: IGameHistory[];
 }
 
-const GameOver: FC<GameOverProps> = ({ winner }) => {
+const GameOver: FC<GameOverProps> = ({ winner, stats }) => {
   const gameOverVariants = {
     visible: {
       opacity: 1,
@@ -31,14 +35,27 @@ const GameOver: FC<GameOverProps> = ({ winner }) => {
       <p className="gameover__winner">
         Команда-победитель: <span className="gameover__team">{winner}</span>
       </p>
-      <Link
-        style={{ display: "block" }}
-        className="button button--secondary"
-        to="/welcome"
-        replace={true}
-      >
-        Вернуться на главную
-      </Link>
+      <div className="gameover__row">
+        <Link
+          className="button button--primary"
+          to="/stats"
+          state={{
+            stats,
+            winner,
+          }}
+          replace={true}
+        >
+          Посмотреть историю
+        </Link>
+        <Link
+          style={{ display: "block" }}
+          className="button button--secondary"
+          to="/welcome"
+          replace={true}
+        >
+          Вернуться на главную
+        </Link>
+      </div>
     </motion.div>
   );
 };

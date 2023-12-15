@@ -15,6 +15,7 @@ import Notification from "./components/Notification";
 
 import "./App.scss";
 import "./components/Button/index.scss";
+import StatsPage from "./pages/StatsPage";
 
 const App: FC = () => {
   const navigate = useNavigate();
@@ -77,6 +78,7 @@ const App: FC = () => {
               path="/session"
               element={<SessionPage handleNotification={handleNotification} />}
             />
+            <Route path="/stats" element={<StatsPage />} />
             <Route
               path="/settings"
               element={

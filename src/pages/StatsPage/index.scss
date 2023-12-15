@@ -1,0 +1,66 @@
+.stats {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 25px;
+  justify-content: center;
+  padding: 0 10px;
+  &__subtitle {
+    font-size: 32px;
+    font-weight: 700;
+  }
+  &__winner {
+    display: inline-block;
+    padding: 15px 25px;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 900;
+    border-radius: 20px;
+    border: 2px solid var(--main-text-color);
+    &--innocent {
+      background-color: var(--secondary-color);
+    }
+    &--mafia {
+      background-color: var(--main-color);
+    }
+  }
+  &__list {
+    margin: 50px 0 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    &-item {
+      display: flex;
+      align-items: center;
+      gap: 48px;
+      padding: 25px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+    &-player {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 18px;
+      font-weight: 700;
+      img {
+        width: 118.5px;
+        height: 153.9px;
+        object-fit: cover;
+      }
+    }
+    &-description {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      font-size: 18px;
+      font-style: normal;
+      font-weight: 400;
+    }
+  }
+  &__strong {
+    font-weight: 900;
+  }
+}

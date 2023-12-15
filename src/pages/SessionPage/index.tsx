@@ -14,7 +14,7 @@ import {
   pagesTransition,
 } from "../../utils/pagesAnimation";
 
-import { IPlayers } from "../../models";
+import { IGameStats, IPlayers } from "../../models";
 
 import "./index.scss";
 import GameOver from "../../components/GameOver";
@@ -35,7 +35,8 @@ const SessionPage: FC<SessionPageProps> = ({ handleNotification }) => {
   const [gameStats, setGameStats] = useState({
     type: "Ночь",
     counter: 0,
-  });
+    history: [],
+  } as IGameStats);
   const [queueingPlayers, setQueueingPlayers] = useState<number[]>([]);
   const [isQueueing, setIsQueueing] = useState(false);
 
@@ -54,6 +55,7 @@ const SessionPage: FC<SessionPageProps> = ({ handleNotification }) => {
         return {
           type: prev.type === "Ночь" ? "День" : "Ночь",
           counter: prev.type === "Ночь" ? prev.counter : prev.counter + 1,
+          history: prev.history,
         };
       });
     };
@@ -95,7 +97,13 @@ const SessionPage: FC<SessionPageProps> = ({ handleNotification }) => {
         <Timer handleNotification={handleNotification} />
         <Title text={`${gameStats.type} – ${gameStats.counter}`} />
         <AnimatePresence>
-          {isGameOver && <GameOver key="gameover" winner={winner.current} />}
+          {isGameOver && (
+            <GameOver
+              key="gameover"
+              winner={winner.current}
+              stats={gameStats.history}
+            />
+          )}
         </AnimatePresence>
         <div className="session__wrapper">
           <GameDesk
@@ -104,8 +112,8 @@ const SessionPage: FC<SessionPageProps> = ({ handleNotification }) => {
             setQueueingPlayers={setQueueingPlayers}
             setInnocentPlayersAlive={setInnocentPlayersAlive}
             setMafiaPlayersAlive={setMafiaPlayersAlive}
-            gameTime={gameStats.type}
-            cycleCount={gameStats.counter}
+            gameStats={gameStats}
+            setGameStats={setGameStats}
           />
           <AnimatePresence>
             {isQueueing && (

@@ -18,8 +18,14 @@
   &__winner {
     font-size: 24px;
     font-weight: 400;
+    margin-bottom: 12px;
   }
   &__team {
     font-weight: 900;
+  }
+  &__row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
   }
 }

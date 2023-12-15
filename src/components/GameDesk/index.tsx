@@ -4,14 +4,14 @@ import GameDeskCard from "../GameDeskCard";
 
 import "./index.scss";
 
-import { IPlayers, IGameDeskPlayers } from "../../models";
+import { IPlayers, IGameDeskPlayers, IGameStats } from "../../models";
 import { motion } from "framer-motion";
 
 interface GameDeskProps {
   players: IPlayers[];
   queueingPlayers: number[];
-  gameTime: string;
-  cycleCount: number;
+  gameStats: IGameStats;
+  setGameStats: React.Dispatch<React.SetStateAction<IGameStats>>;
   setQueueingPlayers: React.Dispatch<React.SetStateAction<number[]>>;
   setInnocentPlayersAlive: React.Dispatch<React.SetStateAction<number>>;
   setMafiaPlayersAlive: React.Dispatch<React.SetStateAction<number>>;
@@ -20,8 +20,8 @@ interface GameDeskProps {
 const GameDesk: FC<GameDeskProps> = ({
   players,
   queueingPlayers,
-  gameTime,
-  cycleCount,
+  gameStats,
+  setGameStats,
   setQueueingPlayers,
   setInnocentPlayersAlive,
   setMafiaPlayersAlive,
@@ -68,8 +68,8 @@ const GameDesk: FC<GameDeskProps> = ({
               player.isMafia ? setMafiaPlayersAlive : setInnocentPlayersAlive
             }
             setQueueingPlayers={setQueueingPlayers}
-            cycleCount={cycleCount}
-            gameTime={gameTime}
+            gameStats={gameStats}
+            setGameStats={setGameStats}
           />
         ))}
       </div>

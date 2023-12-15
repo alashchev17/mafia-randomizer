@@ -1,4 +1,5 @@
 .button {
+  display: inline-block;
   font-family: "lato", sans-serif;
   font-size: 16px;
   font-style: normal;
@@ -7,7 +8,10 @@
   padding: 15px 30px;
   border-radius: 10px;
   cursor: pointer;
-  transition: box-shadow 0.3s ease-in-out, color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+  transition:
+    box-shadow 0.3s ease-in-out,
+    color 0.3s ease-in-out,
+    background-color 0.3s ease-in-out;
   &.disabled {
     cursor: not-allowed;
     background-color: var(--disabled-bg-color);

@@ -18,3 +18,19 @@ export interface IGameDeskPlayers {
   roleSrc: string;
   isMafia: boolean;
 }
+
+export interface IGameHistory {
+  playerId: number;
+  playerCard: string;
+  reason: string;
+  timestamp: {
+    type: "День" | "Ночь";
+    cycle: number;
+  };
+}
+
+export interface IGameStats {
+  type: "День" | "Ночь";
+  counter: number;
+  history: IGameHistory[];
+}
