@@ -220,7 +220,7 @@ const GameDeskCard: FC<GameDeskCardProps> = ({
 
     handleNotification(
       true,
-      `Единственной кандидатурой на снятие был Игрок №${queueingPlayers[0]}`,
+      `Игрок №${queueingPlayers[0]} - единственный выставленный игрок!`,
     );
 
     setPlayerStatus((prev) => {
