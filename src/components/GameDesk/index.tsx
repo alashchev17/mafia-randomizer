@@ -11,20 +11,28 @@ interface GameDeskProps {
   players: IPlayers[];
   queueingPlayers: number[];
   gameStats: IGameStats;
+  isQueueing: boolean;
+  isInstantQueue: boolean;
+  setIsQueueing: React.Dispatch<React.SetStateAction<boolean>>;
   setGameStats: React.Dispatch<React.SetStateAction<IGameStats>>;
   setQueueingPlayers: React.Dispatch<React.SetStateAction<number[]>>;
   setInnocentPlayersAlive: React.Dispatch<React.SetStateAction<number>>;
   setMafiaPlayersAlive: React.Dispatch<React.SetStateAction<number>>;
+  handleNotification: (state: boolean, text: string) => void;
 }
 
 const GameDesk: FC<GameDeskProps> = ({
   players,
   queueingPlayers,
+  isInstantQueue,
   gameStats,
+  isQueueing,
+  setIsQueueing,
   setGameStats,
   setQueueingPlayers,
   setInnocentPlayersAlive,
   setMafiaPlayersAlive,
+  handleNotification,
 }) => {
   const listOfPlayers: IGameDeskPlayers[] = players.map(
     (player: IPlayers, index: number) => {
@@ -64,12 +72,16 @@ const GameDesk: FC<GameDeskProps> = ({
             key={player.id}
             player={player}
             queueingPlayers={queueingPlayers}
+            isInstantQueue={isInstantQueue}
             setPlayerDead={
               player.isMafia ? setMafiaPlayersAlive : setInnocentPlayersAlive
             }
+            isQueueing={isQueueing}
+            setIsQueueing={setIsQueueing}
             setQueueingPlayers={setQueueingPlayers}
             gameStats={gameStats}
             setGameStats={setGameStats}
+            handleNotification={handleNotification}
           />
         ))}
       </div>

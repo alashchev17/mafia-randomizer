@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 
 import Penalty from "../Penalty";
 
-import { IGameDeskPlayers, IGameHistory, IGameStats } from "../../models";
+import { IGameDeskPlayers, IGameStats } from "../../models";
 
 import "./index.scss";
 
@@ -20,18 +20,26 @@ interface GameDeskCardProps {
   player: IGameDeskPlayers;
   queueingPlayers: number[];
   gameStats: IGameStats;
+  isQueueing: boolean;
+  isInstantQueue: boolean;
   setGameStats: React.Dispatch<React.SetStateAction<IGameStats>>;
   setQueueingPlayers: React.Dispatch<React.SetStateAction<number[]>>;
   setPlayerDead: React.Dispatch<React.SetStateAction<number>>;
+  setIsQueueing: React.Dispatch<React.SetStateAction<boolean>>;
+  handleNotification: (state: boolean, text: string) => void;
 }
 
 const GameDeskCard: FC<GameDeskCardProps> = ({
   player,
   queueingPlayers,
   gameStats,
+  isQueueing,
+  isInstantQueue,
   setGameStats,
   setQueueingPlayers,
   setPlayerDead,
+  setIsQueueing,
+  handleNotification,
 }) => {
   const [playerStatus, setPlayerStatus] = useState({
     isMuted: false,
@@ -78,26 +86,27 @@ const GameDeskCard: FC<GameDeskCardProps> = ({
   };
 
   const handleKill = () => {
-    setPlayerStatus({
-      isDeleted: false,
-      isKilled: true,
-      isQueued: false,
-      isMuted: false,
-    });
+    setPlayerStatus((prev) => ({
+      ...prev,
+      isMuted: prev.isMuted ? false : prev.isMuted,
+      isKilled: !prev.isKilled,
+    }));
     setPlayerDead((prev) => prev - 1);
     setGameStats((prev) => {
-      const updatedHistory = prev.history;
-      updatedHistory.push({
-        playerId: player.id,
-        playerCard: player.roleSrc,
-        reason: "Отстрелен ночью представителями Мафии",
-        timestamp: {
-          type: gameStats.type,
-          cycle: gameStats.counter,
+      const updatedHistory = [
+        ...prev.history,
+        {
+          playerId: player.id,
+          playerCard: player.roleSrc,
+          reason: "Отстрелен ночью представителями Мафии",
+          timestamp: {
+            type: gameStats.type,
+            cycle: gameStats.counter,
+          },
         },
-      });
-
+      ];
       return {
+        ...prev,
         type: prev.type,
         counter: prev.counter,
         history: updatedHistory,
@@ -106,27 +115,27 @@ const GameDeskCard: FC<GameDeskCardProps> = ({
   };
 
   const handleDelete = () => {
-    setPlayerStatus({
-      isDeleted: true,
-      isKilled: false,
-      isQueued: false,
-      isMuted: false,
-    });
+    setPlayerStatus((prev) => ({
+      ...prev,
+      isMuted: prev.isMuted ? false : prev.isMuted,
+      isDeleted: !prev.isDeleted,
+    }));
     setPlayerDead((prev) => prev - 1);
     setGameStats((prev) => {
-      const updatedHistory: IGameHistory[] = prev.history;
-
-      updatedHistory.push({
-        playerId: player.id,
-        playerCard: player.roleSrc,
-        reason: "Удалён ведущим после 4-го фолла",
-        timestamp: {
-          type: gameStats.type,
-          cycle: gameStats.counter,
+      const updatedHistory = [
+        ...prev.history,
+        {
+          playerId: player.id,
+          playerCard: player.roleSrc,
+          reason: "Удалён ведущим после 4-го фолла",
+          timestamp: {
+            type: gameStats.type,
+            cycle: gameStats.counter,
+          },
         },
-      });
-
+      ];
       return {
+        ...prev,
         type: prev.type,
         counter: prev.counter,
         history: updatedHistory,
@@ -135,27 +144,27 @@ const GameDeskCard: FC<GameDeskCardProps> = ({
   };
 
   const handleQueue = () => {
-    setPlayerStatus({
-      isDeleted: false,
-      isKilled: false,
-      isQueued: true,
-      isMuted: false,
-    });
+    setPlayerStatus((prev) => ({
+      ...prev,
+      isMuted: prev.isMuted ? false : prev.isMuted,
+      isQueued: !prev.isQueued,
+    }));
     setPlayerDead((prev) => prev - 1);
     setGameStats((prev) => {
-      const updatedHistory = prev.history;
-
-      updatedHistory.push({
-        playerId: player.id,
-        playerCard: player.roleSrc,
-        reason: "Снят во время дневного голосования",
-        timestamp: {
-          type: gameStats.type,
-          cycle: gameStats.counter,
+      const updatedHistory = [
+        ...prev.history,
+        {
+          playerId: player.id,
+          playerCard: player.roleSrc,
+          reason: "Снят во время дневного голосования",
+          timestamp: {
+            type: gameStats.type,
+            cycle: gameStats.counter,
+          },
         },
-      });
-
+      ];
       return {
+        ...prev,
         type: prev.type,
         counter: prev.counter,
         history: updatedHistory,
@@ -164,6 +173,9 @@ const GameDeskCard: FC<GameDeskCardProps> = ({
   };
 
   const setupOnQueue = () => {
+    if (isQueueing) {
+      return;
+    }
     if (gameStats.type === "День") {
       if (!isPromoted) {
         setIsPromoted((prev) => !prev);
@@ -203,6 +215,34 @@ const GameDeskCard: FC<GameDeskCardProps> = ({
     // eslint-disable-next-line
   }, [playerStatus.isMuted]);
 
+  useEffect(() => {
+    if (!isInstantQueue) return;
+
+    handleNotification(
+      true,
+      `Единственной кандидатурой на снятие был Игрок №${queueingPlayers[0]}`,
+    );
+
+    setPlayerStatus((prev) => {
+      return {
+        ...prev,
+        isQueued: isInstantQueue && queueingPlayers[0] === player.id,
+      };
+    });
+
+    setIsPromoted(false);
+
+    setQueueingPlayers((prev) => {
+      const currentArray = [...prev];
+      const indexInArray = currentArray.indexOf(player.id);
+      currentArray.splice(indexInArray, 1);
+      return currentArray;
+    });
+
+    setIsQueueing(false);
+    // eslint-disable-next-line
+  }, [isInstantQueue]);
+
   return (
     <motion.div
       className="player game-desk__player"
@@ -218,7 +258,8 @@ const GameDeskCard: FC<GameDeskCardProps> = ({
             gameStats.type === "Ночь" ||
             playerStatus.isKilled ||
             playerStatus.isDeleted ||
-            playerStatus.isQueued
+            playerStatus.isQueued ||
+            isQueueing
               ? "disabled"
               : ""
           }`}

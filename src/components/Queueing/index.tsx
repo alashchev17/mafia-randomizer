@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 
 import Title from "../Title";
 import QueueingPlayer from "../QueueingPlayer";
@@ -9,9 +9,14 @@ import "./index.scss";
 interface QueueingProps {
   queueingPlayers: number[];
   amountOfPlayers: number;
+  handleInstantQueue: (state: boolean) => void;
 }
 
-const Queueing: FC<QueueingProps> = ({ queueingPlayers, amountOfPlayers }) => {
+const Queueing: FC<QueueingProps> = ({
+  queueingPlayers,
+  amountOfPlayers,
+  handleInstantQueue,
+}) => {
   const queueingVariants = {
     visible: {
       height: "auto",
@@ -25,6 +30,14 @@ const Queueing: FC<QueueingProps> = ({ queueingPlayers, amountOfPlayers }) => {
     },
   };
 
+  useEffect(() => {
+    handleInstantQueue(false);
+    if (queueingPlayers.length === 1) {
+      handleInstantQueue(true);
+    }
+    // eslint-disable-next-line
+  }, []);
+
   return (
     <motion.div
       className="queueing"
@@ -37,19 +50,23 @@ const Queueing: FC<QueueingProps> = ({ queueingPlayers, amountOfPlayers }) => {
       }}
       exit="hidden"
     >
-      <Title text="Голосование" />
-      <div className="queueing__players">
-        <AnimatePresence mode="wait">
-          {queueingPlayers.map((player) => (
-            <QueueingPlayer
-              key={player}
-              player={player}
-              queueingPlayers={queueingPlayers}
-              amountOfPlayers={amountOfPlayers}
-            />
-          ))}
-        </AnimatePresence>
-      </div>
+      {queueingPlayers.length > 1 && (
+        <>
+          <Title text="Голосование" />
+          <div className="queueing__players">
+            <AnimatePresence mode="wait">
+              {queueingPlayers.map((player) => (
+                <QueueingPlayer
+                  key={player}
+                  player={player}
+                  queueingPlayers={queueingPlayers}
+                  amountOfPlayers={amountOfPlayers}
+                />
+              ))}
+            </AnimatePresence>
+          </div>
+        </>
+      )}
     </motion.div>
   );
 };

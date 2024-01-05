@@ -39,120 +39,22 @@ const SessionPage: FC<SessionPageProps> = ({ handleNotification }) => {
   } as IGameStats);
   const [queueingPlayers, setQueueingPlayers] = useState<number[]>([]);
   const [isQueueing, setIsQueueing] = useState(false);
-
   const [innocentPlayersAlive, setInnocentPlayersAlive] =
     useState(innocentPlayers);
   const [mafiaPlayersAlive, setMafiaPlayersAlive] = useState(mafiaPlayers);
-
   const [isGameOver, setIsGameOver] = useState(false);
-
+  const [isInstantQueue, setIsInstantQueue] = useState(false);
   const winner = useRef("Ничья");
 
-  if (location.state) {
-    const listOfPlayers: IPlayers[] = location.state.players;
-    const handleStats = () => {
-      setGameStats((prev) => {
-        return {
-          type: prev.type === "Ночь" ? "День" : "Ночь",
-          counter: prev.type === "Ночь" ? prev.counter : prev.counter + 1,
-          history: prev.history,
-        };
-      });
-    };
-
-    const handleQueue = () => {
-      setIsQueueing((prev) => !prev);
-    };
-
-    const handleGameOver = () => {
-      if (window.confirm("Вы действительно хотите завершить партию?")) {
-        setIsGameOver((prev) => !prev);
-      }
-    };
-
-    if (listOfPlayers.length > 12 || listOfPlayers.length < 6) {
-      handleNotification(true, "Некорректное количество игроков!");
-      return <Navigate to="/settings" replace={true} />;
+  useEffect(() => {
+    if (mafiaPlayersAlive < 1 || mafiaPlayersAlive === innocentPlayersAlive) {
+      winner.current =
+        mafiaPlayersAlive === innocentPlayersAlive ? "Мафия" : "Мирные жители";
+      setIsGameOver(true);
     }
+  }, [isGameOver, mafiaPlayersAlive, innocentPlayersAlive]);
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useEffect(() => {
-      if (mafiaPlayersAlive < 1 || mafiaPlayersAlive === innocentPlayersAlive) {
-        winner.current =
-          mafiaPlayersAlive === innocentPlayersAlive
-            ? "Мафия"
-            : "Мирные жители";
-        setIsGameOver(true);
-      }
-    }, [isGameOver, mafiaPlayersAlive, innocentPlayersAlive]);
-
-    return (
-      <motion.section
-        initial={pagesInitial}
-        animate={pagesAnimate}
-        transition={pagesTransition}
-        className="session"
-      >
-        <Title text="Таймер & Игровое поле" />
-        <Timer handleNotification={handleNotification} />
-        <Title text={`${gameStats.type} – ${gameStats.counter}`} />
-        <AnimatePresence>
-          {isGameOver && (
-            <GameOver
-              key="gameover"
-              winner={winner.current}
-              stats={gameStats.history}
-            />
-          )}
-        </AnimatePresence>
-        <div className="session__wrapper">
-          <GameDesk
-            players={listOfPlayers}
-            queueingPlayers={queueingPlayers}
-            setQueueingPlayers={setQueueingPlayers}
-            setInnocentPlayersAlive={setInnocentPlayersAlive}
-            setMafiaPlayersAlive={setMafiaPlayersAlive}
-            gameStats={gameStats}
-            setGameStats={setGameStats}
-          />
-          <AnimatePresence>
-            {isQueueing && (
-              <Queueing
-                key="queueing"
-                queueingPlayers={queueingPlayers}
-                amountOfPlayers={listOfPlayers.length}
-              />
-            )}
-          </AnimatePresence>
-        </div>
-        <div className="session__controls">
-          <Button
-            className={
-              gameStats.type === "День" ? "button--third" : "button--primary"
-            }
-            text={
-              gameStats.type === "День" ? "Следующая ночь" : "Следующий день"
-            }
-            clickHandle={handleStats}
-            disabled={isQueueing}
-          />
-          <AnimatePresence>
-            {gameStats.type === "День" && (
-              <Button
-                className="button--primary"
-                text={isQueueing ? "Скрыть голосование" : "Голосование"}
-                clickHandle={handleQueue}
-                disabled={queueingPlayers.length < 1}
-              ></Button>
-            )}
-          </AnimatePresence>
-          <button className="button button--secondary" onClick={handleGameOver}>
-            Завершить партию
-          </button>
-        </div>
-      </motion.section>
-    );
-  } else {
+  if (!location.state) {
     return (
       <Navigate
         to="/welcome"
@@ -164,6 +66,108 @@ const SessionPage: FC<SessionPageProps> = ({ handleNotification }) => {
       />
     );
   }
+
+  const listOfPlayers: IPlayers[] = location.state.players;
+
+  if (listOfPlayers.length > 12 || listOfPlayers.length < 6) {
+    handleNotification(true, "Некорректное количество игроков!");
+    return <Navigate to="/settings" replace={true} />;
+  }
+  const handleStats = () => {
+    setGameStats((prev) => {
+      return {
+        ...prev,
+        type: prev.type === "Ночь" ? "День" : "Ночь",
+        counter: prev.type === "День" ? prev.counter + 1 : prev.counter,
+        history: [...prev.history],
+      };
+    });
+  };
+
+  const handleQueue = () => {
+    setIsQueueing((prev) => !prev);
+  };
+
+  const handleGameOver = () => {
+    if (window.confirm("Вы действительно хотите завершить партию?")) {
+      setIsGameOver((prev) => !prev);
+    }
+  };
+
+  // function which handles if only one player was promoted on queueing process
+  const handleInstantQueue = (state: boolean) => {
+    setIsInstantQueue(state);
+  };
+
+  return (
+    <motion.section
+      initial={pagesInitial}
+      animate={pagesAnimate}
+      transition={pagesTransition}
+      className="session"
+    >
+      <Title text="Таймер & Игровое поле" />
+      <Timer handleNotification={handleNotification} />
+      <Title text={`${gameStats.type} – ${gameStats.counter}`} />
+      <AnimatePresence>
+        {isGameOver && (
+          <GameOver
+            key="gameover"
+            winner={winner.current}
+            stats={gameStats.history}
+          />
+        )}
+      </AnimatePresence>
+      <div className="session__wrapper">
+        <GameDesk
+          players={listOfPlayers}
+          queueingPlayers={queueingPlayers}
+          isInstantQueue={isInstantQueue}
+          isQueueing={isQueueing}
+          setIsQueueing={setIsQueueing}
+          setQueueingPlayers={setQueueingPlayers}
+          setInnocentPlayersAlive={setInnocentPlayersAlive}
+          setMafiaPlayersAlive={setMafiaPlayersAlive}
+          gameStats={gameStats}
+          setGameStats={setGameStats}
+          handleNotification={handleNotification}
+        />
+        <AnimatePresence>
+          {isQueueing && (
+            <Queueing
+              key="queueing"
+              queueingPlayers={queueingPlayers}
+              amountOfPlayers={listOfPlayers.length}
+              handleInstantQueue={handleInstantQueue}
+            />
+          )}
+        </AnimatePresence>
+      </div>
+      <div className="session__controls">
+        <Button
+          className={
+            gameStats.type === "День" ? "button--third" : "button--primary"
+          }
+          text={gameStats.type === "День" ? "Следующая ночь" : "Следующий день"}
+          clickHandle={handleStats}
+          disabled={isQueueing}
+        />
+        <AnimatePresence>
+          {gameStats.type === "День" && (
+            <Button
+              className="button--primary"
+              text={isQueueing ? "Скрыть голосование" : "Голосование"}
+              clickHandle={handleQueue}
+              disabled={queueingPlayers.length < 1}
+            ></Button>
+          )}
+        </AnimatePresence>
+        <button className="button button--secondary" onClick={handleGameOver}>
+          Завершить партию
+        </button>
+      </div>
+    </motion.section>
+  );
 };
 
 export default SessionPage;
