@@ -40,7 +40,7 @@ const SessionPage: FC<SessionPageProps> = ({ handleNotification }) => {
     useState(innocentPlayers);
   const [mafiaPlayersAlive, setMafiaPlayersAlive] = useState(mafiaPlayers);
   const [isGameOver, setIsGameOver] = useState(false);
-  const winner = useRef("Ничья");
+  const winner = useRef("Игра завершена досрочно");
 
   useEffect(() => {
     if (mafiaPlayersAlive < 1 || mafiaPlayersAlive === innocentPlayersAlive) {

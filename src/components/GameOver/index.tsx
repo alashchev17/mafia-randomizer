@@ -37,17 +37,19 @@ const GameOver: FC<GameOverProps> = ({ winner }) => {
         Команда-победитель: <span className="gameover__team">{winner}</span>
       </p>
       <div className="gameover__row">
-        <Link
-          className="button button--primary"
-          to="/stats"
-          state={{
-            stats,
-            winner,
-          }}
-          replace={true}
-        >
-          Посмотреть историю
-        </Link>
+        {winner !== "Игра завершена досрочно" && (
+          <Link
+            className="button button--primary"
+            to="/stats"
+            state={{
+              stats,
+              winner,
+            }}
+            replace={true}
+          >
+            Посмотреть историю
+          </Link>
+        )}
         <Link
           style={{ display: "block" }}
           className="button button--secondary"
