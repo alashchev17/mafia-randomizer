@@ -54,7 +54,7 @@ const Queueing: FC<QueueingProps> = ({
         <>
           <Title text="Голосование" />
           <div className="queueing__players">
-            <AnimatePresence mode="wait">
+            <AnimatePresence mode="sync">
               {queueingPlayers.map((player) => (
                 <QueueingPlayer
                   key={player}

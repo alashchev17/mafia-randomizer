@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 
 import Penalty from "../Penalty";
 
-import { IGameDeskPlayers, IGameStats } from "../../models";
+import { IGameDeskPlayers } from "../../models";
 
 import "./index.scss";
 
@@ -15,32 +15,29 @@ import queuedSvg from "./assets/queued.svg";
 import killBtnSvg from "./assets/buttons/kill.svg";
 import queueBtnSvg from "./assets/buttons/queue.svg";
 import deleteBtnSvg from "./assets/buttons/delete.svg";
+import { useSessionContext } from "../../contexts/SessionContext.tsx";
 
 interface GameDeskCardProps {
   player: IGameDeskPlayers;
-  queueingPlayers: number[];
-  gameStats: IGameStats;
-  isQueueing: boolean;
-  isInstantQueue: boolean;
-  setGameStats: React.Dispatch<React.SetStateAction<IGameStats>>;
-  setQueueingPlayers: React.Dispatch<React.SetStateAction<number[]>>;
   setPlayerDead: React.Dispatch<React.SetStateAction<number>>;
-  setIsQueueing: React.Dispatch<React.SetStateAction<boolean>>;
   handleNotification: (state: boolean, text: string) => void;
 }
 
 const GameDeskCard: FC<GameDeskCardProps> = ({
   player,
-  queueingPlayers,
-  gameStats,
-  isQueueing,
-  isInstantQueue,
-  setGameStats,
-  setQueueingPlayers,
   setPlayerDead,
-  setIsQueueing,
   handleNotification,
 }) => {
+  const {
+    gameStats,
+    setGameStats,
+    setQueueingPlayers,
+    queueingPlayers,
+    isInstantQueue,
+    setIsQueueing,
+    isQueueing,
+  } = useSessionContext();
+
   const [playerStatus, setPlayerStatus] = useState({
     isMuted: false,
     isKilled: false,
@@ -48,7 +45,7 @@ const GameDeskCard: FC<GameDeskCardProps> = ({
     isQueued: false,
   });
 
-  const [mutedTime, setMutedTime] = useState<number>(undefined!);
+  const [mutedTime, setMutedTime] = useState<number | undefined>(undefined);
 
   const [isPromoted, setIsPromoted] = useState(
     queueingPlayers.indexOf(player.id) !== -1,
@@ -198,8 +195,11 @@ const GameDeskCard: FC<GameDeskCardProps> = ({
     if (gameStats.type === "Ночь") {
       setIsPromoted(false);
       setQueueingPlayers([]);
-      if (mutedTime + 2 === gameStats.counter) {
-        setMutedTime(undefined!);
+      if (
+        typeof mutedTime === "number" &&
+        mutedTime + 2 === gameStats.counter
+      ) {
+        setMutedTime(undefined);
         setPlayerStatus((prev) => ({
           ...prev,
           isMuted: false,
