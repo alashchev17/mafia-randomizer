@@ -1,27 +1,27 @@
-export interface IDatabaseDescriptions {
+export interface IDatabaseDescription {
   id: number;
   text: string;
   title?: string;
   path: string;
 }
 
-export interface IDatabaseRoles {
+export interface IDatabaseRole {
   id: number;
   title: string;
   roleDescription: string;
   roleSrc: string;
 }
 
-export interface IDatabaseGameModes {
+export interface IDatabaseGameMode {
   id: number;
   title: string;
   description: string;
 }
 
 export interface IDatabase {
-  descriptions: IDatabaseDescriptions[];
-  roles: IDatabaseRoles[];
-  gameModes: IDatabaseGameModes[];
+  descriptions: IDatabaseDescription[];
+  roles: IDatabaseRole[];
+  gameModes: IDatabaseGameMode[];
 }
 
 export const database: IDatabase = {

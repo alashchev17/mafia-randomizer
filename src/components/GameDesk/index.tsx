@@ -4,10 +4,10 @@ import GameDeskCard from "../GameDeskCard";
 
 import "./index.scss";
 
-import { IPlayers, IGameDeskPlayers } from "../../models";
+import { IPlayer, IGameDeskPlayer } from "../../models";
 import { motion } from "framer-motion";
 interface GameDeskProps {
-  players: IPlayers[];
+  players: IPlayer[];
   setInnocentPlayersAlive: React.Dispatch<React.SetStateAction<number>>;
   setMafiaPlayersAlive: React.Dispatch<React.SetStateAction<number>>;
   handleNotification: (state: boolean, text: string) => void;
@@ -19,8 +19,8 @@ const GameDesk: FC<GameDeskProps> = ({
   setMafiaPlayersAlive,
   handleNotification,
 }) => {
-  const listOfPlayers: IGameDeskPlayers[] = players.map(
-    (player: IPlayers, index: number) => {
+  const listOfPlayers: IGameDeskPlayer[] = players.map(
+    (player: IPlayer, index: number) => {
       return {
         id: index + 1,
         role: player.role,

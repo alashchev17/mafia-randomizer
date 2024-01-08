@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import Title from "../../components/Title";
 import DescriptionParagraph from "../../components/DescriptionParagraph";
 
-import { database, IDatabaseDescriptions } from "../../assets/database";
+import { database, IDatabaseDescription } from "../../assets/database";
 import {
   pagesAnimate,
   pagesInitial,
@@ -15,8 +15,8 @@ import {
 const MainPage: FC = () => {
   const location = useLocation();
 
-  const [description, setDescription] = useState<IDatabaseDescriptions>(
-    {} as IDatabaseDescriptions,
+  const [description, setDescription] = useState<IDatabaseDescription>(
+    {} as IDatabaseDescription,
   );
 
   useEffect(() => {
@@ -24,7 +24,7 @@ const MainPage: FC = () => {
 
     const currentLocation = location.pathname.split("/")[1];
 
-    const description: IDatabaseDescriptions = database.descriptions.find(
+    const description: IDatabaseDescription = database.descriptions.find(
       (d) => d.path === currentLocation,
     )!;
     setDescription(description);

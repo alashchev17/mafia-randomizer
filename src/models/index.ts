@@ -7,12 +7,12 @@ export interface INotification {
   text: string;
 }
 
-export interface IPlayers {
+export interface IPlayer {
   role: string;
   roleSrc: string;
 }
 
-export interface IGameDeskPlayers {
+export interface IGameDeskPlayer {
   id: number;
   role: string;
   roleSrc: string;

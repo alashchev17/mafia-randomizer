@@ -8,6 +8,7 @@ import Timer from "../../components/Timer";
 import GameDesk from "../../components/GameDesk";
 import SessionControls from "../../components/SessionControls";
 import GameDeskQueueing from "../../components/GameDeskQueueing";
+import GameOver from "../../components/GameOver";
 
 import {
   pagesAnimate,
@@ -15,10 +16,9 @@ import {
   pagesTransition,
 } from "../../utils/pagesAnimation";
 
-import { IPlayers } from "../../models";
+import { IPlayer } from "../../models";
 
 import "./index.scss";
-import GameOver from "../../components/GameOver";
 
 import SessionContextProvider from "../../contexts/SessionContext.tsx";
 
@@ -63,7 +63,7 @@ const SessionPage: FC<SessionPageProps> = ({ handleNotification }) => {
     );
   }
 
-  const listOfPlayers: IPlayers[] = location.state.players;
+  const listOfPlayers: IPlayer[] = location.state.players;
 
   if (listOfPlayers.length > 12 || listOfPlayers.length < 6) {
     handleNotification(true, "Некорректное количество игроков!");

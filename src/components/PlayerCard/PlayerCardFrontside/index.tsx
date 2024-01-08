@@ -1,12 +1,12 @@
 import { FC, useEffect, useState } from "react";
 
-import { IPlayers } from "../../../models";
+import { IPlayer } from "../../../models";
 
 import "./index.scss";
 
 interface PlayerCardFrontsideProps {
   isRevealed: boolean;
-  currentPlayer: IPlayers;
+  currentPlayer: IPlayer;
 }
 
 const PlayerCardFrontside: FC<PlayerCardFrontsideProps> = ({

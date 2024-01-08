@@ -1,6 +1,6 @@
-import { IPlayers } from "../models";
+import { IPlayer } from "../models";
 
-export const initialPlayers: IPlayers[] = [
+export const initialPlayers: IPlayer[] = [
   {
     role: "Мирный житель",
     roleSrc: "/cards/innocent.svg",
@@ -18,15 +18,15 @@ export const rolesRandomizer = (playersAmount: number, gameMode: string) => {
       break;
   }
 
-  const generateRole = (role: string, roleSrc: string): IPlayers => {
+  const generateRole = (role: string, roleSrc: string): IPlayer => {
     return { role, roleSrc };
   };
 
   const generateArrayOfPlayers = (
     mafiaPlayers: number,
     innocentPlayers: number,
-  ): IPlayers[] => {
-    const arrayOfRoles = [] as IPlayers[];
+  ): IPlayer[] => {
+    const arrayOfRoles = [] as IPlayer[];
 
     if (mafiaPlayers === 1) {
       arrayOfRoles.push(generateRole("Дон", "/cards/headOfMafia.svg"));
@@ -54,7 +54,7 @@ export const rolesRandomizer = (playersAmount: number, gameMode: string) => {
     return arrayOfRoles;
   };
 
-  const shuffleArray = (array: IPlayers[]) => {
+  const shuffleArray = (array: IPlayer[]) => {
     const shuffledArray = [...array];
 
     for (let i = shuffledArray.length - 1; i > 0; i--) {

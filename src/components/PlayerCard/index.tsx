@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-import { IPlayers } from "../../models";
+import { IPlayer } from "../../models";
 
 import PlayerCardBackside from "./PlayerCardBackside";
 import PlayerCardFrontside from "./PlayerCardFrontside";
@@ -12,7 +12,7 @@ interface PlayerCardProps {
   setIsRevealed: (state: boolean) => void;
   isRevealing: boolean;
   setIsRevealing: (state: boolean) => void;
-  currentPlayer: IPlayers;
+  currentPlayer: IPlayer;
 }
 
 const PlayerCard: FC<PlayerCardProps> = ({

@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 
 import Penalty from "../Penalty";
 
-import { IGameDeskPlayers } from "../../models";
+import { IGameDeskPlayer } from "../../models";
 
 import "./index.scss";
 
@@ -18,7 +18,7 @@ import deleteBtnSvg from "./assets/buttons/delete.svg";
 import { useSessionContext } from "../../contexts/SessionContext.tsx";
 
 interface GameDeskCardProps {
-  player: IGameDeskPlayers;
+  player: IGameDeskPlayer;
   setPlayerDead: React.Dispatch<React.SetStateAction<number>>;
   handleNotification: (state: boolean, text: string) => void;
 }

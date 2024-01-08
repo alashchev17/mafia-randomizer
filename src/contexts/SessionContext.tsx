@@ -15,7 +15,7 @@ type SessionContextType = {
 export const SessionContext = createContext<SessionContextType | null>(null);
 
 type SessionContextProviderProps = {
-  children?: React.ReactNode;
+  children: React.ReactNode;
 };
 
 export default function SessionContextProvider({

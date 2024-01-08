@@ -8,7 +8,7 @@ import {
   initialPlayers,
   rolesRandomizer,
 } from "../../utils/rolesRandomizer.ts";
-import { ISettings, IPlayers } from "../../models";
+import { ISettings, IPlayer } from "../../models";
 
 interface SetupContentProps {
   settings: ISettings;
@@ -18,7 +18,7 @@ const SetupContent: FC<SetupContentProps> = ({ settings }) => {
   const navigate = useNavigate();
   const { setupId } = useParams();
 
-  const [players, setPlayers] = useState(initialPlayers as IPlayers[]);
+  const [players, setPlayers] = useState(initialPlayers as IPlayer[]);
   const [playerId, setPlayerId] = useState(0);
   const [isRevealed, setIsRevealed] = useState(false);
   const [isRevealing, setIsRevealing] = useState(true);

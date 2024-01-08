@@ -1,11 +1,14 @@
 import { FC } from "react";
-import Queueing from "../Queueing";
-import { useSessionContext } from "../../contexts/SessionContext.tsx";
-import { IPlayers } from "../../models";
 import { AnimatePresence } from "framer-motion";
 
+import Queueing from "../Queueing";
+
+import { IPlayer } from "../../models";
+
+import { useSessionContext } from "../../contexts/SessionContext.tsx";
+
 type GameDeskQueueingProps = {
-  listOfPlayers: IPlayers[];
+  listOfPlayers: IPlayer[];
 };
 
 const GameDeskQueueing: FC<GameDeskQueueingProps> = ({ listOfPlayers }) => {

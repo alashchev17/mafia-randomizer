@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 import Title from "../../components/Title";
 
-import { database, IDatabaseRoles } from "../../assets/database";
+import { database, IDatabaseRole } from "../../assets/database";
 import RolesCard from "../../components/RolesCard";
 import {
   pagesAnimate,
@@ -27,7 +27,7 @@ const RolesInfoPage: FC = () => {
       <Title text="Информация о ролях" />
       <div className="roles-wrapper">
         {database.roles &&
-          database.roles.map((role: IDatabaseRoles, i: number) => (
+          database.roles.map((role: IDatabaseRole, i: number) => (
             <RolesCard
               key={role.id}
               title={role.title}
