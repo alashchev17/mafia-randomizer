@@ -239,6 +239,27 @@ const GameDeskCard: FC<GameDeskCardProps> = ({
       return currentArray;
     });
 
+    setGameStats((prev) => {
+      const updatedHistory = [
+        ...prev.history,
+        {
+          playerId: player.id,
+          playerCard: player.roleSrc,
+          reason: "Снят во время дневного голосования",
+          timestamp: {
+            type: gameStats.type,
+            cycle: gameStats.counter,
+          },
+        },
+      ];
+      return {
+        ...prev,
+        type: prev.type,
+        counter: prev.counter,
+        history: updatedHistory,
+      };
+    });
+
     setIsQueueing(false);
     // eslint-disable-next-line
   }, [isInstantQueue]);
