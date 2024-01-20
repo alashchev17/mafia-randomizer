@@ -223,44 +223,45 @@ const GameDeskCard: FC<GameDeskCardProps> = ({
       `Игрок №${queueingPlayers[0]} - единственный выставленный игрок!`,
     );
 
-    setPlayerStatus((prev) => {
-      return {
-        ...prev,
-        isQueued: isInstantQueue && queueingPlayers[0] === player.id,
-      };
-    });
+    // setPlayerStatus((prev) => {
+    //   return {
+    //     ...prev,
+    //     isQueued: isInstantQueue && queueingPlayers[0] === player.id,
+    //   };
+    // });
 
-    setIsPromoted(false);
+    // setIsPromoted(false);
 
-    setQueueingPlayers((prev) => {
-      const currentArray = [...prev];
-      const indexInArray = currentArray.indexOf(player.id);
-      currentArray.splice(indexInArray, 1);
-      return currentArray;
-    });
+    // setQueueingPlayers((prev) => {
+    //   const currentArray = [...prev];
+    //   const indexInArray = currentArray.indexOf(player.id);
+    //   currentArray.splice(indexInArray, 1);
+    //   return currentArray;
+    // });
 
-    setGameStats((prev) => {
-      const updatedHistory = [
-        ...prev.history,
-        {
-          playerId: player.id,
-          playerCard: player.roleSrc,
-          reason: "Снят во время дневного голосования",
-          timestamp: {
-            type: gameStats.type,
-            cycle: gameStats.counter,
-          },
-        },
-      ];
-      return {
-        ...prev,
-        type: prev.type,
-        counter: prev.counter,
-        history: updatedHistory,
-      };
-    });
+    // setGameStats((prev) => {
+    //   const updatedHistory = [
+    //     ...prev.history,
+    //     {
+    //       playerId: player.id,
+    //       playerCard: player.roleSrc,
+    //       reason: "Снят во время дневного голосования",
+    //       timestamp: {
+    //         type: gameStats.type,
+    //         cycle: gameStats.counter,
+    //       },
+    //     },
+    //   ];
+    //   return {
+    //     ...prev,
+    //     type: prev.type,
+    //     counter: prev.counter,
+    //     history: updatedHistory,
+    //   };
+    // });
 
-    setIsQueueing(false);
+    // setIsQueueing(false);
+    handleQueue();
     // eslint-disable-next-line
   }, [isInstantQueue]);
 
