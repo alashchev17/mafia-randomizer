@@ -1,34 +1,27 @@
-import React, { FC } from "react";
+import React, { FC } from 'react'
 
-import GameDeskCard from "../GameDeskCard";
+import GameDeskCard from '../GameDeskCard'
 
-import "./index.scss";
+import './index.scss'
 
-import { IPlayer, IGameDeskPlayer } from "../../models";
-import { motion } from "framer-motion";
+import { IPlayer, IGameDeskPlayer } from '../../models'
+import { motion } from 'framer-motion'
 interface GameDeskProps {
-  players: IPlayer[];
-  setInnocentPlayersAlive: React.Dispatch<React.SetStateAction<number>>;
-  setMafiaPlayersAlive: React.Dispatch<React.SetStateAction<number>>;
-  handleNotification: (state: boolean, text: string) => void;
+  players: IPlayer[]
+  setInnocentPlayersAlive: React.Dispatch<React.SetStateAction<number>>
+  setMafiaPlayersAlive: React.Dispatch<React.SetStateAction<number>>
+  handleNotification: (state: boolean, text: string) => void
 }
 
-const GameDesk: FC<GameDeskProps> = ({
-  players,
-  setInnocentPlayersAlive,
-  setMafiaPlayersAlive,
-  handleNotification,
-}) => {
-  const listOfPlayers: IGameDeskPlayer[] = players.map(
-    (player: IPlayer, index: number) => {
-      return {
-        id: index + 1,
-        role: player.role,
-        roleSrc: player.roleSrc,
-        isMafia: player.role === "Мафия" || player.role === "Дон",
-      };
-    },
-  );
+const GameDesk: FC<GameDeskProps> = ({ players, setInnocentPlayersAlive, setMafiaPlayersAlive, handleNotification }) => {
+  const listOfPlayers: IGameDeskPlayer[] = players.map((player: IPlayer, index: number) => {
+    return {
+      id: index + 1,
+      role: player.role,
+      roleSrc: player.roleSrc,
+      isMafia: player.role === 'Мафия' || player.role === 'Дон',
+    }
+  })
 
   const gameDeskVariants = {
     visible: {
@@ -39,7 +32,7 @@ const GameDesk: FC<GameDeskProps> = ({
       y: -40,
       opacity: 0,
     },
-  };
+  }
   return (
     <motion.div
       className="game-desk"
@@ -56,15 +49,13 @@ const GameDesk: FC<GameDeskProps> = ({
           <GameDeskCard
             key={player.id}
             player={player}
-            setPlayerDead={
-              player.isMafia ? setMafiaPlayersAlive : setInnocentPlayersAlive
-            }
+            setPlayerDead={player.isMafia ? setMafiaPlayersAlive : setInnocentPlayersAlive}
             handleNotification={handleNotification}
           />
         ))}
       </div>
     </motion.div>
-  );
-};
+  )
+}
 
-export default GameDesk;
+export default GameDesk
