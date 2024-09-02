@@ -1,21 +1,16 @@
-import { FC } from "react";
-import { motion } from "framer-motion";
+import { FC } from 'react'
+import { motion } from 'framer-motion'
 
-import "./index.scss";
+import './index.scss'
 
 interface ButtonProps {
-  className?: string;
-  text: string;
-  clickHandle?: () => void;
-  disabled?: boolean;
+  className?: string
+  text: string
+  clickHandle?: () => void
+  disabled?: boolean
 }
 
-const Button: FC<ButtonProps> = ({
-  className,
-  text,
-  clickHandle,
-  disabled,
-}) => {
+const Button: FC<ButtonProps> = ({ className, text, clickHandle, disabled }) => {
   const buttonVariants = {
     hidden: {
       opacity: 0,
@@ -23,13 +18,11 @@ const Button: FC<ButtonProps> = ({
     visible: {
       opacity: 1,
     },
-  };
+  }
 
   return (
     <motion.button
-      className={`button ${className ? className : ""} ${
-        disabled ? "disabled" : ""
-      }`}
+      className={`button ${className ? className : ''} ${disabled ? 'disabled' : ''}`}
       onClick={clickHandle}
       disabled={disabled}
       variants={buttonVariants}
@@ -39,7 +32,7 @@ const Button: FC<ButtonProps> = ({
     >
       {text}
     </motion.button>
-  );
-};
+  )
+}
 
-export default Button;
+export default Button
