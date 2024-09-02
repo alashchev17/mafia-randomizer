@@ -8,10 +8,9 @@ interface ButtonProps {
   text: string
   clickHandle?: () => void
   disabled?: boolean
-  ref?: React.RefObject<HTMLButtonElement>
 }
 
-const Button: FC<ButtonProps> = ({ className, text, clickHandle, disabled, ref }) => {
+const Button: FC<ButtonProps> = ({ className, text, clickHandle, disabled }) => {
   const buttonVariants = {
     hidden: {
       opacity: 0,
@@ -29,7 +28,6 @@ const Button: FC<ButtonProps> = ({ className, text, clickHandle, disabled, ref }
       variants={buttonVariants}
       initial="hidden"
       animate="visible"
-      ref={ref}
       exit="hidden"
     >
       {text}
