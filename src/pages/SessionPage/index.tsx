@@ -17,12 +17,14 @@ import { IPlayer } from '../../models'
 import './index.scss'
 
 import SessionContextProvider from '../../contexts/SessionContext.tsx'
+import { useTranslation } from 'react-i18next'
 
 interface SessionPageProps {
   handleNotification: (state: boolean, text: string) => void
 }
 
 const SessionPage: FC<SessionPageProps> = ({ handleNotification }) => {
+  const { t } = useTranslation()
   const location = useLocation()
 
   const innocentPlayers: number = location.state?.innocentPlayers ? location.state.innocentPlayers : 0
@@ -31,14 +33,14 @@ const SessionPage: FC<SessionPageProps> = ({ handleNotification }) => {
   const [innocentPlayersAlive, setInnocentPlayersAlive] = useState(innocentPlayers)
   const [mafiaPlayersAlive, setMafiaPlayersAlive] = useState(mafiaPlayers)
   const [isGameOver, setIsGameOver] = useState(false)
-  const winner = useRef('Игра завершена досрочно')
+  const winner = useRef(t('teams.premature'))
 
   useEffect(() => {
     if (mafiaPlayersAlive < 1 || mafiaPlayersAlive === innocentPlayersAlive) {
-      winner.current = mafiaPlayersAlive === innocentPlayersAlive ? 'Мафия' : 'Мирные жители'
+      winner.current = mafiaPlayersAlive === innocentPlayersAlive ? t('teams.mafia') : t('teams.peaceful')
       setIsGameOver(true)
     }
-  }, [isGameOver, mafiaPlayersAlive, innocentPlayersAlive])
+  }, [isGameOver, mafiaPlayersAlive, innocentPlayersAlive, t])
 
   if (!location.state) {
     return (
@@ -47,7 +49,7 @@ const SessionPage: FC<SessionPageProps> = ({ handleNotification }) => {
         replace={true}
         state={{
           page: 'session',
-          notificationMessage: 'Игровое поле доступно только после старта!',
+          notificationMessage: t('notifications.gameFieldAccess'),
         }}
       />
     )
@@ -56,21 +58,14 @@ const SessionPage: FC<SessionPageProps> = ({ handleNotification }) => {
   const listOfPlayers: IPlayer[] = location.state.players
 
   if (listOfPlayers.length > 12 || listOfPlayers.length < 6) {
-    handleNotification(true, 'Некорректное количество игроков!')
+    handleNotification(true, t('notifications.invalidPlayerCount'))
     return <Navigate to="/settings" replace={true} />
   }
-
-  useEffect(() => {
-    console.log(`[DEBUG]: innocentPlayersAlive: ${innocentPlayersAlive}`)
-    console.log(`[DEBUG]: mafiaPlayersAlive: ${mafiaPlayersAlive}`)
-  }, [innocentPlayersAlive, mafiaPlayersAlive])
-
-  // function which handles if only one player was promoted on queueing process
 
   return (
     <SessionContextProvider>
       <motion.section initial={pagesInitial} animate={pagesAnimate} transition={pagesTransition} className="session">
-        <Title text="Таймер & Игровое поле" />
+        <Title text={t('headers.sessionPage')} />
         <Timer handleNotification={handleNotification} />
         <GameDeskTitle />
         <AnimatePresence>{isGameOver && <GameOver key="gameover" winner={winner.current} />}</AnimatePresence>

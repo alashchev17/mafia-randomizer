@@ -2,6 +2,7 @@ import React, { FC, useCallback, useEffect } from 'react'
 import Button from '../Button'
 import { AnimatePresence } from 'framer-motion'
 import { useSessionContext } from '../../contexts/SessionContext.tsx'
+import { useTranslation } from 'react-i18next'
 
 type SessionControlsProps = {
   setIsGameOver: React.Dispatch<React.SetStateAction<boolean>>
@@ -9,7 +10,7 @@ type SessionControlsProps = {
 
 const SessionControls: FC<SessionControlsProps> = ({ setIsGameOver }) => {
   const { gameStats, setGameStats, isQueueing, setIsQueueing, queueingPlayers, isInstantQueue, setIsInstantQueue } = useSessionContext()
-
+  const { t } = useTranslation()
   const handleStats = useCallback(() => {
     setGameStats((prev) => {
       return {
@@ -26,7 +27,7 @@ const SessionControls: FC<SessionControlsProps> = ({ setIsGameOver }) => {
   }
 
   const handleGameOver = () => {
-    if (window.confirm('Вы действительно хотите завершить партию?')) {
+    if (window.confirm(t('notifications.confirmPrematureFinish'))) {
       setIsGameOver((prev) => !prev)
     }
   }
@@ -42,7 +43,7 @@ const SessionControls: FC<SessionControlsProps> = ({ setIsGameOver }) => {
     <div className="session__controls">
       <Button
         className={gameStats.type === 'День' ? 'button--third' : 'button--primary'}
-        text={gameStats.type === 'День' ? 'Следующая ночь' : 'Следующий день'}
+        text={gameStats.type === 'День' ? t('buttons.nextNight') : t('buttons.nextDay')}
         clickHandle={handleStats}
         disabled={isQueueing}
       />
@@ -50,13 +51,13 @@ const SessionControls: FC<SessionControlsProps> = ({ setIsGameOver }) => {
         {gameStats.type === 'День' && (
           <Button
             className="button--primary"
-            text={isQueueing ? 'Скрыть голосование' : 'Голосование'}
+            text={isQueueing ? t('buttons.hideVoting') : t('buttons.showVoting')}
             clickHandle={handleQueue}
             disabled={queueingPlayers.length < 1}
           />
         )}
       </AnimatePresence>
-      <Button className="button--secondary" text="Завершить партию" clickHandle={handleGameOver} />
+      <Button className="button--secondary" text={t('buttons.finishGame')} clickHandle={handleGameOver} />
     </div>
   )
 }

@@ -16,6 +16,7 @@ import killBtnSvg from './assets/buttons/kill.svg'
 import queueBtnSvg from './assets/buttons/queue.svg'
 import deleteBtnSvg from './assets/buttons/delete.svg'
 import { useSessionContext } from '../../contexts/SessionContext.tsx'
+import { useTranslation } from 'react-i18next'
 
 interface GameDeskCardProps {
   player: IGameDeskPlayer
@@ -24,6 +25,8 @@ interface GameDeskCardProps {
 }
 
 const GameDeskCard: FC<GameDeskCardProps> = ({ player, setPlayerDead, handleNotification }) => {
+  const { t } = useTranslation()
+
   const { gameStats, setGameStats, setQueueingPlayers, queueingPlayers, isInstantQueue, setIsQueueing, isQueueing } = useSessionContext()
 
   const [playerStatus, setPlayerStatus] = useState({
@@ -74,7 +77,7 @@ const GameDeskCard: FC<GameDeskCardProps> = ({ player, setPlayerDead, handleNoti
         {
           playerId: player.id,
           playerCard: player.roleSrc,
-          reason: 'Отстрелен ночью представителями Мафии',
+          reason: t('reasons.killed'),
           timestamp: {
             type: gameStats.type,
             cycle: gameStats.counter,
@@ -103,7 +106,7 @@ const GameDeskCard: FC<GameDeskCardProps> = ({ player, setPlayerDead, handleNoti
         {
           playerId: player.id,
           playerCard: player.roleSrc,
-          reason: 'Удалён ведущим после 4-го фолла',
+          reason: t('reasons.deleted'),
           timestamp: {
             type: gameStats.type,
             cycle: gameStats.counter,
@@ -144,7 +147,7 @@ const GameDeskCard: FC<GameDeskCardProps> = ({ player, setPlayerDead, handleNoti
             updatedHistory.push({
               playerId: player.id,
               playerCard: player.roleSrc,
-              reason: 'Единственный выставленный игрок на дневном голосовании!',
+              reason: t('reasons.singleQueued'),
               timestamp: {
                 type: gameStats.type,
                 cycle: gameStats.counter,
@@ -172,7 +175,7 @@ const GameDeskCard: FC<GameDeskCardProps> = ({ player, setPlayerDead, handleNoti
           {
             playerId: player.id,
             playerCard: player.roleSrc,
-            reason: 'Снят во время дневного голосования',
+            reason: t('reasons.queued'),
             timestamp: {
               type: gameStats.type,
               cycle: gameStats.counter,
@@ -197,6 +200,7 @@ const GameDeskCard: FC<GameDeskCardProps> = ({ player, setPlayerDead, handleNoti
       setPlayerDead,
       setPlayerStatus,
       setQueueingPlayers,
+      t,
     ]
   )
 
@@ -246,9 +250,9 @@ const GameDeskCard: FC<GameDeskCardProps> = ({ player, setPlayerDead, handleNoti
   useEffect(() => {
     if (!isInstantQueue) return
 
-    handleNotification(true, `Игрок №${queueingPlayers[0]} - единственный выставленный игрок!`)
+    handleNotification(true, t('notifications.singlePlayerQueued', { playerId: queueingPlayers[0] }))
     handleQueue(queueingPlayers[0], isInstantQueue)
-  }, [isInstantQueue, queueingPlayers, handleNotification, handleQueue])
+  }, [isInstantQueue, queueingPlayers, handleNotification, handleQueue, t])
 
   return (
     <motion.div className="player game-desk__player" variants={playerCardVariants} initial="hidden" animate="visible" custom={player.id}>
@@ -266,15 +270,15 @@ const GameDeskCard: FC<GameDeskCardProps> = ({ player, setPlayerDead, handleNoti
           <div className={playerContextMenuClassNames}>
             <button className="player__button player__button--primary" onClick={handleKill}>
               <img src={killBtnSvg} alt="Kill icon" />
-              <span>Отстрел</span>
+              <span>{t('buttons.kill')}</span>
             </button>
             <button className="player__button player__button--secondary" onClick={() => handleQueue(player.id, false)}>
               <img src={queueBtnSvg} alt="Queue icon" />
-              <span>Снятие</span>
+              <span>{t('buttons.queue')}</span>
             </button>
             <button className="player__button player__button--third" onClick={handleDelete}>
               <img src={deleteBtnSvg} alt="Delete icon" />
-              <span>Удаление</span>
+              <span>{t('buttons.delete')}</span>
             </button>
           </div>
           <img className="player__image" src={player.roleSrc} alt={`Card: ${player.role}`} />

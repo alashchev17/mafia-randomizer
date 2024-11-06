@@ -1,0 +1,123 @@
+{
+  "titles": {
+    "welcomePage": "Mafia | Roles randomizer",
+    "rolesInfoPage": "Mafia | Roles information",
+    "settingsPage": "Mafia | Settings",
+    "setupPage": "Mafia | Setup"
+  },
+  "headers": {
+    "mainHeader": "Mafia (roles randomizer)",
+    "settings": "Settings",
+    "rolesInfoPage": "Roles Information",
+    "sessionPage": "Timer & Game desk",
+    "vote": "Voting process",
+    "gameOver": "Game was finished!",
+    "gameResults": "Results of the game"
+  },
+  "description": {
+    "1": {
+      "text": "A popular psychological game. The plot is simple. The peaceful residents of the city, tired of the rampant mafia, decide to take justice into their own hands and kill the criminals. The mafia, in response, declares war with the aim of destroying all the townspeople. The mafia and the peaceful residents play against each other. The peaceful residents win if they identify and 'send to death' all the mafiosi. The mafia wins if the victory of the peaceful residents is mathematically impossible.",
+      "title": "Mafia",
+      "path": "welcome"
+    }
+  },
+  "roles": {
+    "1": {
+      "title": "Peaceful Resident",
+      "description": "The most numerous role in the game. Their task is to identify and eliminate all the mafia team players during the day vote. They do not act at night. They win when all the mafia are eliminated.",
+      "src": "/cards/innocent.svg"
+    },
+    "2": {
+      "title": "Sheriff",
+      "description": "Plays for the team of peaceful residents. The sheriff's task is to help the team of peaceful residents by secretly checking players for mafia affiliation at night. Each night, they have the right to secretly check one (any) player.",
+      "src": "/cards/sheriff.svg"
+    },
+    "3": {
+      "title": "Mafia",
+      "description": "Plays for the mafia team. The mafia's task is to kill all the peaceful residents at night and, if possible, nominate peaceful team players for voting. Each night, they have the right to secretly choose a victim together with the Don and other mafia team members.",
+      "src": "/cards/mafia.svg"
+    },
+    "4": {
+      "title": "Don",
+      "description": "Plays for the mafia team. The Don's task is to lead their team to victory. Each night, they have the right to secretly identify the sheriff through night checks to subsequently eliminate them. The Don is the main player of the mafia team, determining the course of the game by negotiating with their allies.",
+      "src": "/cards/headOfMafia.svg"
+    },
+    "5": {
+      "title": "Doctor",
+      "description": "Plays for the team of peaceful residents. The doctor's task is to protect the sheriff from mafia attacks. Each night, they have the right to secretly go on night duty and save someone's life. Available only in the extended game mode.",
+      "src": "/cards/doctor.svg"
+    }
+  },
+  "gameModes": {
+    "1": {
+      "title": "Classic",
+      "description": "Classic tournament mafia with roles: Peaceful Resident, Don, Sheriff, Mafia"
+    },
+    "2": {
+      "title": "Extended",
+      "description": "Extended mafia mode with roles: Peaceful Resident, Don, Sheriff, Mafia, Doctor"
+    }
+  },
+  "buttons": {
+    "startGame": "Start game",
+    "roleInfo": "Roles information",
+    "sourceCode": "Source code",
+    "backToMain": "Back to main",
+    "settings": "Settings",
+    "saveChanges": "Save changes",
+    "nextPlayer": "Next player",
+    "goToGameDesk": "Go to game desk",
+    "nextDay": "Next day",
+    "nextNight": "Next night",
+    "finishGame": "Finish game",
+    "showVoting": "Voting",
+    "hideVoting": "Hide voting",
+    "sec60": "60 seconds",
+    "sec30": "30 seconds",
+    "sec20": "20 seconds",
+    "skipTimer": "Skip",
+    "kill": "Shooting",
+    "queue": "Gibbet",
+    "delete": "Deletion",
+    "showHistory": "View history"
+  },
+  "labels": {
+    "amountOfPlayers": "Amount of players",
+    "gameMode": "Desired game mode",
+    "night": "Night",
+    "day": "Day",
+    "player": "Player",
+    "winnerTeam": "Team-winner",
+    "historyOfPlayersLeave": "The history of the rise of the players",
+    "gameTime": "Time of day",
+    "gameCycle": "Game cycle",
+    "leaveReason": "The reason for the rise"
+  },
+  "teams": {
+    "peaceful": "Peaceful citizens",
+    "mafia": "Mafia",
+    "draw": "Draw",
+    "premature": "The game is completed ahead of schedule"
+  },
+  "selects": {
+    "gameMode": {
+      "defaultValue": "Choose mode"
+    }
+  },
+  "reasons": {
+    "queued": "Removed during the afternoon voting",
+    "singleQueued": "The only exposed player on the day's voting!",
+    "killed": "Shot at night by Mafia representatives",
+    "deleted": "Deleted by the presenter after the 4th foul"
+  },
+  "notifications": {
+    "settingsSaved": "Settings were saved successfully!",
+    "invalidPlayerCount": "Invalid number of players specified",
+    "settingsSaveError": "An error occurred while saving settings!",
+    "gameFieldAccess": "The game field is only accessible after game initialization!",
+    "timerCompleted": "The timer has successfully completed!",
+    "timerSkipped": "The timer was successfully skipped!",
+    "singlePlayerQueued": "Player №{{playerId}} - the only player queued!",
+    "confirmPrematureFinish": "Do you really want to finish the game?"
+  }
+}

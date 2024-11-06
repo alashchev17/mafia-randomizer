@@ -1,100 +1,81 @@
-import {
-  Dispatch,
-  FC,
-  FormEventHandler,
-  SetStateAction,
-  useState,
-} from "react";
-import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { Dispatch, FC, FormEventHandler, SetStateAction, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { motion } from 'framer-motion'
 
-import Title from "../../components/Title";
-import NumberInput from "../../components/NumberInput";
+import Title from '../../components/Title'
+import NumberInput from '../../components/NumberInput'
 
-import "./index.scss";
+import './index.scss'
 
-import { database } from "../../assets/database.ts";
-import { ISettings } from "../../models";
-import {
-  pagesAnimate,
-  pagesInitial,
-  pagesTransition,
-} from "../../utils/pagesAnimation.ts";
+import { useDatabaseTexts } from '../../hooks/useDatabaseTexts.ts'
+import { ISettings } from '../../models'
+import { pagesAnimate, pagesInitial, pagesTransition } from '../../utils/pagesAnimation.ts'
+import { useTranslation } from 'react-i18next'
 
 interface SettingsPageProps {
-  settings: ISettings;
-  setSettings: Dispatch<SetStateAction<ISettings>>;
-  handleNotification: (state: boolean, text: string) => void;
+  settings: ISettings
+  setSettings: Dispatch<SetStateAction<ISettings>>
+  handleNotification: (state: boolean, text: string) => void
 }
 
 type FormFields = {
-  players: HTMLInputElement;
-  gameMode: HTMLInputElement;
-};
+  players: HTMLInputElement
+  gameMode: HTMLInputElement
+}
 
-const SettingsPage: FC<SettingsPageProps> = ({
-  settings,
-  setSettings,
-  handleNotification,
-}) => {
-  const navigate = useNavigate();
+const SettingsPage: FC<SettingsPageProps> = ({ settings, setSettings, handleNotification }) => {
+  const { t } = useTranslation()
+  const database = useDatabaseTexts()
+  const navigate = useNavigate()
 
-  const [isValid, setIsValid] = useState(true);
-  const handleSubmit: FormEventHandler<HTMLFormElement & FormFields> = (
-    event,
-  ) => {
-    event.preventDefault();
+  useEffect(() => {
+    document.title = t('titles.settingsPage')
+  }, [t])
+
+  const [isValid, setIsValid] = useState(true)
+  const handleSubmit: FormEventHandler<HTMLFormElement & FormFields> = (event) => {
+    event.preventDefault()
     if (isValid) {
-      const form = event.currentTarget;
+      const form = event.currentTarget
 
-      const amountOfPlayers = Number(form.players.value);
-      const gameMode = form.gameMode.value;
+      const amountOfPlayers = Number(form.players.value)
+      const gameMode = form.gameMode.value
       if (amountOfPlayers >= 6 && amountOfPlayers <= 12) {
-        handleNotification(true, "Настройки были сохранены успешно!");
+        handleNotification(true, t('notifications.settingsSaved'))
         setSettings((prev: ISettings): ISettings => {
           return {
             ...prev,
             amountOfPlayers,
             gameMode,
-          };
-        });
-        navigate("/");
+          }
+        })
+        navigate('/')
       } else {
-        handleNotification(true, "Указано некорректное количество игроков");
+        handleNotification(true, t('notifications.invalidPlayerCount'))
       }
     } else {
-      handleNotification(
-        true,
-        "В процессе сохранения настроек произошла ошибка!",
-      );
+      handleNotification(true, t('notifications.settingsSaveError'))
     }
-  };
+  }
 
-  const buttonClassNames = `button button--primary ${
-    isValid ? "" : "disabled"
-  }`;
+  const buttonClassNames = `button button--primary ${isValid ? '' : 'disabled'}`
 
   return (
-    <motion.div
-      className="flex-center-column settings"
-      initial={pagesInitial}
-      animate={pagesAnimate}
-      transition={pagesTransition}
-    >
-      <Title text="Настройки" />
+    <motion.div className="flex-center-column settings" initial={pagesInitial} animate={pagesAnimate} transition={pagesTransition}>
+      <Title text={t('titles.settingsPage').split('|')[1]} />
       <form className="settings__form" onSubmit={handleSubmit}>
         <NumberInput
-          label="Количество игроков"
+          label={t('labels.amountOfPlayers')}
           name="players"
           currentValue={settings.amountOfPlayers}
           setButtonValid={setIsValid}
         />
         <label className="label">
-          Игровой режим
+          {t('labels.gameMode')}
           <div className="select-wrapper">
             <select name="gameMode" defaultValue={settings.gameMode}>
-              <option value="Выберите режим" disabled>
-                Выберите режим
+              <option value={t('selects.gameMode.defaultValue')} disabled>
+                {t('selects.gameMode.defaultValue')}
               </option>
               {database.gameModes.map((item) => {
                 if (item.title === settings.gameMode) {
@@ -102,23 +83,23 @@ const SettingsPage: FC<SettingsPageProps> = ({
                     <option key={item.title} value={item.title}>
                       {item.title}
                     </option>
-                  );
+                  )
                 }
                 return (
                   <option key={item.title} value={item.title}>
                     {item.title}
                   </option>
-                );
+                )
               })}
             </select>
           </div>
         </label>
         <button className={buttonClassNames} disabled={!isValid} type="submit">
-          Сохранить изменения
+          {t('buttons.saveChanges')}
         </button>
       </form>
     </motion.div>
-  );
-};
+  )
+}
 
-export default SettingsPage;
+export default SettingsPage

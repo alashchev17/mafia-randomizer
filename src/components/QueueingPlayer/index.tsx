@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 
 import iconPlus from "./assets/plus.svg";
 import iconMinus from "./assets/minus.svg";
+import { useTranslation } from "react-i18next";
 
 interface QueueingPlayerProps {
   player: number;
@@ -15,6 +16,7 @@ const QueueingPlayer: FC<QueueingPlayerProps> = ({
   queueingPlayers,
   amountOfPlayers,
 }) => {
+  const {t} = useTranslation();
   const [amountOfVotes, setAmountOfVotes] = useState(0);
 
   const handleAmountPlus = () => {
@@ -51,7 +53,7 @@ const QueueingPlayer: FC<QueueingPlayerProps> = ({
       custom={queueingPlayers.indexOf(player)}
       exit="hidden"
     >
-      <span className="queueing__number">Игрок №{player}</span>
+      <span className="queueing__number">{t("labels.player")} №{player}</span>
       <div className="queueing__controls">
         <button
           className="queueing__button"
