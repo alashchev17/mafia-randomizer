@@ -1,0 +1,16 @@
+.language-switcher {
+  display: flex;
+  gap: 4px;
+  &__lang {
+    padding: 10px 15px;
+    background-color: var(--primary-color);
+    color: var(--primary-color);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:disabled {
+      cursor: not-allowed;
+      text-decoration: underline;
+    }
+  }
+}
