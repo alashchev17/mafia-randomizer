@@ -10,10 +10,7 @@ interface LanguageProviderProps {
   children: React.ReactNode
 }
 
-const LanguageContext = createContext<LanguageContextProps>({
-  language: 'ru',
-  changeLanguage: () => {},
-})
+const LanguageContext = createContext<LanguageContextProps | null>(null)
 
 export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) => {
   const [language, setLanguage] = useState<string>(localStorage.getItem('i18nextLng') || 'ru')
@@ -34,4 +31,12 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
   return <LanguageContext.Provider value={{ language, changeLanguage }}>{children}</LanguageContext.Provider>
 }
 
-export const useLanguage = () => useContext(LanguageContext)
+export const useLanguage = () => {
+  const context = useContext(LanguageContext)
+
+  if (!context) {
+    throw new Error("LanguageContext must be used within LanguageContextProvider")
+  }
+
+  return context
+}

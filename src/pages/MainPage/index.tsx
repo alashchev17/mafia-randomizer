@@ -10,9 +10,11 @@ import { useTranslation } from 'react-i18next'
 
 import type { IDatabaseDescription } from '../../assets/database'
 import { pagesAnimate, pagesInitial, pagesTransition } from '../../utils/pagesAnimation'
+import { useLanguage } from '../../contexts/LanguageContext'
 
 const MainPage: FC = () => {
   const { t } = useTranslation()
+  const { language } = useLanguage()
   const location = useLocation()
   const database = useDatabaseTexts()
 
@@ -25,7 +27,8 @@ const MainPage: FC = () => {
 
     const description: IDatabaseDescription = database.descriptions.find((d) => d.path === currentLocation)!
     setDescription(description)
-  }, [location, database.descriptions, t])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location, language])
 
   return (
     <motion.div className="container__mainpage" initial={pagesInitial} animate={pagesAnimate} transition={pagesTransition}>
