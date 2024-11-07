@@ -1,52 +1,64 @@
 # Mafia (roles randomizer)
 
-Проект, созданный для упрощения процесса ведения игры “Мафия” для ведущих. Является готовым инструментом для удобного мониторинга игрового процесса с приятной визуальной составляющей.
+A project created to simplify the process of conducting the game "Mafia" for hosts. It is a ready-to-use tool for convenient monitoring of the game process with a pleasant visual component.
 
-# ℹ️ Список изменений
+## Available Languages
 
-***Changelog 24.11 v0.2:***
+| Language | Link                         |
+| -------- | ---------------------------- |
+| English  | [README.md](README.md)       |
+| Russian  | [README.ru.md](README.ru.md) |
 
-- Реализована страница “Настройки”;
-- Добавлен выбор игрового режима;
-- Вынесен функционал определения количества игроков в страницу “Настройки”;
-- Добавлена новая роль: “Доктор”.
+# ℹ️ Changelog
 
-***Changelog 26.11 v0.2.1:***
+**_Changelog 24.11.23 v0.2:_**
 
-- Реализованы уведомления при сохранении настроек.
+- Implemented the "Settings" page;
+- Added game mode selection;
+- Moved the functionality of determining the number of players to the "Settings" page;
+- Added a new role: "Doctor".
 
-***Changelog 06.12 v1.0-pre-release:***
+**_Changelog 26.11.23 v0.2.1:_**
 
-- Добавлена страница “Игровое поле”;
-- Добавлен игровой таймер с несколькими параметрами;
-- Реализована система отслеживания статусов игроков;
-- Реализована система голосований;
-- Реализована система фиксации нарушения игровых правил;
-- Устранены незначительные баги отображения интерфейса.
+- Implemented notifications when saving settings.
 
-***Changelog 12.12 v1.1-pre-release:***
+**_Changelog 06.12.23 v1.0-pre-release:_**
 
-- Добавлены сценарии автоматического завершения игры (согласно правилам игры “Мафия”);
-- Устранение багов и ошибок в коде.
+- Added the "Game Field" page;
+- Added a game timer with several parameters;
+- Implemented a system for tracking player statuses;
+- Implemented a voting system;
+- Implemented a system for recording rule violations;
+- Fixed minor interface display bugs.
 
-***Changelog 15.12 v1.2:***
+**_Changelog 12.12.23 v1.1-pre-release:_**
 
-- Добавлена история игровых событий в качестве отдельной страницы;
-- Устранение багов и ошибок в странице Игрового Поля.
+- Added scenarios for automatic game completion (according to the rules of the game "Mafia");
+- Fixed bugs and errors in the code.
 
-***Changelog 05.01 v1.3:***
+**_Changelog 15.12.23 v1.2:_**
 
-- Добавлено автоматическое снятие игрока на голосовании, если он был выставлен единственным;
-- Устранение багов и ошибок в коде.
+- Added a history of game events as a separate page;
+- Fixed bugs and errors on the Game Field page.
 
-# 🧑🏼‍💻 Технический стек
+**_Changelog 05.01.24 v1.3:_**
+
+- Added automatic removal of a player in voting if they were the only one nominated;
+- Fixed bugs and errors in the code.
+
+**_Changelog 07.11.24 v1.4:_**
+
+- Added a new language - English;
+- Fixed bugs and errors in the code, lots of optimizations.
+
+# 🧑🏼‍💻 Tech Stack
 
 - React
 - TypeScript
 - React-Router v6
 - Framer Motion
 
-# 📁 Источники
+# 📁 Sources
 
 - [GitHub Repository](https://github.com/alashchev17/mafia-randomizer)
 - [Deploy on Vercel](https://mafia-randomizer-react.vercel.app)
