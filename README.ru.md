@@ -57,6 +57,7 @@
 - TypeScript
 - React-Router v6
 - Framer Motion
+- i18next
 
 # 📁 Источники
 
