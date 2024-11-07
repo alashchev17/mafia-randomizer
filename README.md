@@ -57,6 +57,7 @@ A project created to simplify the process of conducting the game "Mafia" for hos
 - TypeScript
 - React-Router v6
 - Framer Motion
+- i18next
 
 # 📁 Sources
 
