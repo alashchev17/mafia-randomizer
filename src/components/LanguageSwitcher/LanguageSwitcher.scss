@@ -1,16 +1,31 @@
 .language-switcher {
   display: flex;
-  gap: 4px;
+  align-items: center;
   &__lang {
-    padding: 10px 15px;
+    position: relative;
+    padding: 0 2px;
     background-color: var(--primary-color);
     color: var(--primary-color);
     cursor: pointer;
-    transition: background-color 0.3s ease;
-
+    transition: font-weight 0.3s ease-in-out;
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 50%;
+      width: calc(100% - 4px);
+      transform: translateX(-50%);
+      height: 1px;
+      background-color: var(--main-text-color);
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+    }
     &:disabled {
       cursor: not-allowed;
-      text-decoration: underline;
+      font-weight: 700;
+      &::after {
+        opacity: 1;
+      }
     }
   }
 }
