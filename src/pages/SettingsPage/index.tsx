@@ -11,6 +11,7 @@ import { useDatabaseTexts } from '../../hooks/useDatabaseTexts.ts'
 import { ISettings } from '../../models'
 import { pagesAnimate, pagesInitial, pagesTransition } from '../../utils/pagesAnimation.ts'
 import { useTranslation } from 'react-i18next'
+import Select from 'react-select'
 
 interface SettingsPageProps {
   settings: ISettings
@@ -72,27 +73,53 @@ const SettingsPage: FC<SettingsPageProps> = ({ settings, setSettings, handleNoti
         />
         <label className="label">
           {t('labels.gameMode')}
-          <div className="select-wrapper">
-            <select name="gameMode" defaultValue={settings.gameMode}>
-              <option value={t('selects.gameMode.defaultValue')} disabled>
-                {t('selects.gameMode.defaultValue')}
-              </option>
-              {database.gameModes.map((item) => {
-                if (item.title === settings.gameMode) {
-                  return (
-                    <option key={item.title} value={item.title}>
-                      {item.title}
-                    </option>
-                  )
-                }
-                return (
-                  <option key={item.title} value={item.title}>
-                    {item.title}
-                  </option>
-                )
-              })}
-            </select>
-          </div>
+          <Select
+            name="gameMode"
+            placeholder={t('selects.gameMode.defaultValue')}
+            options={database.gameModes.map((item) => ({ value: item.title, label: item.title }))}
+            styles={{
+              control: (base) => ({
+                ...base,
+                outline: 'none',
+                padding: '0 6px',
+                height: '48px',
+                background: 'var(--main-color)',
+                borderColor: 'unset',
+                border: '2px solid var(--main-text-color)',
+                borderRadius: '5px',
+                cursor: 'pointer',
+                transition: 'box-shadow 0.3s ease-in-out',
+                '&:hover': {
+                  boxShadow: 'var(--shadow-white)',
+                },
+              }),
+              singleValue: (base) => ({
+                ...base,
+                color: 'var(--main-text-color)',
+              }),
+              menu: (base) => ({
+                ...base,
+                zIndex: 9999,
+                border: '2px solid var(--main-text-color)',
+                borderRadius: '5px',
+              }),
+              menuList: (base) => ({
+                ...base,
+                padding: 0,
+              }),
+              option: (base, { isFocused }) => ({
+                ...base,
+                backgroundColor: isFocused ? 'var(--main-color-transparent)' : 'var(--main-color)',
+                color: 'var(--main-text-color)',
+                cursor: 'pointer',
+                padding: '10px 15px',
+              }),
+            }}
+            components={{
+              DropdownIndicator: () => null,
+              IndicatorSeparator: () => null,
+            }}
+          />
         </label>
         <button className={buttonClassNames} disabled={!isValid} type="submit">
           {t('buttons.saveChanges')}
