@@ -13,17 +13,12 @@ const LanguageSwitcher: React.FC = () => {
   return (
     <div className="language-switcher">
       {languages.map((lng, i) => (
-        <>
-          <button
-            className="language-switcher__lang"
-            key={lng.code}
-            onClick={() => changeLanguage(lng.code)}
-            disabled={lng.code === language}
-          >
+        <span key={lng.code}>
+          <button className="language-switcher__lang" onClick={() => changeLanguage(lng.code)} disabled={lng.code === language}>
             {lng.name}
           </button>
           {i < languages.length - 1 && '/'}
-        </>
+        </span>
       ))}
     </div>
   )

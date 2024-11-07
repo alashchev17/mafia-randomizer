@@ -3,7 +3,8 @@
     "welcomePage": "Mafia | Roles randomizer",
     "rolesInfoPage": "Mafia | Roles information",
     "settingsPage": "Mafia | Settings",
-    "setupPage": "Mafia | Setup"
+    "setupPage": "Mafia | Setup",
+    "page404": "Mafia | Page not found"
   },
   "headers": {
     "mainHeader": "Mafia (roles randomizer)",
@@ -12,7 +13,8 @@
     "sessionPage": "Timer & Game desk",
     "vote": "Voting process",
     "gameOver": "Game was finished!",
-    "gameResults": "Results of the game"
+    "gameResults": "Results of the game",
+    "oops": "Oops!"
   },
   "description": {
     "1": {
@@ -91,7 +93,9 @@
     "historyOfPlayersLeave": "The history of the rise of the players",
     "gameTime": "Time of day",
     "gameCycle": "Game cycle",
-    "leaveReason": "The reason for the rise"
+    "leaveReason": "The reason for the rise",
+    "404": "Page not found",
+    "reason404": "The page you are trying to open has been deleted, its name has changed, or it is temporarily unavailable."
   },
   "teams": {
     "peaceful": "Peaceful citizens",
