@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useMemo } from 'react'
 import { Link, Navigate, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 
@@ -9,14 +9,21 @@ import { IGameHistory } from '../../models'
 
 import './index.scss'
 import { useTranslation } from 'react-i18next'
+import { useLanguage } from '../../contexts/LanguageContext.tsx'
 
 const StatsPage: FC = () => {
   const { t } = useTranslation()
   const location = useLocation()
+  const { language } = useLanguage()
   const { stats, winner } = location.state
-  if (stats) {
-    const winnerClassNames = `stats__winner ${winner === 'Мафия' ? 'stats__winner--mafia' : 'stats__winner--innocent'}`
 
+  const winnerClassNames = useMemo(
+    () => `stats__winner ${winner === t('teams.mafia') ? 'stats__winner--mafia' : 'stats__winner--innocent'}`,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [language, winner]
+  )
+
+  if (stats) {
     return (
       <motion.div className="stats" initial={pagesInitial} animate={pagesAnimate} transition={pagesTransition}>
         <Title text={t('headers.gameResults')} />
