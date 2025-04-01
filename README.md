@@ -9,7 +9,7 @@ A project created to simplify the process of conducting the game "Mafia" for hos
 | English  | [README.md](README.md)       |
 | Russian  | [README.ru.md](README.ru.md) |
 
-# ℹ️ Changelog
+# ℹ️ Changelog
 
 **_Changelog 24.11.23 v0.2:_**
 
@@ -51,15 +51,59 @@ A project created to simplify the process of conducting the game "Mafia" for hos
 - Added a new language - English;
 - Fixed bugs and errors in the code, lots of optimizations.
 
-# 🧑🏼‍💻 Tech Stack
+**_Changelog [Current Date] v1.5:_**
+
+- Added comprehensive testing suite with Vitest and Cypress;
+- Implemented unit tests for core components and utilities;
+- Added end-to-end tests for critical application flows;
+- Improved code reliability and maintainability.
+
+# 🧑🏼‍💻 Tech Stack
 
 - React
 - TypeScript
 - React-Router v6
 - Framer Motion
 - i18next
+- Vitest (Unit Testing)
+- Cypress (E2E Testing)
 
-# 📁 Sources
+# 🧪 Testing
+
+The project now includes a comprehensive testing suite:
+
+## Unit Tests (Vitest)
+
+Unit tests cover individual components and utilities to ensure they function correctly in isolation:
+
+- Core components like `PlayerCard`, `GameDesk`, etc.
+- Utility functions like `rolesRandomizer`
+- Context providers like `SessionContext`
+
+Run unit tests with:
+
+```bash
+npm run test        # Run tests in watch mode
+npm run test:ui     # Run tests with UI
+npm run test:coverage # Generate test coverage report
+```
+
+## End-to-End Tests (Cypress)
+
+E2E tests simulate real user interactions to verify the application works correctly as a whole:
+
+- Navigation between pages
+- Game setup and configuration
+- Game state management
+
+Run E2E tests with:
+
+```bash
+npm run test:e2e    # Run all E2E tests headlessly
+npm run cypress:open # Open Cypress UI for interactive testing
+```
+
+# 📁 Sources
 
 - [GitHub Repository](https://github.com/alashchev17/mafia-randomizer)
 - [Deploy on Vercel](https://mafia-randomizer-react.vercel.app)
