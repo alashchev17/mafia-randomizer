@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react'
+import React, { createContext, useContext, useMemo, useState } from 'react'
 import { IGameStats } from '../models'
 
 type SessionContextType = {
@@ -28,22 +28,21 @@ export default function SessionContextProvider({ children }: SessionContextProvi
   const [isQueueing, setIsQueueing] = useState(false)
   const [isInstantQueue, setIsInstantQueue] = useState(false)
 
-  return (
-    <SessionContext.Provider
-      value={{
-        gameStats,
-        queueingPlayers,
-        isQueueing,
-        isInstantQueue,
-        setGameStats,
-        setQueueingPlayers,
-        setIsQueueing,
-        setIsInstantQueue,
-      }}
-    >
-      {children}
-    </SessionContext.Provider>
+  const value = useMemo(
+    () => ({
+      gameStats,
+      queueingPlayers,
+      isQueueing,
+      isInstantQueue,
+      setGameStats,
+      setQueueingPlayers,
+      setIsQueueing,
+      setIsInstantQueue,
+    }),
+    [gameStats, queueingPlayers, isQueueing, isInstantQueue]
   )
+
+  return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>
 }
 
 export const useSessionContext = () => {
