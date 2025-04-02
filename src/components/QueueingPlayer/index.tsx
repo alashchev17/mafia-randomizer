@@ -16,7 +16,7 @@ const QueueingPlayer: FC<QueueingPlayerProps> = ({
   queueingPlayers,
   amountOfPlayers,
 }) => {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const [amountOfVotes, setAmountOfVotes] = useState(0);
 
   const handleAmountPlus = () => {
@@ -53,7 +53,9 @@ const QueueingPlayer: FC<QueueingPlayerProps> = ({
       custom={queueingPlayers.indexOf(player)}
       exit="hidden"
     >
-      <span className="queueing__number">{t("labels.player")} №{player}</span>
+      <span className="queueing__number">
+        {t("labels.player")} №{player}
+      </span>
       <div className="queueing__controls">
         <button
           className="queueing__button"

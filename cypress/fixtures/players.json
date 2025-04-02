@@ -1,0 +1,26 @@
+{
+  "classicMode": {
+    "players": [
+      { "role": "Дон", "roleSrc": "/cards/headOfMafia.svg" },
+      { "role": "Мафия", "roleSrc": "/cards/mafia.svg" },
+      { "role": "Мирный житель", "roleSrc": "/cards/innocent.svg" },
+      { "role": "Мирный житель", "roleSrc": "/cards/innocent.svg" },
+      { "role": "Мирный житель", "roleSrc": "/cards/innocent.svg" },
+      { "role": "Шериф", "roleSrc": "/cards/sheriff.svg" }
+    ],
+    "mafiaPlayers": 2,
+    "innocentPlayers": 4
+  },
+  "extendedMode": {
+    "players": [
+      { "role": "Дон", "roleSrc": "/cards/headOfMafia.svg" },
+      { "role": "Мафия", "roleSrc": "/cards/mafia.svg" },
+      { "role": "Мирный житель", "roleSrc": "/cards/innocent.svg" },
+      { "role": "Мирный житель", "roleSrc": "/cards/innocent.svg" },
+      { "role": "Шериф", "roleSrc": "/cards/sheriff.svg" },
+      { "role": "Доктор", "roleSrc": "/cards/doctor.svg" }
+    ],
+    "mafiaPlayers": 2,
+    "innocentPlayers": 4
+  }
+}

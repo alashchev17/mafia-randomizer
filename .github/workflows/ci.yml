@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Save commit SHA
+        if: github.event_name == 'push'
+        run: echo ${{ github.sha }} > commit-sha.txt
+
+      - name: Upload commit SHA
+        if: github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: commit-sha
+          path: commit-sha.txt
+          retention-days: 1
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: Check formatting
+        run: npm run format:check
+        continue-on-error: ${{ github.actor == 'nektos/act' }}
+
+      - name: Lint
+        run: npm run lint
+        continue-on-error: ${{ github.actor == 'nektos/act' }}
+
+      - name: Type check
+        run: npx tsc --noEmit
+
+      - name: Run unit tests
+        run: npm test run
+
+      - name: Build app
+        run: npm run build
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run E2E tests
+        run: npm run e2e
+        env:
+          CI: true
+          PLAYWRIGHT_TEST_BASE_URL: http://localhost:4173
+          NODE_OPTIONS: --max_old_space_size=4096

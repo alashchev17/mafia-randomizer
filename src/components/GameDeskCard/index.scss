@@ -22,7 +22,9 @@
     transform: rotate(45deg);
     z-index: 30;
     cursor: pointer;
-    transition: background-color 0.15s ease-in-out, border 0.15s ease-in-out;
+    transition:
+      background-color 0.15s ease-in-out,
+      border 0.15s ease-in-out;
     &.pressed {
       background-color: var(--main-text-color);
       border: 2px solid var(--main-text-color);

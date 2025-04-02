@@ -26,7 +26,8 @@
   -ms-transition: box-shadow 0.3s ease-in-out;
   -o-transition: box-shadow 0.3s ease-in-out;
   transition: box-shadow 0.3s ease-in-out;
-  &:hover, &:focus {
-    box-shadow: var(--shadow-white)
+  &:hover,
+  &:focus {
+    box-shadow: var(--shadow-white);
   }
 }

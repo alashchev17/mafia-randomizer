@@ -11,7 +11,9 @@
     justify-content: space-between;
     width: 100%;
     grid-row-gap: 25px;
-    &--7, &--9, &--11 {
+    &--7,
+    &--9,
+    &--11 {
       justify-content: space-around;
     }
     &--6 {
