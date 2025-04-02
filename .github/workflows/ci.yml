@@ -49,12 +49,8 @@ jobs:
       - name: Build app
         run: yarn build
 
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
-
       - name: Run E2E tests
-        run: yarn test:e2e
+        run: yarn cy:run
         env:
           CI: true
-          PLAYWRIGHT_TEST_BASE_URL: http://localhost:4173
           NODE_OPTIONS: --max_old_space_size=4096
