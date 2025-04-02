@@ -27,33 +27,33 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
+          cache: "yarn"
 
       - name: Install dependencies
         run: yarn
 
       - name: Check formatting
-        run: npm run format:check
+        run: yarn format:check
         continue-on-error: ${{ github.actor == 'nektos/act' }}
 
       - name: Lint
-        run: npm run lint
+        run: yarn lint
         continue-on-error: ${{ github.actor == 'nektos/act' }}
 
       - name: Type check
         run: npx tsc --noEmit
 
       - name: Run unit tests
-        run: npm test run
+        run: yarn test
 
       - name: Build app
-        run: npm run build
+        run: yarn build
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
       - name: Run E2E tests
-        run: npm run e2e
+        run: yarn test:e2e
         env:
           CI: true
           PLAYWRIGHT_TEST_BASE_URL: http://localhost:4173
