@@ -1,0 +1,99 @@
+name: Vercel Production Deployment
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
+    branches:
+      - master
+jobs:
+  Deploy-Production:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    permissions:
+      actions: read
+      contents: read
+      statuses: write
+
+    steps:
+      - name: Download artifact
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: CI
+          run_id: ${{ github.event.workflow_run.id }}
+          name: commit-sha
+
+      - name: Get commit SHA
+        id: get-commit-sha
+        run: echo "sha=$(cat commit-sha.txt)" >> $GITHUB_OUTPUT
+
+      - name: Create pending deployment status
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: '${{ steps.get-commit-sha.outputs.sha }}',
+              state: 'pending',
+              context: 'Vercel Production Deployment',
+              description: 'Deployment is in progress...',
+              target_url: 'https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+            })
+
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.get-commit-sha.outputs.sha }}
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build Project Artifacts
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy Project Artifacts to Vercel
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Get Vercel Deployment URL
+        id: get-deployment-url
+        if: success()
+        run: echo "deployment_url=https://${{ env.VERCEL_PROJECT_ID }}.vercel.app" >> $GITHUB_OUTPUT
+
+      - name: Update deployment status to success
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: '${{ steps.get-commit-sha.outputs.sha }}',
+              state: 'success',
+              context: 'Vercel Production Deployment',
+              description: 'Deployment completed successfully',
+              target_url: 'https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+            })
+
+      - name: Update deployment status to failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: '${{ steps.get-commit-sha.outputs.sha }}',
+              state: 'failure',
+              context: 'Vercel Production Deployment',
+              description: 'Deployment failed',
+              target_url: 'https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+            })
