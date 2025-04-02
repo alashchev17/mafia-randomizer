@@ -1,12 +1,12 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
-import PlayerCard from '../index';
-import { IPlayer } from '../../../models';
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { render, screen, fireEvent } from "@testing-library/react";
+import PlayerCard from "../index";
+import { IPlayer } from "../../../models";
 
-describe('PlayerCard', () => {
+describe("PlayerCard", () => {
   const mockPlayer: IPlayer = {
-    role: 'Мирный житель',
-    roleSrc: '/cards/innocent.svg',
+    role: "Мирный житель",
+    roleSrc: "/cards/innocent.svg",
   };
 
   const mockSetIsRevealed = vi.fn();
@@ -18,7 +18,7 @@ describe('PlayerCard', () => {
     vi.useFakeTimers();
   });
 
-  it('renders correctly when not revealed', () => {
+  it("renders correctly when not revealed", () => {
     render(
       <PlayerCard
         isRevealed={false}
@@ -26,14 +26,14 @@ describe('PlayerCard', () => {
         isRevealing={false}
         setIsRevealing={mockSetIsRevealing}
         currentPlayer={mockPlayer}
-      />
+      />,
     );
 
     expect(screen.getByAltText("Backside Card")).toBeInTheDocument();
     expect(screen.getByAltText("Мирный житель")).toHaveClass("active");
   });
 
-  it('reveals card on click and calls appropriate functions', () => {
+  it("reveals card on click and calls appropriate functions", () => {
     render(
       <PlayerCard
         isRevealed={false}
@@ -41,10 +41,10 @@ describe('PlayerCard', () => {
         isRevealing={false}
         setIsRevealing={mockSetIsRevealing}
         currentPlayer={mockPlayer}
-      />
+      />,
     );
 
-    const card = screen.getByAltText("Backside Card").closest('.player-card');
+    const card = screen.getByAltText("Backside Card").closest(".player-card");
     fireEvent.click(card!);
 
     expect(mockSetIsRevealed).toHaveBeenCalledWith(true);
@@ -56,7 +56,7 @@ describe('PlayerCard', () => {
     expect(mockSetIsRevealing).toHaveBeenCalledWith(false);
   });
 
-  it('renders correctly when revealed', () => {
+  it("renders correctly when revealed", () => {
     render(
       <PlayerCard
         isRevealed={true}
@@ -64,14 +64,14 @@ describe('PlayerCard', () => {
         isRevealing={false}
         setIsRevealing={mockSetIsRevealing}
         currentPlayer={mockPlayer}
-      />
+      />,
     );
 
-    expect(screen.getByAltText('Мирный житель')).toBeInTheDocument();
+    expect(screen.getByAltText("Мирный житель")).toBeInTheDocument();
     expect(screen.getByAltText("Backside Card")).toHaveClass("active");
   });
 
-  it('does not trigger reveal logic if already revealed', () => {
+  it("does not trigger reveal logic if already revealed", () => {
     render(
       <PlayerCard
         isRevealed={true}
@@ -79,17 +79,17 @@ describe('PlayerCard', () => {
         isRevealing={false}
         setIsRevealing={mockSetIsRevealing}
         currentPlayer={mockPlayer}
-      />
+      />,
     );
 
-    const card = screen.getByAltText('Мирный житель').closest('.player-card');
+    const card = screen.getByAltText("Мирный житель").closest(".player-card");
     fireEvent.click(card!);
 
     expect(mockSetIsRevealed).not.toHaveBeenCalled();
     expect(mockSetIsRevealing).not.toHaveBeenCalled();
   });
 
-  it('is disabled during revealing animation', () => {
+  it("is disabled during revealing animation", () => {
     render(
       <PlayerCard
         isRevealed={true}
@@ -97,10 +97,10 @@ describe('PlayerCard', () => {
         isRevealing={true}
         setIsRevealing={mockSetIsRevealing}
         currentPlayer={mockPlayer}
-      />
+      />,
     );
 
-    const card = screen.getByAltText('Мирный житель').closest('.player-card');
-    expect(card).toHaveClass('disabled');
+    const card = screen.getByAltText("Мирный житель").closest(".player-card");
+    expect(card).toHaveClass("disabled");
   });
 });

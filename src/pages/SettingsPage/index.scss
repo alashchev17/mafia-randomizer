@@ -21,7 +21,7 @@
   -o-transition: box-shadow 0.3s ease-in-out;
   transition: box-shadow 0.3s ease-in-out;
   &:hover {
-    box-shadow: var(--shadow-white)
+    box-shadow: var(--shadow-white);
   }
   select {
     outline: none;
@@ -32,12 +32,12 @@
     background: transparent;
     color: var(--main-text-color);
     border: 0;
-    appearance: none;            /* remove arrow        */
-    -webkit-appearance: none;    /* remove arrow Chrome */
-    -moz-appearance: none;       /* remove arrow FF     */
+    appearance: none; /* remove arrow        */
+    -webkit-appearance: none; /* remove arrow Chrome */
+    -moz-appearance: none; /* remove arrow FF     */
     cursor: pointer;
-    &::-ms-expand{
-      display: none;             /* remove arrow IE     */
+    &::-ms-expand {
+      display: none; /* remove arrow IE     */
     }
   }
 }

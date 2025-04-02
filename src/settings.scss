@@ -1,10 +1,13 @@
 /* SETTINGS AND VARIABLES OF PROJECT */
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
-body, * {
+body,
+* {
   font-family: "lato", sans-serif;
   user-select: none;
   -webkit-user-select: none;
@@ -28,12 +31,12 @@ button {
 
 // COLORS VARIABLES
 :root {
-  --main-color: #2C2C2C;
+  --main-color: #2c2c2c;
   --main-color-transparent: rgba(44, 44, 44, 50%);
-  --secondary-color: #B11F1F;
+  --secondary-color: #b11f1f;
   --secondary-color-transparent: rgba(177, 31, 31, 35%);
   --third-color: rgba(255, 255, 255, 0.25);
-  --main-text-color: #FFFFFF;
+  --main-text-color: #ffffff;
   --disabled-bg-color: #676767;
   --disabled-text-color: #b0b0b0;
   --shadow-white: 0px 0px 20px 0px rgba(255, 255, 255, 0.25);
