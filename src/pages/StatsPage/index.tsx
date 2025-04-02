@@ -4,11 +4,7 @@ import { motion } from "framer-motion";
 
 import Title from "../../components/Title";
 
-import {
-  pagesAnimate,
-  pagesInitial,
-  pagesTransition,
-} from "../../utils/pagesAnimation.ts";
+import { pagesAnimate, pagesInitial, pagesTransition } from "../../utils/pagesAnimation.ts";
 import { IGameHistory } from "../../models";
 
 import "./index.scss";
@@ -22,20 +18,14 @@ const StatsPage: FC = () => {
   const { stats, winner } = location.state;
 
   const winnerClassNames = useMemo(
-    () =>
-      `stats__winner ${winner === t("teams.mafia") ? "stats__winner--mafia" : "stats__winner--innocent"}`,
+    () => `stats__winner ${winner === t("teams.mafia") ? "stats__winner--mafia" : "stats__winner--innocent"}`,
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [language, winner],
+    [language, winner]
   );
 
   if (stats) {
     return (
-      <motion.div
-        className="stats"
-        initial={pagesInitial}
-        animate={pagesAnimate}
-        transition={pagesTransition}
-      >
+      <motion.div className="stats" initial={pagesInitial} animate={pagesAnimate} transition={pagesTransition}>
         <Title text={t("headers.gameResults")} />
         <h2 className="stats__subtitle">{t("labels.winnerTeam")}</h2>
         <span className={winnerClassNames}>{winner}</span>
@@ -51,18 +41,14 @@ const StatsPage: FC = () => {
                 <span>
                   {t("labels.gameTime")}:{" "}
                   <span className="stats__strong">
-                    {item.timestamp.type === "День"
-                      ? t("labels.day")
-                      : t("labels.night")}
+                    {item.timestamp.type === "День" ? t("labels.day") : t("labels.night")}
                   </span>
                 </span>
                 <span>
-                  {t("labels.gameCycle")}:{" "}
-                  <span className="stats__strong">{item.timestamp.cycle}</span>
+                  {t("labels.gameCycle")}: <span className="stats__strong">{item.timestamp.cycle}</span>
                 </span>
                 <span>
-                  {t("labels.leaveReason")}:{" "}
-                  <span className="stats__strong">{item.reason}</span>
+                  {t("labels.leaveReason")}: <span className="stats__strong">{item.reason}</span>
                 </span>
               </div>
             </li>

@@ -1,15 +1,11 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { useContext } from "react";
-import SessionContextProvider, {
-  SessionContext,
-  useSessionContext,
-} from "../SessionContext";
+import SessionContextProvider, { SessionContext, useSessionContext } from "../SessionContext";
 
 // Test component that consumes the context
 const TestConsumer = () => {
-  const { gameStats, queueingPlayers, isQueueing, isInstantQueue } =
-    useSessionContext();
+  const { gameStats, queueingPlayers, isQueueing, isInstantQueue } = useSessionContext();
 
   return (
     <div>
@@ -38,7 +34,7 @@ describe("SessionContext", () => {
     render(
       <SessionContextProvider>
         <TestConsumer />
-      </SessionContextProvider>,
+      </SessionContextProvider>
     );
 
     expect(screen.getByTestId("game-type")).toHaveTextContent("Ночь");
@@ -52,7 +48,7 @@ describe("SessionContext", () => {
     render(
       <SessionContextProvider>
         <DirectConsumer />
-      </SessionContextProvider>,
+      </SessionContextProvider>
     );
 
     expect(screen.getByTestId("has-context")).toBeInTheDocument();
@@ -67,9 +63,7 @@ describe("SessionContext", () => {
 
     expect(() => {
       render(<TestConsumer />);
-    }).toThrow(
-      "useSessionContext should be consumed within SessionContextProvider",
-    );
+    }).toThrow("useSessionContext should be consumed within SessionContextProvider");
     // eslint-disable-next-line no-console
     console.error = originalError;
   });

@@ -4,10 +4,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import Title from "../../components/Title";
 import PlayerCard from "../../components/PlayerCard";
 
-import {
-  initialPlayers,
-  rolesRandomizer,
-} from "../../utils/rolesRandomizer.ts";
+import { initialPlayers, rolesRandomizer } from "../../utils/rolesRandomizer.ts";
 import { ISettings, IPlayer } from "../../models";
 import { useTranslation } from "react-i18next";
 
@@ -26,7 +23,7 @@ const SetupContent: FC<SetupContentProps> = ({ settings }) => {
   const [isRevealing, setIsRevealing] = useState(true);
   const { mafiaPlayers, innocentPlayers, generatedArray } = rolesRandomizer(
     settings.amountOfPlayers,
-    settings.gameMode,
+    settings.gameMode
   );
 
   const playerCount = playerId + 1;
@@ -86,9 +83,7 @@ const SetupContent: FC<SetupContentProps> = ({ settings }) => {
             to="/session"
             state={{ players, innocentPlayers, mafiaPlayers }}
             className={`button button--primary ${isRevealing || !isRevealed ? "disabled" : ""}`}
-            onClick={(event) =>
-              !isRevealed || isRevealing ? event.preventDefault() : null
-            }
+            onClick={(event) => (!isRevealed || isRevealing ? event.preventDefault() : null)}
           >
             {t("buttons.goToGameDesk")}
           </Link>

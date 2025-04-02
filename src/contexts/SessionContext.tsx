@@ -18,9 +18,7 @@ type SessionContextProviderProps = {
   children: React.ReactNode;
 };
 
-export default function SessionContextProvider({
-  children,
-}: SessionContextProviderProps) {
+export default function SessionContextProvider({ children }: SessionContextProviderProps) {
   const [gameStats, setGameStats] = useState({
     type: "Ночь",
     counter: 0,
@@ -41,20 +39,16 @@ export default function SessionContextProvider({
       setIsQueueing,
       setIsInstantQueue,
     }),
-    [gameStats, queueingPlayers, isQueueing, isInstantQueue],
+    [gameStats, queueingPlayers, isQueueing, isInstantQueue]
   );
 
-  return (
-    <SessionContext.Provider value={value}>{children}</SessionContext.Provider>
-  );
+  return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>;
 }
 
 export const useSessionContext = () => {
   const context = useContext(SessionContext);
   if (!context) {
-    throw new Error(
-      "useSessionContext should be consumed within SessionContextProvider",
-    );
+    throw new Error("useSessionContext should be consumed within SessionContextProvider");
   }
   return context;
 };

@@ -26,9 +26,7 @@ vi.mock("../pages/MainPage", () => ({
 }));
 
 vi.mock("../pages/RolesInfoPage", () => ({
-  default: () => (
-    <div data-testid="mocked-roles-info-page">Roles Info Page</div>
-  ),
+  default: () => <div data-testid="mocked-roles-info-page">Roles Info Page</div>,
 }));
 
 vi.mock("../pages/SetupPage", () => ({
@@ -60,7 +58,7 @@ describe("App", () => {
     render(
       <MemoryRouter initialEntries={["/"]}>
         <App />
-      </MemoryRouter>,
+      </MemoryRouter>
     );
 
     expect(mockNavigate).toHaveBeenCalledWith("/welcome");
@@ -70,7 +68,7 @@ describe("App", () => {
     render(
       <MemoryRouter initialEntries={["/welcome"]}>
         <App />
-      </MemoryRouter>,
+      </MemoryRouter>
     );
 
     expect(screen.getByTestId("mocked-header")).toBeInTheDocument();
@@ -80,7 +78,7 @@ describe("App", () => {
     render(
       <MemoryRouter initialEntries={["/welcome"]}>
         <App />
-      </MemoryRouter>,
+      </MemoryRouter>
     );
 
     expect(screen.getByTestId("mocked-main-page")).toBeInTheDocument();
@@ -90,7 +88,7 @@ describe("App", () => {
     render(
       <MemoryRouter initialEntries={["/invalid-route"]}>
         <App />
-      </MemoryRouter>,
+      </MemoryRouter>
     );
 
     expect(screen.getByTestId("mocked-not-found-page")).toBeInTheDocument();

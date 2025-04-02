@@ -5,11 +5,7 @@ import { motion } from "framer-motion";
 import Title from "../../components/Title";
 
 import "./index.scss";
-import {
-  pagesAnimate,
-  pagesInitial,
-  pagesTransition,
-} from "../../utils/pagesAnimation.ts";
+import { pagesAnimate, pagesInitial, pagesTransition } from "../../utils/pagesAnimation.ts";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../contexts/LanguageContext.tsx";
 
@@ -23,11 +19,7 @@ const NotFoundPage: FC = () => {
   }, [language]);
 
   return (
-    <motion.div
-      initial={pagesInitial}
-      animate={pagesAnimate}
-      transition={pagesTransition}
-    >
+    <motion.div initial={pagesInitial} animate={pagesAnimate} transition={pagesTransition}>
       <Title text={t("headers.oops")} />
       <div className="not-found">
         <h3 className="not-found__subtitle">404 - {t("labels.404")}</h3>

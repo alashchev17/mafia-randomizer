@@ -62,12 +62,7 @@ const Notification: FC<NotificationProps> = ({ text, setVisible }) => {
       ></motion.span>
       <div className="notification__header">
         <h2 className="notification__title">{text}</h2>
-        <img
-          onClick={handleClose}
-          src={closeSvg}
-          alt="Icon: Close icon"
-          className="notification__close"
-        />
+        <img onClick={handleClose} src={closeSvg} alt="Icon: Close icon" className="notification__close" />
       </div>
     </motion.div>
   );

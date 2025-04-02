@@ -11,11 +11,7 @@ interface QueueingPlayerProps {
   amountOfPlayers: number;
 }
 
-const QueueingPlayer: FC<QueueingPlayerProps> = ({
-  player,
-  queueingPlayers,
-  amountOfPlayers,
-}) => {
+const QueueingPlayer: FC<QueueingPlayerProps> = ({ player, queueingPlayers, amountOfPlayers }) => {
   const { t } = useTranslation();
   const [amountOfVotes, setAmountOfVotes] = useState(0);
 
@@ -57,19 +53,11 @@ const QueueingPlayer: FC<QueueingPlayerProps> = ({
         {t("labels.player")} №{player}
       </span>
       <div className="queueing__controls">
-        <button
-          className="queueing__button"
-          disabled={amountOfVotes < 1}
-          onClick={handleAmountMinus}
-        >
+        <button className="queueing__button" disabled={amountOfVotes < 1} onClick={handleAmountMinus}>
           <img src={iconMinus} alt="Icon: Minus Icon" />
         </button>
         <span className="queueing__count">{amountOfVotes}</span>
-        <button
-          className="queueing__button"
-          disabled={amountOfVotes === amountOfPlayers}
-          onClick={handleAmountPlus}
-        >
+        <button className="queueing__button" disabled={amountOfVotes === amountOfPlayers} onClick={handleAmountPlus}>
           <img src={iconPlus} alt="Icon: Plus Icon" />
         </button>
       </div>

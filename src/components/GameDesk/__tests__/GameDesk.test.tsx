@@ -49,7 +49,7 @@ describe("GameDesk", () => {
         setInnocentPlayersAlive={mockSetInnocentPlayersAlive}
         setMafiaPlayersAlive={mockSetMafiaPlayersAlive}
         handleNotification={mockHandleNotification}
-      />,
+      />
     );
 
     // Check if all player cards are rendered
@@ -64,7 +64,7 @@ describe("GameDesk", () => {
         setInnocentPlayersAlive={mockSetInnocentPlayersAlive}
         setMafiaPlayersAlive={mockSetMafiaPlayersAlive}
         handleNotification={mockHandleNotification}
-      />,
+      />
     );
 
     // Check mafia roles
@@ -87,7 +87,7 @@ describe("GameDesk", () => {
         setInnocentPlayersAlive={mockSetInnocentPlayersAlive}
         setMafiaPlayersAlive={mockSetMafiaPlayersAlive}
         handleNotification={mockHandleNotification}
-      />,
+      />
     );
 
     // Get all cards
@@ -118,7 +118,7 @@ describe("GameDesk", () => {
         setInnocentPlayersAlive={mockSetInnocentPlayersAlive}
         setMafiaPlayersAlive={mockSetMafiaPlayersAlive}
         handleNotification={mockHandleNotification}
-      />,
+      />
     );
 
     // Check if it applies the correct class based on player count

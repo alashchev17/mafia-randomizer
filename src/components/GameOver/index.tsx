@@ -27,17 +27,10 @@ const GameOver: FC<GameOverProps> = ({ winner }) => {
   const stats = gameStats.history;
 
   return (
-    <motion.div
-      variants={gameOverVariants}
-      initial="hidden"
-      animate="visible"
-      exit="hidden"
-      className="gameover"
-    >
+    <motion.div variants={gameOverVariants} initial="hidden" animate="visible" exit="hidden" className="gameover">
       <Title text={t("headers.gameOver")} />
       <p className="gameover__winner">
-        {t("labels.winnerTeam")}:{" "}
-        <span className="gameover__team">{winner}</span>
+        {t("labels.winnerTeam")}: <span className="gameover__team">{winner}</span>
       </p>
       <div className="gameover__row">
         {winner !== t("teams.premature") && (
@@ -53,12 +46,7 @@ const GameOver: FC<GameOverProps> = ({ winner }) => {
             {t("buttons.showHistory")}
           </Link>
         )}
-        <Link
-          style={{ display: "block" }}
-          className="button button--secondary"
-          to="/welcome"
-          replace={true}
-        >
+        <Link style={{ display: "block" }} className="button button--secondary" to="/welcome" replace={true}>
           {t("buttons.backToMain")}
         </Link>
       </div>

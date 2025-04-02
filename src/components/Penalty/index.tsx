@@ -51,28 +51,12 @@ const Penalty: FC<PenaltyProps> = ({ setPlayerStatus, playerStatus }) => {
     }
   };
 
-  if (
-    playerStatus.isKilled ||
-    playerStatus.isQueued ||
-    playerStatus.isDeleted
-  ) {
+  if (playerStatus.isKilled || playerStatus.isQueued || playerStatus.isDeleted) {
     return (
       <div className="penalty">
-        <button
-          className={`penalty__point ${
-            penaltyCount >= 1 ? "pressed" : ""
-          } disabled`}
-        ></button>
-        <button
-          className={`penalty__point ${
-            penaltyCount >= 2 ? "pressed" : ""
-          } disabled`}
-        ></button>
-        <button
-          className={`penalty__point ${
-            penaltyCount >= 3 ? "pressed" : ""
-          } disabled`}
-        ></button>
+        <button className={`penalty__point ${penaltyCount >= 1 ? "pressed" : ""} disabled`}></button>
+        <button className={`penalty__point ${penaltyCount >= 2 ? "pressed" : ""} disabled`}></button>
+        <button className={`penalty__point ${penaltyCount >= 3 ? "pressed" : ""} disabled`}></button>
       </div>
     );
   }

@@ -7,11 +7,7 @@ import Title from "../../components/Title";
 import type { IDatabaseRole } from "../../assets/database";
 import { useDatabaseTexts } from "../../hooks/useDatabaseTexts.ts";
 import RolesCard from "../../components/RolesCard";
-import {
-  pagesAnimate,
-  pagesInitial,
-  pagesTransition,
-} from "../../utils/pagesAnimation.ts";
+import { pagesAnimate, pagesInitial, pagesTransition } from "../../utils/pagesAnimation.ts";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../contexts/LanguageContext.tsx";
 

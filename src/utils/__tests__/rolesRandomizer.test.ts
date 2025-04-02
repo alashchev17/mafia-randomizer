@@ -3,10 +3,7 @@ import { rolesRandomizer } from "../rolesRandomizer";
 
 describe("rolesRandomizer", () => {
   it("should correctly distribute roles for Classic mode with 6 players", () => {
-    const { mafiaPlayers, innocentPlayers, generatedArray } = rolesRandomizer(
-      6,
-      "Классический",
-    );
+    const { mafiaPlayers, innocentPlayers, generatedArray } = rolesRandomizer(6, "Классический");
 
     expect(mafiaPlayers).toBe(2);
     expect(innocentPlayers).toBe(4);
@@ -24,10 +21,7 @@ describe("rolesRandomizer", () => {
   });
 
   it("should correctly distribute roles for Extended mode with 6 players", () => {
-    const { mafiaPlayers, innocentPlayers, generatedArray } = rolesRandomizer(
-      6,
-      "Расширенный",
-    );
+    const { mafiaPlayers, innocentPlayers, generatedArray } = rolesRandomizer(6, "Расширенный");
 
     expect(mafiaPlayers).toBe(2);
     expect(innocentPlayers).toBe(4);
@@ -43,10 +37,7 @@ describe("rolesRandomizer", () => {
   });
 
   it("should correctly distribute roles for larger games with 9 players", () => {
-    const { mafiaPlayers, innocentPlayers, generatedArray } = rolesRandomizer(
-      9,
-      "Классический",
-    );
+    const { mafiaPlayers, innocentPlayers, generatedArray } = rolesRandomizer(9, "Классический");
 
     expect(mafiaPlayers).toBe(3);
     expect(innocentPlayers).toBe(6);

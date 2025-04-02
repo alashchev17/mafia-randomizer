@@ -9,15 +9,8 @@ type SessionControlsProps = {
 };
 
 const SessionControls: FC<SessionControlsProps> = ({ setIsGameOver }) => {
-  const {
-    gameStats,
-    setGameStats,
-    isQueueing,
-    setIsQueueing,
-    queueingPlayers,
-    isInstantQueue,
-    setIsInstantQueue,
-  } = useSessionContext();
+  const { gameStats, setGameStats, isQueueing, setIsQueueing, queueingPlayers, isInstantQueue, setIsInstantQueue } =
+    useSessionContext();
   const { t } = useTranslation();
   const handleStats = useCallback(() => {
     setGameStats((prev) => {
@@ -50,14 +43,8 @@ const SessionControls: FC<SessionControlsProps> = ({ setIsGameOver }) => {
   return (
     <div className="session__controls">
       <Button
-        className={
-          gameStats.type === "День" ? "button--third" : "button--primary"
-        }
-        text={
-          gameStats.type === "День"
-            ? t("buttons.nextNight")
-            : t("buttons.nextDay")
-        }
+        className={gameStats.type === "День" ? "button--third" : "button--primary"}
+        text={gameStats.type === "День" ? t("buttons.nextNight") : t("buttons.nextDay")}
         clickHandle={handleStats}
         disabled={isQueueing}
       />
@@ -65,19 +52,13 @@ const SessionControls: FC<SessionControlsProps> = ({ setIsGameOver }) => {
         {gameStats.type === "День" && (
           <Button
             className="button--primary"
-            text={
-              isQueueing ? t("buttons.hideVoting") : t("buttons.showVoting")
-            }
+            text={isQueueing ? t("buttons.hideVoting") : t("buttons.showVoting")}
             clickHandle={handleQueue}
             disabled={queueingPlayers.length < 1}
           />
         )}
       </AnimatePresence>
-      <Button
-        className="button--secondary"
-        text={t("buttons.finishGame")}
-        clickHandle={handleGameOver}
-      />
+      <Button className="button--secondary" text={t("buttons.finishGame")} clickHandle={handleGameOver} />
     </div>
   );
 };

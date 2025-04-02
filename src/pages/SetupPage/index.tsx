@@ -5,11 +5,7 @@ import { motion } from "framer-motion";
 import { SetupContent } from "./Content.tsx";
 
 import { ISettings } from "../../models";
-import {
-  pagesAnimate,
-  pagesInitial,
-  pagesTransition,
-} from "../../utils/pagesAnimation.ts";
+import { pagesAnimate, pagesInitial, pagesTransition } from "../../utils/pagesAnimation.ts";
 import { useTranslation } from "react-i18next";
 
 interface SetupPageProps {

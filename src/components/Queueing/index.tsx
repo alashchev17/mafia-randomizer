@@ -13,11 +13,7 @@ interface QueueingProps {
   handleInstantQueue: (state: boolean) => void;
 }
 
-const Queueing: FC<QueueingProps> = ({
-  queueingPlayers,
-  amountOfPlayers,
-  handleInstantQueue,
-}) => {
+const Queueing: FC<QueueingProps> = ({ queueingPlayers, amountOfPlayers, handleInstantQueue }) => {
   const queueingVariants = {
     visible: {
       height: "auto",

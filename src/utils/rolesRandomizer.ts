@@ -24,10 +24,7 @@ export const rolesRandomizer = (playersAmount: number, gameMode: string) => {
     return { role, roleSrc };
   };
 
-  const generateArrayOfPlayers = (
-    mafiaPlayers: number,
-    innocentPlayers: number,
-  ): IPlayer[] => {
+  const generateArrayOfPlayers = (mafiaPlayers: number, innocentPlayers: number): IPlayer[] => {
     const arrayOfRoles = [] as IPlayer[];
 
     if (mafiaPlayers === 1) {
@@ -35,10 +32,7 @@ export const rolesRandomizer = (playersAmount: number, gameMode: string) => {
     } else {
       for (let i = 0; i < mafiaPlayers; i++) {
         arrayOfRoles.push(
-          generateRole(
-            i === 0 ? "Дон" : "Мафия",
-            i === 0 ? "/cards/headOfMafia.svg" : "/cards/mafia.svg",
-          ),
+          generateRole(i === 0 ? "Дон" : "Мафия", i === 0 ? "/cards/headOfMafia.svg" : "/cards/mafia.svg")
         );
       }
     }
@@ -61,17 +55,12 @@ export const rolesRandomizer = (playersAmount: number, gameMode: string) => {
 
     for (let i = shuffledArray.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [shuffledArray[i], shuffledArray[j]] = [
-        shuffledArray[j],
-        shuffledArray[i],
-      ];
+      [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
     }
     return shuffledArray;
   };
 
-  const generatedArray = shuffleArray(
-    generateArrayOfPlayers(mafiaPlayers, innocentPlayers),
-  );
+  const generatedArray = shuffleArray(generateArrayOfPlayers(mafiaPlayers, innocentPlayers));
 
   innocentPlayers = generatedArray.length - mafiaPlayers;
 

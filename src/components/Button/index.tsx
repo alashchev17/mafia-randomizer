@@ -10,12 +10,7 @@ interface ButtonProps {
   disabled?: boolean;
 }
 
-const Button: FC<ButtonProps> = ({
-  className,
-  text,
-  clickHandle,
-  disabled,
-}) => {
+const Button: FC<ButtonProps> = ({ className, text, clickHandle, disabled }) => {
   const buttonVariants = {
     hidden: {
       opacity: 0,

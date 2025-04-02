@@ -15,13 +15,7 @@ interface PlayerCardProps {
   currentPlayer: IPlayer;
 }
 
-const PlayerCard: FC<PlayerCardProps> = ({
-  currentPlayer,
-  isRevealed,
-  isRevealing,
-  setIsRevealed,
-  setIsRevealing,
-}) => {
+const PlayerCard: FC<PlayerCardProps> = ({ currentPlayer, isRevealed, isRevealing, setIsRevealed, setIsRevealing }) => {
   const roleRevealHandler = () => {
     if (!isRevealed && !isRevealing) {
       setIsRevealing(true);
@@ -35,10 +29,7 @@ const PlayerCard: FC<PlayerCardProps> = ({
   return (
     <div className={classes} onClick={roleRevealHandler}>
       <PlayerCardBackside isRevealed={isRevealed} />
-      <PlayerCardFrontside
-        isRevealed={isRevealed}
-        currentPlayer={currentPlayer}
-      />
+      <PlayerCardFrontside isRevealed={isRevealed} currentPlayer={currentPlayer} />
     </div>
   );
 };

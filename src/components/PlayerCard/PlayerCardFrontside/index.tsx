@@ -9,10 +9,7 @@ interface PlayerCardFrontsideProps {
   currentPlayer: IPlayer;
 }
 
-const PlayerCardFrontside: FC<PlayerCardFrontsideProps> = ({
-  isRevealed,
-  currentPlayer,
-}) => {
+const PlayerCardFrontside: FC<PlayerCardFrontsideProps> = ({ isRevealed, currentPlayer }) => {
   const { roleSrc, role } = currentPlayer;
 
   const [image, setImage] = useState(roleSrc);

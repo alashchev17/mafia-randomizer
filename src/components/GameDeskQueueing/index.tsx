@@ -12,8 +12,7 @@ type GameDeskQueueingProps = {
 };
 
 const GameDeskQueueing: FC<GameDeskQueueingProps> = ({ listOfPlayers }) => {
-  const { isQueueing, queueingPlayers, setIsInstantQueue } =
-    useSessionContext();
+  const { isQueueing, queueingPlayers, setIsInstantQueue } = useSessionContext();
 
   const handleInstantQueue = (state: boolean) => {
     setIsInstantQueue(state);

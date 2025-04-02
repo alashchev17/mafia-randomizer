@@ -24,22 +24,11 @@ interface GameDeskCardProps {
   handleNotification: (state: boolean, text: string) => void;
 }
 
-const GameDeskCard: FC<GameDeskCardProps> = ({
-  player,
-  setPlayerDead,
-  handleNotification,
-}) => {
+const GameDeskCard: FC<GameDeskCardProps> = ({ player, setPlayerDead, handleNotification }) => {
   const { t } = useTranslation();
 
-  const {
-    gameStats,
-    setGameStats,
-    setQueueingPlayers,
-    queueingPlayers,
-    isInstantQueue,
-    setIsQueueing,
-    isQueueing,
-  } = useSessionContext();
+  const { gameStats, setGameStats, setQueueingPlayers, queueingPlayers, isInstantQueue, setIsQueueing, isQueueing } =
+    useSessionContext();
 
   const [playerStatus, setPlayerStatus] = useState({
     isMuted: false,
@@ -50,23 +39,14 @@ const GameDeskCard: FC<GameDeskCardProps> = ({
 
   const [mutedTime, setMutedTime] = useState<number | undefined>(undefined);
 
-  const [isPromoted, setIsPromoted] = useState(
-    queueingPlayers.indexOf(player.id) !== -1,
-  );
+  const [isPromoted, setIsPromoted] = useState(queueingPlayers.indexOf(player.id) !== -1);
 
   const playerStatusClassNames = `player__status ${
-    playerStatus.isMuted ||
-    playerStatus.isKilled ||
-    playerStatus.isDeleted ||
-    playerStatus.isQueued
-      ? "visible"
-      : ""
+    playerStatus.isMuted || playerStatus.isKilled || playerStatus.isDeleted || playerStatus.isQueued ? "visible" : ""
   }`;
 
   const playerContextMenuClassNames = `player__context-menu ${
-    playerStatus.isKilled || playerStatus.isDeleted || playerStatus.isQueued
-      ? ""
-      : "visible"
+    playerStatus.isKilled || playerStatus.isDeleted || playerStatus.isQueued ? "" : "visible"
   }`;
 
   const playerCardVariants = {
@@ -151,8 +131,7 @@ const GameDeskCard: FC<GameDeskCardProps> = ({
           return {
             ...prev,
             isMuted: false,
-            isQueued:
-              isInstantQueue && playerId === player.id ? true : prev.isQueued,
+            isQueued: isInstantQueue && playerId === player.id ? true : prev.isQueued,
           };
         });
 
@@ -223,7 +202,7 @@ const GameDeskCard: FC<GameDeskCardProps> = ({
       setPlayerStatus,
       setQueueingPlayers,
       t,
-    ],
+    ]
   );
 
   const setupOnQueue = () => {
@@ -252,10 +231,7 @@ const GameDeskCard: FC<GameDeskCardProps> = ({
     if (gameStats.type === "Ночь") {
       setIsPromoted(false);
       setQueueingPlayers([]);
-      if (
-        typeof mutedTime === "number" &&
-        mutedTime + 2 === gameStats.counter
-      ) {
+      if (typeof mutedTime === "number" && mutedTime + 2 === gameStats.counter) {
         setMutedTime(undefined);
         setPlayerStatus((prev) => ({
           ...prev,
@@ -275,10 +251,7 @@ const GameDeskCard: FC<GameDeskCardProps> = ({
   useEffect(() => {
     if (!isInstantQueue) return;
 
-    handleNotification(
-      true,
-      t("notifications.singlePlayerQueued", { playerId: queueingPlayers[0] }),
-    );
+    handleNotification(true, t("notifications.singlePlayerQueued", { playerId: queueingPlayers[0] }));
     handleQueue(queueingPlayers[0], isInstantQueue);
   }, [isInstantQueue, queueingPlayers, handleNotification, handleQueue, t]);
 
@@ -306,63 +279,26 @@ const GameDeskCard: FC<GameDeskCardProps> = ({
         ></span>
         <div className="player__actions">
           <div className={playerContextMenuClassNames}>
-            <button
-              className="player__button player__button--primary"
-              onClick={handleKill}
-            >
+            <button className="player__button player__button--primary" onClick={handleKill}>
               <img src={killBtnSvg} alt="Kill icon" />
               <span>{t("buttons.kill")}</span>
             </button>
-            <button
-              className="player__button player__button--secondary"
-              onClick={() => handleQueue(player.id, false)}
-            >
+            <button className="player__button player__button--secondary" onClick={() => handleQueue(player.id, false)}>
               <img src={queueBtnSvg} alt="Queue icon" />
               <span>{t("buttons.queue")}</span>
             </button>
-            <button
-              className="player__button player__button--third"
-              onClick={handleDelete}
-            >
+            <button className="player__button player__button--third" onClick={handleDelete}>
               <img src={deleteBtnSvg} alt="Delete icon" />
               <span>{t("buttons.delete")}</span>
             </button>
           </div>
-          <img
-            className="player__image"
-            src={player.roleSrc}
-            alt={`Card: ${player.role}`}
-          />
+          <img className="player__image" src={player.roleSrc} alt={`Card: ${player.role}`} />
           <div className={playerStatusClassNames}>
             <AnimatePresence>
-              {playerStatus.isMuted && (
-                <motion.img
-                  exit={{ opacity: 0 }}
-                  src={mutedSvg}
-                  alt="Mute status"
-                />
-              )}
-              {playerStatus.isKilled && (
-                <motion.img
-                  exit={{ opacity: 0 }}
-                  src={killedSvg}
-                  alt="Killed status"
-                />
-              )}
-              {playerStatus.isQueued && (
-                <motion.img
-                  exit={{ opacity: 0 }}
-                  src={queuedSvg}
-                  alt="Queued status"
-                />
-              )}
-              {playerStatus.isDeleted && (
-                <motion.img
-                  exit={{ opacity: 0 }}
-                  src={deletedSvg}
-                  alt="Queued status"
-                />
-              )}
+              {playerStatus.isMuted && <motion.img exit={{ opacity: 0 }} src={mutedSvg} alt="Mute status" />}
+              {playerStatus.isKilled && <motion.img exit={{ opacity: 0 }} src={killedSvg} alt="Killed status" />}
+              {playerStatus.isQueued && <motion.img exit={{ opacity: 0 }} src={queuedSvg} alt="Queued status" />}
+              {playerStatus.isDeleted && <motion.img exit={{ opacity: 0 }} src={deletedSvg} alt="Queued status" />}
             </AnimatePresence>
           </div>
         </div>

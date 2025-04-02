@@ -12,9 +12,7 @@ describe("Game State Management", () => {
 
     cy.url().should("include", "/welcome");
 
-    cy.contains(
-      "The game field is only accessible after game initialization!",
-    ).should("be.visible");
+    cy.contains("The game field is only accessible after game initialization!").should("be.visible");
   });
 
   it("should validate player count when starting a game", () => {

@@ -26,7 +26,7 @@ describe("PlayerCard", () => {
         isRevealing={false}
         setIsRevealing={mockSetIsRevealing}
         currentPlayer={mockPlayer}
-      />,
+      />
     );
 
     expect(screen.getByAltText("Backside Card")).toBeInTheDocument();
@@ -41,7 +41,7 @@ describe("PlayerCard", () => {
         isRevealing={false}
         setIsRevealing={mockSetIsRevealing}
         currentPlayer={mockPlayer}
-      />,
+      />
     );
 
     const card = screen.getByAltText("Backside Card").closest(".player-card");
@@ -64,7 +64,7 @@ describe("PlayerCard", () => {
         isRevealing={false}
         setIsRevealing={mockSetIsRevealing}
         currentPlayer={mockPlayer}
-      />,
+      />
     );
 
     expect(screen.getByAltText("Мирный житель")).toBeInTheDocument();
@@ -79,7 +79,7 @@ describe("PlayerCard", () => {
         isRevealing={false}
         setIsRevealing={mockSetIsRevealing}
         currentPlayer={mockPlayer}
-      />,
+      />
     );
 
     const card = screen.getByAltText("Мирный житель").closest(".player-card");
@@ -97,7 +97,7 @@ describe("PlayerCard", () => {
         isRevealing={true}
         setIsRevealing={mockSetIsRevealing}
         currentPlayer={mockPlayer}
-      />,
+      />
     );
 
     const card = screen.getByAltText("Мирный житель").closest(".player-card");

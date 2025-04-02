@@ -19,16 +19,14 @@ const GameDesk: FC<GameDeskProps> = ({
   setMafiaPlayersAlive,
   handleNotification,
 }) => {
-  const listOfPlayers: IGameDeskPlayer[] = players.map(
-    (player: IPlayer, index: number) => {
-      return {
-        id: index + 1,
-        role: player.role,
-        roleSrc: player.roleSrc,
-        isMafia: player.role === "Мафия" || player.role === "Дон",
-      };
-    },
-  );
+  const listOfPlayers: IGameDeskPlayer[] = players.map((player: IPlayer, index: number) => {
+    return {
+      id: index + 1,
+      role: player.role,
+      roleSrc: player.roleSrc,
+      isMafia: player.role === "Мафия" || player.role === "Дон",
+    };
+  });
 
   const gameDeskVariants = {
     visible: {
@@ -56,9 +54,7 @@ const GameDesk: FC<GameDeskProps> = ({
           <GameDeskCard
             key={player.id}
             player={player}
-            setPlayerDead={
-              player.isMafia ? setMafiaPlayersAlive : setInnocentPlayersAlive
-            }
+            setPlayerDead={player.isMafia ? setMafiaPlayersAlive : setInnocentPlayersAlive}
             handleNotification={handleNotification}
           />
         ))}

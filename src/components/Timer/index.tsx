@@ -51,8 +51,7 @@ const Timer: FC<TimerProps> = ({ handleNotification }) => {
     return () => clearInterval(interval);
   }, [seconds, isTimerActive, handleTimer]);
 
-  const timerSeconds =
-    seconds === 60 ? "01:00" : `00:${seconds < 10 ? `0${seconds}` : seconds}`;
+  const timerSeconds = seconds === 60 ? "01:00" : `00:${seconds < 10 ? `0${seconds}` : seconds}`;
 
   return (
     <div className="timer">
@@ -66,11 +65,7 @@ const Timer: FC<TimerProps> = ({ handleNotification }) => {
           xmlns="http://www.w3.org/2000/svg"
           className={`${isTimerActive ? "disabled" : ""}`}
         >
-          <path
-            onClick={startTimer}
-            d="M0 22.5V0L35 22.5L0 45V22.5Z"
-            fill="white"
-          />
+          <path onClick={startTimer} d="M0 22.5V0L35 22.5L0 45V22.5Z" fill="white" />
         </svg>
       </div>
       <div className="timer__controls">

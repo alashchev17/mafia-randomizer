@@ -1,11 +1,4 @@
-import {
-  Dispatch,
-  FC,
-  FormEventHandler,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react";
+import { Dispatch, FC, FormEventHandler, SetStateAction, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
@@ -16,11 +9,7 @@ import "./index.scss";
 
 import { useDatabaseTexts } from "../../hooks/useDatabaseTexts.ts";
 import { ISettings } from "../../models";
-import {
-  pagesAnimate,
-  pagesInitial,
-  pagesTransition,
-} from "../../utils/pagesAnimation.ts";
+import { pagesAnimate, pagesInitial, pagesTransition } from "../../utils/pagesAnimation.ts";
 import { useTranslation } from "react-i18next";
 import Select from "react-select";
 
@@ -35,11 +24,7 @@ type FormFields = {
   gameMode: HTMLInputElement;
 };
 
-const SettingsPage: FC<SettingsPageProps> = ({
-  settings,
-  setSettings,
-  handleNotification,
-}) => {
+const SettingsPage: FC<SettingsPageProps> = ({ settings, setSettings, handleNotification }) => {
   const { t } = useTranslation();
   const database = useDatabaseTexts();
   const navigate = useNavigate();
@@ -49,9 +34,7 @@ const SettingsPage: FC<SettingsPageProps> = ({
   }, [t]);
 
   const [isValid, setIsValid] = useState(true);
-  const handleSubmit: FormEventHandler<HTMLFormElement & FormFields> = (
-    event,
-  ) => {
+  const handleSubmit: FormEventHandler<HTMLFormElement & FormFields> = (event) => {
     event.preventDefault();
     if (isValid) {
       const form = event.currentTarget;
@@ -134,9 +117,7 @@ const SettingsPage: FC<SettingsPageProps> = ({
               }),
               option: (base, { isFocused }) => ({
                 ...base,
-                backgroundColor: isFocused
-                  ? "var(--main-color-transparent)"
-                  : "var(--main-color)",
+                backgroundColor: isFocused ? "var(--main-color-transparent)" : "var(--main-color)",
                 color: "var(--main-text-color)",
                 cursor: "pointer",
                 padding: "10px 15px",

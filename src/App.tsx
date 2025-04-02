@@ -22,9 +22,7 @@ const App: FC = () => {
   const location = useLocation();
 
   const [isNotificationVisible, setIsNotificationVisible] = useState(false);
-  const [notificationData, setNotificationData] = useState<INotification>(
-    {} as INotification,
-  );
+  const [notificationData, setNotificationData] = useState<INotification>({} as INotification);
 
   const [settings, setSettings] = useState<ISettings>({
     amountOfPlayers: 6,
@@ -54,39 +52,22 @@ const App: FC = () => {
 
   return (
     <>
-      <AnimatePresence>
-        {location.pathname !== "/session" && <Header />}
-      </AnimatePresence>
+      <AnimatePresence>{location.pathname !== "/session" && <Header />}</AnimatePresence>
       <div className="wrapper">
         <AnimatePresence>
-          {isNotificationVisible && (
-            <Notification
-              text={notificationData.text}
-              setVisible={setIsNotificationVisible}
-            />
-          )}
+          {isNotificationVisible && <Notification text={notificationData.text} setVisible={setIsNotificationVisible} />}
         </AnimatePresence>
         <div className="container">
           <Routes>
             <Route path="/welcome" element={<MainPage />} />
             <Route path="/information" element={<RolesInfoPage />} />
-            <Route
-              path="/setup/:setupId"
-              element={<SetupPage settings={settings} />}
-            />
-            <Route
-              path="/session"
-              element={<SessionPage handleNotification={handleNotification} />}
-            />
+            <Route path="/setup/:setupId" element={<SetupPage settings={settings} />} />
+            <Route path="/session" element={<SessionPage handleNotification={handleNotification} />} />
             <Route path="/stats" element={<StatsPage />} />
             <Route
               path="/settings"
               element={
-                <SettingsPage
-                  settings={settings}
-                  setSettings={setSettings}
-                  handleNotification={handleNotification}
-                />
+                <SettingsPage settings={settings} setSettings={setSettings} handleNotification={handleNotification} />
               }
             />
             <Route path="*" element={<NotFoundPage />} />

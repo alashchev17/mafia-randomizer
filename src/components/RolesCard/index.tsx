@@ -10,12 +10,7 @@ interface RolesCardProps {
   index: number;
 }
 
-const RolesCard: FC<RolesCardProps> = ({
-  title,
-  description,
-  roleSrc,
-  index,
-}) => {
+const RolesCard: FC<RolesCardProps> = ({ title, description, roleSrc, index }) => {
   const cardsVariants = {
     hidden: {
       opacity: 0,
@@ -33,13 +28,7 @@ const RolesCard: FC<RolesCardProps> = ({
   };
 
   return (
-    <motion.div
-      className="roles-card"
-      variants={cardsVariants}
-      initial="hidden"
-      whileInView="visible"
-      custom={index}
-    >
+    <motion.div className="roles-card" variants={cardsVariants} initial="hidden" whileInView="visible" custom={index}>
       <img className="roles-card__image" src={roleSrc} alt={title} />
       <div className="roles-card__information">
         <p className="roles-card__text">

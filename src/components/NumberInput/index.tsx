@@ -9,12 +9,7 @@ interface NumberInputProps {
   setButtonValid: (state: boolean) => void;
 }
 
-const NumberInput: FC<NumberInputProps> = ({
-  label,
-  currentValue,
-  name,
-  setButtonValid,
-}) => {
+const NumberInput: FC<NumberInputProps> = ({ label, currentValue, name, setButtonValid }) => {
   const [value, setValue] = useState(currentValue.toString());
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
