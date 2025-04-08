@@ -94,6 +94,11 @@ const SetupContent: FC<SetupContentProps> = ({ settings }) => {
     }, 1500);
   }, [players]);
 
+  useEffect(() => {
+    // eslint-disable-next-line
+    console.log(`[INFO]: players: `, players);
+  }, [players]);
+
   return (
     <>
       <Title text={`${t("labels.player")} №${playerCount}`} />
