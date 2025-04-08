@@ -16,6 +16,10 @@
     &--11 {
       justify-content: space-around;
     }
+    &--5 {
+      grid-template-rows: 1fr;
+      grid-template-columns: repeat(5, 118.5px);
+    }
     &--6 {
       grid-template-rows: 1fr;
       grid-template-columns: repeat(6, 118.5px);

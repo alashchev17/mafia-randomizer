@@ -41,7 +41,7 @@ const SettingsPage: FC<SettingsPageProps> = ({ settings, setSettings, handleNoti
 
       const amountOfPlayers = Number(form.players.value);
       const gameMode = form.gameMode.value;
-      if (amountOfPlayers >= 6 && amountOfPlayers <= 12) {
+      if (amountOfPlayers >= 5 && amountOfPlayers <= 12) {
         handleNotification(true, t("notifications.settingsSaved"));
         setSettings((prev: ISettings): ISettings => {
           return {

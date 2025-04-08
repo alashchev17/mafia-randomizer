@@ -57,7 +57,7 @@ const SessionPage: FC<SessionPageProps> = ({ handleNotification }) => {
 
   const listOfPlayers: IPlayer[] = location.state.players;
 
-  if (listOfPlayers.length > 12 || listOfPlayers.length < 6) {
+  if (listOfPlayers.length > 12 || listOfPlayers.length < 5) {
     handleNotification(true, t("notifications.invalidPlayerCount"));
     return <Navigate to="/settings" replace={true} />;
   }

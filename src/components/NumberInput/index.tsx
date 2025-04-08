@@ -16,7 +16,7 @@ const NumberInput: FC<NumberInputProps> = ({ label, currentValue, name, setButto
     if (event.target.value.length !== 0) {
       if (Number(event.target.value)) {
         setValue(event.target.value);
-        Number(event.target.value) >= 6 && Number(event.target.value) <= 12
+        Number(event.target.value) >= 5 && Number(event.target.value) <= 12
           ? setButtonValid(true)
           : setButtonValid(false);
       } else {
