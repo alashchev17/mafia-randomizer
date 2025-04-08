@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useCallback, useEffect } from "react";
 
 import { IPlayer } from "../../models";
 
@@ -16,7 +16,7 @@ interface PlayerCardProps {
 }
 
 const PlayerCard: FC<PlayerCardProps> = ({ currentPlayer, isRevealed, isRevealing, setIsRevealed, setIsRevealing }) => {
-  const roleRevealHandler = () => {
+  const roleRevealHandler = useCallback(() => {
     if (!isRevealed && !isRevealing) {
       setIsRevealing(true);
       setIsRevealed(true);
@@ -24,8 +24,21 @@ const PlayerCard: FC<PlayerCardProps> = ({ currentPlayer, isRevealed, isRevealin
         setIsRevealing(false);
       }, 2000);
     }
-  };
+  }, [isRevealed, isRevealing, setIsRevealing, setIsRevealed]);
+
+  useEffect(() => {
+    const handleSpacePress = (event: globalThis.KeyboardEvent) => {
+      if (event.code === "Space") roleRevealHandler();
+    };
+    window.addEventListener("keypress", handleSpacePress);
+
+    return () => {
+      window.removeEventListener("keypress", handleSpacePress);
+    };
+  }, [roleRevealHandler]);
+
   const classes = `player-card ${isRevealing ? "disabled" : ""}`;
+
   return (
     <div className={classes} onClick={roleRevealHandler}>
       <PlayerCardBackside isRevealed={isRevealed} />

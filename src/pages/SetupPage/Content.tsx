@@ -1,4 +1,4 @@
-import { FC, MouseEvent, useEffect, useState } from "react";
+import { FC, MouseEvent, useCallback, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 import Title from "../../components/Title";
@@ -28,16 +28,51 @@ const SetupContent: FC<SetupContentProps> = ({ settings }) => {
 
   const playerCount = playerId + 1;
 
+  const showNextPlayer = useCallback(
+    (eventType: "link" | "keypress", event: null | MouseEvent<HTMLAnchorElement>) => {
+      if (!isRevealed || isRevealing) {
+        if (eventType === "link" && event) {
+          event.preventDefault();
+        }
+        return;
+      }
+      setPlayerId((prev) => prev + 1);
+      navigate(settings.amountOfPlayers === playerCount ? "/session" : `/setup/${playerCount + 1}`, {
+        state: settings.amountOfPlayers === playerCount ? { players, innocentPlayers, mafiaPlayers } : null,
+      });
+      setIsRevealing(true);
+      setTimeout(() => {
+        setIsRevealing(false);
+      }, 2000);
+    },
+    [
+      isRevealed,
+      isRevealing,
+      playerCount,
+      settings.amountOfPlayers,
+      players,
+      innocentPlayers,
+      mafiaPlayers,
+      navigate,
+      setIsRevealing,
+      setPlayerId,
+    ]
+  );
+
+  useEffect(() => {
+    const handleSpacePress = (event: globalThis.KeyboardEvent) => {
+      if (event.code === "Space") showNextPlayer("keypress", null);
+    };
+
+    window.addEventListener("keypress", handleSpacePress);
+
+    return () => {
+      window.removeEventListener("keypress", handleSpacePress);
+    };
+  }, [showNextPlayer]);
+
   const linkHandler = (event: MouseEvent<HTMLAnchorElement>) => {
-    if (!isRevealed || isRevealing) {
-      event.preventDefault();
-      return;
-    }
-    setPlayerId((prev) => prev + 1);
-    setIsRevealing(true);
-    setTimeout(() => {
-      setIsRevealing(false);
-    }, 2000);
+    showNextPlayer("link", event);
   };
 
   useEffect(() => {
