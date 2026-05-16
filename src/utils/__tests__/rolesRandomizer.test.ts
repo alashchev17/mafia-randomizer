@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+import { getRoleDistribution } from "../roleDistribution";
 import { rolesRandomizer } from "../rolesRandomizer";
 
 describe("rolesRandomizer", () => {
@@ -57,5 +58,16 @@ describe("rolesRandomizer", () => {
 
     expect(classicArray.map((player) => player.role)).not.toContain("Доктор");
     expect(extendedArray.map((player) => player.role)).toContain("Доктор");
+  });
+
+  it("should return role counts for preview without shuffling roles", () => {
+    const distribution = getRoleDistribution(6, "Расширенный");
+    const countsByRole = Object.fromEntries(distribution.map(({ role, count }) => [role, count]));
+
+    expect(countsByRole["Мирный житель"]).toBe(2);
+    expect(countsByRole["Шериф"]).toBe(1);
+    expect(countsByRole["Дон"]).toBe(1);
+    expect(countsByRole["Мафия"]).toBe(1);
+    expect(countsByRole["Доктор"]).toBe(1);
   });
 });

@@ -23,6 +23,9 @@ interface SessionPageProps {
   handleNotification: (state: boolean, text: string) => void;
 }
 
+const PLAYER_COUNT_MIN = 4;
+const PLAYER_COUNT_MAX = 12;
+
 const SessionPage: FC<SessionPageProps> = ({ handleNotification }) => {
   const { t } = useTranslation();
   const location = useLocation();
@@ -57,7 +60,7 @@ const SessionPage: FC<SessionPageProps> = ({ handleNotification }) => {
 
   const listOfPlayers: IPlayer[] = location.state.players;
 
-  if (listOfPlayers.length > 12 || listOfPlayers.length < 6) {
+  if (listOfPlayers.length > PLAYER_COUNT_MAX || listOfPlayers.length < PLAYER_COUNT_MIN) {
     handleNotification(true, t("notifications.invalidPlayerCount"));
     return <Navigate to="/settings" replace={true} />;
   }

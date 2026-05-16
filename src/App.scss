@@ -20,6 +20,12 @@
   padding: 76px 40px;
 }
 
+.settings-container {
+  display: flex;
+  color: var(--main-text-color);
+  padding: 1rem 2rem;
+}
+
 .flex-center-column {
   display: flex;
   flex-direction: column;

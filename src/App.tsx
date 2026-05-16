@@ -57,7 +57,7 @@ const App: FC = () => {
         <AnimatePresence>
           {isNotificationVisible && <Notification text={notificationData.text} setVisible={setIsNotificationVisible} />}
         </AnimatePresence>
-        <div className="container">
+        <div className={location.pathname === "/settings" ? "settings-container" : "container"}>
           <Routes>
             <Route path="/welcome" element={<MainPage />} />
             <Route path="/information" element={<RolesInfoPage />} />

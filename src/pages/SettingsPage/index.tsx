@@ -1,4 +1,4 @@
-import { Dispatch, FC, FormEventHandler, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, FC, FormEventHandler, SetStateAction, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
@@ -7,11 +7,16 @@ import NumberInput from "../../components/NumberInput";
 
 import "./index.scss";
 
-import { useDatabaseTexts } from "../../hooks/useDatabaseTexts.ts";
 import { ISettings } from "../../models";
 import { pagesAnimate, pagesInitial, pagesTransition } from "../../utils/pagesAnimation.ts";
+import {
+  GAME_MODE_CLASSIC,
+  GAME_MODE_EXTENDED,
+  getRoleDistribution,
+  normalizeGameMode,
+  type GameMode,
+} from "../../utils/roleDistribution.ts";
 import { useTranslation } from "react-i18next";
-import Select from "react-select";
 
 interface SettingsPageProps {
   settings: ISettings;
@@ -19,119 +24,126 @@ interface SettingsPageProps {
   handleNotification: (state: boolean, text: string) => void;
 }
 
-type FormFields = {
-  players: HTMLInputElement;
-  gameMode: HTMLInputElement;
-};
+const PLAYER_COUNT_MIN = 4;
+const PLAYER_COUNT_MAX = 12;
+
+const GAME_MODES: {
+  value: GameMode;
+  titleKey: string;
+  descriptionKey: string;
+}[] = [
+  {
+    value: GAME_MODE_CLASSIC,
+    titleKey: "gameModes.1.title",
+    descriptionKey: "gameModes.1.shortDescription",
+  },
+  {
+    value: GAME_MODE_EXTENDED,
+    titleKey: "gameModes.2.title",
+    descriptionKey: "gameModes.2.shortDescription",
+  },
+];
 
 const SettingsPage: FC<SettingsPageProps> = ({ settings, setSettings, handleNotification }) => {
   const { t } = useTranslation();
-  const database = useDatabaseTexts();
   const navigate = useNavigate();
+  const [selectedPlayersAmount, setSelectedPlayersAmount] = useState(settings.amountOfPlayers);
+  const [selectedGameMode, setSelectedGameMode] = useState<GameMode>(normalizeGameMode(settings.gameMode));
+  const selectedGameModeLabel = t(
+    GAME_MODES.find(({ value }) => value === selectedGameMode)?.titleKey || GAME_MODES[0].titleKey
+  );
+  const rolePreview = useMemo(
+    () => getRoleDistribution(selectedPlayersAmount, selectedGameMode).filter(({ count }) => count > 0),
+    [selectedPlayersAmount, selectedGameMode]
+  );
 
   useEffect(() => {
     document.title = t("titles.settingsPage");
   }, [t]);
 
-  const [isValid, setIsValid] = useState(true);
-  const handleSubmit: FormEventHandler<HTMLFormElement & FormFields> = (event) => {
-    event.preventDefault();
-    if (isValid) {
-      const form = event.currentTarget;
+  useEffect(() => {
+    setSelectedPlayersAmount(settings.amountOfPlayers);
+    setSelectedGameMode(normalizeGameMode(settings.gameMode));
+  }, [settings.amountOfPlayers, settings.gameMode]);
 
-      const amountOfPlayers = Number(form.players.value);
-      const gameMode = form.gameMode.value;
-      if (amountOfPlayers >= 6 && amountOfPlayers <= 12) {
-        handleNotification(true, t("notifications.settingsSaved"));
-        setSettings((prev: ISettings): ISettings => {
-          return {
-            ...prev,
-            amountOfPlayers,
-            gameMode,
-          };
-        });
-        navigate("/");
-      } else {
-        handleNotification(true, t("notifications.invalidPlayerCount"));
-      }
+  const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
+    event.preventDefault();
+
+    if (selectedPlayersAmount >= PLAYER_COUNT_MIN && selectedPlayersAmount <= PLAYER_COUNT_MAX) {
+      handleNotification(true, t("notifications.settingsSaved"));
+      setSettings((prev: ISettings): ISettings => {
+        return {
+          ...prev,
+          amountOfPlayers: selectedPlayersAmount,
+          gameMode: selectedGameMode,
+        };
+      });
+      navigate("/");
     } else {
-      handleNotification(true, t("notifications.settingsSaveError"));
+      handleNotification(true, t("notifications.invalidPlayerCount"));
     }
   };
 
-  const buttonClassNames = `button button--primary ${isValid ? "" : "disabled"}`;
-
   return (
-    <motion.div
-      className="flex-center-column settings"
-      initial={pagesInitial}
-      animate={pagesAnimate}
-      transition={pagesTransition}
-    >
-      <Title text={t("titles.settingsPage").split("|")[1]} />
+    <motion.div className="settings" initial={pagesInitial} animate={pagesAnimate} transition={pagesTransition}>
+      <div className="settings__header">
+        <Title className="settings__title" text={t("headers.settings")} />
+        <p className="settings__description">{t("descriptions.settings")}</p>
+      </div>
       <form className="settings__form" onSubmit={handleSubmit}>
-        <NumberInput
-          label={t("labels.amountOfPlayers")}
-          name="players"
-          currentValue={settings.amountOfPlayers}
-          setButtonValid={setIsValid}
-        />
-        <label className="label">
-          {t("labels.gameMode")}
-          <Select
-            name="gameMode"
-            placeholder={t("selects.gameMode.defaultValue")}
-            options={database.gameModes.map((item) => ({
-              value: item.title,
-              label: item.title,
-            }))}
-            styles={{
-              control: (base) => ({
-                ...base,
-                outline: "none",
-                padding: "0 6px",
-                height: "48px",
-                background: "var(--main-color)",
-                borderColor: "unset",
-                border: "2px solid var(--main-text-color)",
-                borderRadius: "5px",
-                cursor: "pointer",
-                transition: "box-shadow 0.3s ease-in-out",
-                "&:hover": {
-                  boxShadow: "var(--shadow-white)",
-                },
-              }),
-              singleValue: (base) => ({
-                ...base,
-                color: "var(--main-text-color)",
-              }),
-              menu: (base) => ({
-                ...base,
-                zIndex: 9999,
-                border: "2px solid var(--main-text-color)",
-                borderRadius: "5px",
-              }),
-              menuList: (base) => ({
-                ...base,
-                padding: 0,
-              }),
-              option: (base, { isFocused }) => ({
-                ...base,
-                backgroundColor: isFocused ? "var(--main-color-transparent)" : "var(--main-color)",
-                color: "var(--main-text-color)",
-                cursor: "pointer",
-                padding: "10px 15px",
-              }),
-            }}
-            components={{
-              DropdownIndicator: () => null,
-              IndicatorSeparator: () => null,
-            }}
+        <div className="settings__controls">
+          <NumberInput
+            label={t("labels.amountOfPlayers")}
+            sublabel={t("labels.amountOfPlayersRange")}
+            entityTitle={t("labels.playersEntity")}
+            name="players"
+            currentValue={selectedPlayersAmount}
+            minValue={PLAYER_COUNT_MIN}
+            maxValue={PLAYER_COUNT_MAX}
+            onChange={setSelectedPlayersAmount}
           />
-        </label>
-        <button className={buttonClassNames} disabled={!isValid} type="submit">
-          {t("buttons.saveChanges")}
-        </button>
+          <fieldset className="settings__mode">
+            <legend className="settings__section-title">{t("labels.gameMode")}</legend>
+            <div className="settings__mode-options">
+              {GAME_MODES.map(({ value, titleKey, descriptionKey }) => (
+                <label className="settings__mode-option" key={value}>
+                  <input
+                    className="settings__mode-input"
+                    type="radio"
+                    name="gameMode"
+                    value={value}
+                    checked={selectedGameMode === value}
+                    onChange={() => setSelectedGameMode(value)}
+                  />
+                  <span className="settings__mode-card">
+                    <span className="settings__mode-title">{t(titleKey)}</span>
+                    <span className="settings__mode-description">{t(descriptionKey)}</span>
+                  </span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+          <button className="button button--primary" type="submit">
+            {t("buttons.saveChanges")}
+          </button>
+        </div>
+        <aside className="settings__preview" aria-label={t("labels.rolePreview")}>
+          <p className="settings__preview-label">{t("labels.rolePreview")}</p>
+          <h2 className="settings__preview-title">
+            {selectedPlayersAmount} {t("labels.playersEntity")}
+          </h2>
+          <p className="settings__preview-mode">
+            {t("labels.gameModePreview")}: {selectedGameModeLabel}
+          </p>
+          <ul className="settings__preview-list">
+            {rolePreview.map(({ titleKey, count }) => (
+              <li className="settings__preview-item" key={titleKey}>
+                <span className="settings__preview-role">{t(titleKey)}</span>
+                <span className="settings__preview-count">× {count}</span>
+              </li>
+            ))}
+          </ul>
+        </aside>
       </form>
     </motion.div>
   );

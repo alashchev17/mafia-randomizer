@@ -1,47 +1,87 @@
-import { ChangeEvent, FC, useState } from "react";
+import { FC, useEffect, useId, useState } from "react";
 
 import "./index.scss";
 
 interface NumberInputProps {
   label: string;
+  sublabel?: string;
+  entityTitle: string;
   currentValue: number;
-  name: string;
-  setButtonValid: (state: boolean) => void;
+  minValue: number;
+  maxValue: number;
+  name?: string;
+  onChange?: (value: number) => void;
 }
 
-const NumberInput: FC<NumberInputProps> = ({ label, currentValue, name, setButtonValid }) => {
-  const [value, setValue] = useState(currentValue.toString());
+const clampValue = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.value.length !== 0) {
-      if (Number(event.target.value)) {
-        setValue(event.target.value);
-        Number(event.target.value) >= 6 && Number(event.target.value) <= 12
-          ? setButtonValid(true)
-          : setButtonValid(false);
-      } else {
-        setValue("");
-      }
-    } else {
-      setValue("");
-      setButtonValid(false);
-    }
-    return false;
+const NumberInput: FC<NumberInputProps> = ({
+  label,
+  sublabel,
+  entityTitle,
+  currentValue,
+  minValue,
+  maxValue,
+  name,
+  onChange,
+}) => {
+  const labelId = useId();
+  const sublabelId = useId();
+  const [value, setValue] = useState(clampValue(currentValue, minValue, maxValue));
+
+  useEffect(() => {
+    setValue(clampValue(currentValue, minValue, maxValue));
+  }, [currentValue, minValue, maxValue]);
+
+  const updateValue = (nextValue: number) => {
+    const clampedValue = clampValue(nextValue, minValue, maxValue);
+
+    setValue(clampedValue);
+    onChange?.(clampedValue);
   };
 
   return (
-    <label className="label">
-      {label}
-      <input
-        className="input"
-        type="text"
-        autoComplete="off"
-        inputMode="numeric"
-        value={value}
-        name={name}
-        onChange={handleChange}
-      />
-    </label>
+    <div
+      className="number-input"
+      role="group"
+      aria-labelledby={labelId}
+      aria-describedby={sublabel ? sublabelId : undefined}
+    >
+      <div className="number-input__header">
+        <span className="number-input__label" id={labelId}>
+          {label}
+        </span>
+        {sublabel && (
+          <span className="number-input__sublabel" id={sublabelId}>
+            {sublabel}
+          </span>
+        )}
+      </div>
+      <div className="number-input__controls">
+        <button
+          className="number-input__button"
+          type="button"
+          disabled={value <= minValue}
+          aria-label={`${label}: decrease`}
+          onClick={() => updateValue(value - 1)}
+        >
+          -
+        </button>
+        <output className="number-input__value" aria-live="polite">
+          {value} {entityTitle}
+        </output>
+        <button
+          className="number-input__button"
+          type="button"
+          disabled={value >= maxValue}
+          aria-label={`${label}: increase`}
+          onClick={() => updateValue(value + 1)}
+        >
+          +
+        </button>
+      </div>
+      {name && <input type="hidden" value={value} name={name} readOnly />}
+    </div>
   );
 };
 

@@ -85,6 +85,14 @@
     &__cards {
       justify-content: space-around;
       grid-template-rows: auto;
+      &--4 {
+        grid-template-columns: repeat(4, 118.5px);
+      }
+
+      &--5 {
+        grid-template-columns: repeat(5, 118.5px);
+      }
+
       &--6,
       &--12 {
         grid-template-columns: repeat(3, 118.5px);
@@ -180,6 +188,8 @@
     &__cards {
       justify-content: space-around;
       &--6,
+      &--4,
+      &--5,
       &--7,
       &--8,
       &--9,

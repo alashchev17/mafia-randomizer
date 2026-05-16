@@ -1,33 +1,116 @@
-.label {
+.number-input {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 25px;
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: -0.2px;
-  &:not(:last-child) {
-    margin-bottom: 25px;
+  width: 100%;
+  gap: 17px;
+  color: var(--main-text-color);
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    width: 100%;
+  }
+
+  &__label,
+  &__sublabel {
+    font-size: 24px;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: 0;
+  }
+
+  &__label {
+    color: var(--main-text-color);
+  }
+
+  &__sublabel {
+    color: var(--secondary-text-color);
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  &__controls {
+    display: grid;
+    grid-template-columns: 76px minmax(0, 1fr) 76px;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+  }
+
+  &__button,
+  &__value {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    height: 76px;
+    color: var(--main-text-color);
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+  }
+
+  &__button {
+    cursor: pointer;
+    font-size: 36px;
+    font-weight: 800;
+    line-height: 1;
+    transition:
+      border-color 0.2s ease-in-out,
+      background-color 0.2s ease-in-out,
+      box-shadow 0.2s ease-in-out,
+      opacity 0.2s ease-in-out;
+
+    &:hover:not(:disabled),
+    &:focus-visible:not(:disabled) {
+      border-color: rgba(255, 255, 255, 0.45);
+      background-color: rgba(255, 255, 255, 0.06);
+      box-shadow: var(--shadow-white);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.45;
+    }
+  }
+
+  &__value {
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1.2;
+    text-align: center;
+    white-space: nowrap;
   }
 }
 
-.input {
-  width: 52px;
-  padding: 15px 12px 15px 12px;
-  font-size: 18px;
-  color: var(--main-text-color);
-  text-align: center;
-  background-color: var(--main-color);
-  border-radius: 5px;
-  outline: none;
-  border: 2px solid var(--main-text-color);
-  -webkit-transition: box-shadow 0.3s ease-in-out;
-  -moz-transition: box-shadow 0.3s ease-in-out;
-  -ms-transition: box-shadow 0.3s ease-in-out;
-  -o-transition: box-shadow 0.3s ease-in-out;
-  transition: box-shadow 0.3s ease-in-out;
-  &:hover,
-  &:focus {
-    box-shadow: var(--shadow-white);
+@media screen and (max-width: 700px) {
+  .number-input {
+    gap: 12px;
+
+    &__label,
+    &__sublabel {
+      font-size: 18px;
+    }
+
+    &__controls {
+      grid-template-columns: 56px minmax(0, 1fr) 56px;
+      gap: 10px;
+    }
+
+    &__button,
+    &__value {
+      height: 56px;
+      border-radius: 12px;
+    }
+
+    &__button {
+      font-size: 28px;
+    }
+
+    &__value {
+      font-size: 20px;
+    }
   }
 }

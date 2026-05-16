@@ -8,13 +8,16 @@
   },
   "headers": {
     "mainHeader": "Mafia (roles randomizer)",
-    "settings": "Settings",
+    "settings": "Game Settings",
     "rolesInfoPage": "Roles Information",
     "sessionPage": "Timer & Game desk",
     "vote": "Voting process",
     "gameOver": "Game was finished!",
     "gameResults": "Results of the game",
     "oops": "Oops!"
+  },
+  "descriptions": {
+    "settings": "Choose the number of players and mode — a preview of the game parameters will appear on the right."
   },
   "description": {
     "1": {
@@ -53,11 +56,13 @@
   "gameModes": {
     "1": {
       "title": "Classic",
-      "description": "Classic tournament mafia with roles: Peaceful Resident, Don, Sheriff, Mafia"
+      "description": "Classic tournament mafia with roles: Peaceful Resident, Don, Sheriff, Mafia",
+      "shortDescription": "Don, Mafia, Sheriff, and residents"
     },
     "2": {
       "title": "Extended",
-      "description": "Extended mafia mode with roles: Peaceful Resident, Don, Sheriff, Mafia, Doctor"
+      "description": "Extended mafia mode with roles: Peaceful Resident, Don, Sheriff, Mafia, Doctor",
+      "shortDescription": "Classic mode + Doctor"
     }
   },
   "buttons": {
@@ -85,6 +90,10 @@
   },
   "labels": {
     "amountOfPlayers": "Amount of players",
+    "amountOfPlayersRange": "from 4 to 12",
+    "playersEntity": "players",
+    "rolePreview": "preview",
+    "gameModePreview": "mode",
     "gameMode": "Desired game mode",
     "night": "Night",
     "day": "Day",
