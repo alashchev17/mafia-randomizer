@@ -51,11 +51,17 @@ A project created to simplify the process of conducting the game "Mafia" for hos
 - Added a new language - English;
 - Fixed bugs and errors in the code, lots of optimizations.
 
-**_Changelog [Current Date] v1.5:_**
+**_Changelog 01.04.25 v1.5:_**
 
 - Added comprehensive testing suite with Vitest and Cypress;
 - Implemented unit tests for core components and utilities;
 - Added end-to-end tests for critical application flows;
+- Improved code reliability and maintainability.
+
+**_Changelog 18.05.26 v1.6:_**
+
+- Moved core game logic to Redux Toolkit thunks & actions;
+- Fixed unit tests;
 - Improved code reliability and maintainability.
 
 # 🧑🏼‍💻 Tech Stack
@@ -65,6 +71,7 @@ A project created to simplify the process of conducting the game "Mafia" for hos
 - React-Router v6
 - Framer Motion
 - i18next
+- Redux Toolkit
 - Vitest (Unit Testing)
 - Cypress (E2E Testing)
 
