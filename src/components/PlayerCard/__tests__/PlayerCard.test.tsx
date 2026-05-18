@@ -2,11 +2,11 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import PlayerCard from "../index";
 import { IPlayer } from "../../../models";
+import { ROLES } from "../../../utils/roleAssets";
 
 describe("PlayerCard", () => {
   const mockPlayer: IPlayer = {
-    role: "Мирный житель",
-    roleSrc: "/cards/innocent.svg",
+    role: ROLES.INNOCENT,
   };
 
   const mockSetIsRevealed = vi.fn();
@@ -30,7 +30,7 @@ describe("PlayerCard", () => {
     );
 
     expect(screen.getByAltText("Backside Card")).toBeInTheDocument();
-    expect(screen.getByAltText("Мирный житель")).toHaveClass("active");
+    expect(screen.getByAltText(ROLES.INNOCENT)).toHaveClass("active");
   });
 
   it("reveals card on click and calls appropriate functions", () => {
@@ -67,7 +67,7 @@ describe("PlayerCard", () => {
       />
     );
 
-    expect(screen.getByAltText("Мирный житель")).toBeInTheDocument();
+    expect(screen.getByAltText(ROLES.INNOCENT)).toBeInTheDocument();
     expect(screen.getByAltText("Backside Card")).toHaveClass("active");
   });
 
@@ -82,7 +82,7 @@ describe("PlayerCard", () => {
       />
     );
 
-    const card = screen.getByAltText("Мирный житель").closest(".player-card");
+    const card = screen.getByAltText(ROLES.INNOCENT).closest(".player-card");
     fireEvent.click(card!);
 
     expect(mockSetIsRevealed).not.toHaveBeenCalled();
@@ -100,7 +100,7 @@ describe("PlayerCard", () => {
       />
     );
 
-    const card = screen.getByAltText("Мирный житель").closest(".player-card");
+    const card = screen.getByAltText(ROLES.INNOCENT).closest(".player-card");
     expect(card).toHaveClass("disabled");
   });
 });

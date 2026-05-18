@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { getRoleDistribution } from "../roleDistribution";
 import { rolesRandomizer } from "../rolesRandomizer";
+import { ROLES } from "../roleAssets";
 
 describe("rolesRandomizer", () => {
   it("should correctly distribute roles for Classic mode with 6 players", () => {
@@ -10,15 +11,12 @@ describe("rolesRandomizer", () => {
     expect(innocentPlayers).toBe(4);
     expect(generatedArray.length).toBe(6);
 
-    // Verify all expected roles are present
     const roles = generatedArray.map((player) => player.role);
-    expect(roles).toContain("Дон");
-    expect(roles).toContain("Мафия");
-    expect(roles).toContain("Шериф");
-    expect(roles.filter((role) => role === "Мирный житель").length).toBe(3);
-
-    // Verify no doctor in classic mode
-    expect(roles).not.toContain("Доктор");
+    expect(roles).toContain(ROLES.DON);
+    expect(roles).toContain(ROLES.MAFIA);
+    expect(roles).toContain(ROLES.SHERIFF);
+    expect(roles.filter((role) => role === ROLES.INNOCENT).length).toBe(3);
+    expect(roles).not.toContain(ROLES.DOCTOR);
   });
 
   it("should correctly distribute roles for Extended mode with 6 players", () => {
@@ -28,13 +26,12 @@ describe("rolesRandomizer", () => {
     expect(innocentPlayers).toBe(4);
     expect(generatedArray.length).toBe(6);
 
-    // Verify all expected roles are present
     const roles = generatedArray.map((player) => player.role);
-    expect(roles).toContain("Дон");
-    expect(roles).toContain("Мафия");
-    expect(roles).toContain("Шериф");
-    expect(roles).toContain("Доктор");
-    expect(roles.filter((role) => role === "Мирный житель").length).toBe(2);
+    expect(roles).toContain(ROLES.DON);
+    expect(roles).toContain(ROLES.MAFIA);
+    expect(roles).toContain(ROLES.SHERIFF);
+    expect(roles).toContain(ROLES.DOCTOR);
+    expect(roles.filter((role) => role === ROLES.INNOCENT).length).toBe(2);
   });
 
   it("should correctly distribute roles for larger games with 9 players", () => {
@@ -44,30 +41,29 @@ describe("rolesRandomizer", () => {
     expect(innocentPlayers).toBe(6);
     expect(generatedArray.length).toBe(9);
 
-    // Verify all expected roles are present
     const roles = generatedArray.map((player) => player.role);
-    expect(roles).toContain("Дон");
-    expect(roles.filter((role) => role === "Мафия").length).toBe(2);
-    expect(roles).toContain("Шериф");
-    expect(roles.filter((role) => role === "Мирный житель").length).toBe(5);
+    expect(roles).toContain(ROLES.DON);
+    expect(roles.filter((role) => role === ROLES.MAFIA).length).toBe(2);
+    expect(roles).toContain(ROLES.SHERIFF);
+    expect(roles.filter((role) => role === ROLES.INNOCENT).length).toBe(5);
   });
 
   it("should handle English mode names", () => {
     const { generatedArray: classicArray } = rolesRandomizer(6, "Classic");
     const { generatedArray: extendedArray } = rolesRandomizer(6, "Extended");
 
-    expect(classicArray.map((player) => player.role)).not.toContain("Доктор");
-    expect(extendedArray.map((player) => player.role)).toContain("Доктор");
+    expect(classicArray.map((player) => player.role)).not.toContain(ROLES.DOCTOR);
+    expect(extendedArray.map((player) => player.role)).toContain(ROLES.DOCTOR);
   });
 
   it("should return role counts for preview without shuffling roles", () => {
     const distribution = getRoleDistribution(6, "Расширенный");
     const countsByRole = Object.fromEntries(distribution.map(({ role, count }) => [role, count]));
 
-    expect(countsByRole["Мирный житель"]).toBe(2);
-    expect(countsByRole["Шериф"]).toBe(1);
-    expect(countsByRole["Дон"]).toBe(1);
-    expect(countsByRole["Мафия"]).toBe(1);
-    expect(countsByRole["Доктор"]).toBe(1);
+    expect(countsByRole[ROLES.INNOCENT]).toBe(2);
+    expect(countsByRole[ROLES.SHERIFF]).toBe(1);
+    expect(countsByRole[ROLES.DON]).toBe(1);
+    expect(countsByRole[ROLES.MAFIA]).toBe(1);
+    expect(countsByRole[ROLES.DOCTOR]).toBe(1);
   });
 });

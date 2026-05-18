@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from "react";
 
 import { IPlayer } from "../../../models";
+import { getRoleSrc } from "../../../utils/roleAssets";
 
 import "./index.scss";
 
@@ -10,7 +11,8 @@ interface PlayerCardFrontsideProps {
 }
 
 const PlayerCardFrontside: FC<PlayerCardFrontsideProps> = ({ isRevealed, currentPlayer }) => {
-  const { roleSrc, role } = currentPlayer;
+  const { role } = currentPlayer;
+  const roleSrc = getRoleSrc(role);
 
   const [image, setImage] = useState(roleSrc);
 

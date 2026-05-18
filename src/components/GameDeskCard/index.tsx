@@ -1,9 +1,8 @@
-import React, { FC, useCallback, useEffect, useState } from "react";
+import { FC } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 import Penalty from "../Penalty";
-
-import { IGameDeskPlayer } from "../../models";
 
 import "./index.scss";
 
@@ -15,245 +14,54 @@ import queuedSvg from "./assets/queued.svg";
 import killBtnSvg from "./assets/buttons/kill.svg";
 import queueBtnSvg from "./assets/buttons/queue.svg";
 import deleteBtnSvg from "./assets/buttons/delete.svg";
-import { useSessionContext } from "../../contexts/SessionContext.tsx";
-import { useTranslation } from "react-i18next";
+
+import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { useAppSelector } from "../../hooks/useAppSelector";
+import {
+  selectIsDeleted,
+  selectIsKilled,
+  selectIsPromoted,
+  selectIsQueued,
+  selectIsVotingPanelOpen,
+  selectPlayerById,
+  togglePlayerInQueue,
+} from "../../store/sessionSlice";
+import { selectIsDay } from "../../store/statsSlice";
+import { selectIsMuted } from "../../store/selectors";
+import { deletePlayerThunk, killPlayerThunk, queueVoteThunk } from "../../store/thunks";
+import { getRoleSrc } from "../../utils/roleAssets";
 
 interface GameDeskCardProps {
-  player: IGameDeskPlayer;
-  setPlayerDead: React.Dispatch<React.SetStateAction<number>>;
-  handleNotification: (state: boolean, text: string) => void;
+  playerId: number;
 }
 
-const GameDeskCard: FC<GameDeskCardProps> = ({ player, setPlayerDead, handleNotification }) => {
+const playerCardVariants = {
+  hidden: { opacity: 0, y: -40 },
+  visible: (index: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: 0.3 + index * 0.15, duration: 1.5, type: "spring" },
+  }),
+};
+
+const GameDeskCard: FC<GameDeskCardProps> = ({ playerId }) => {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
 
-  const { gameStats, setGameStats, setQueueingPlayers, queueingPlayers, isInstantQueue, setIsQueueing, isQueueing } =
-    useSessionContext();
+  const player = useAppSelector(selectPlayerById(playerId));
+  const isKilled = useAppSelector(selectIsKilled(playerId));
+  const isDeleted = useAppSelector(selectIsDeleted(playerId));
+  const isQueued = useAppSelector(selectIsQueued(playerId));
+  const isMuted = useAppSelector(selectIsMuted(playerId));
+  const isPromoted = useAppSelector(selectIsPromoted(playerId));
+  const isDay = useAppSelector(selectIsDay);
+  const isVotingPanelOpen = useAppSelector(selectIsVotingPanelOpen);
 
-  const [playerStatus, setPlayerStatus] = useState({
-    isMuted: false,
-    isKilled: false,
-    isDeleted: false,
-    isQueued: false,
-  });
+  if (!player) return null;
 
-  const [mutedTime, setMutedTime] = useState<number | undefined>(undefined);
-
-  const [isPromoted, setIsPromoted] = useState(queueingPlayers.indexOf(player.id) !== -1);
-
-  const playerStatusClassNames = `player__status ${
-    playerStatus.isMuted || playerStatus.isKilled || playerStatus.isDeleted || playerStatus.isQueued ? "visible" : ""
-  }`;
-
-  const playerContextMenuClassNames = `player__context-menu ${
-    playerStatus.isKilled || playerStatus.isDeleted || playerStatus.isQueued ? "" : "visible"
-  }`;
-
-  const playerCardVariants = {
-    hidden: {
-      opacity: 0,
-      y: -40,
-    },
-    visible: (index: number) => ({
-      opacity: 1,
-      y: 0,
-      transition: {
-        delay: 0.3 + index * 0.15,
-        duration: 1.5,
-        type: "spring",
-      },
-    }),
-  };
-
-  const handleKill = () => {
-    setPlayerStatus((prev) => ({
-      ...prev,
-      isMuted: prev.isMuted ? false : prev.isMuted,
-      isKilled: !prev.isKilled,
-    }));
-    setPlayerDead((prev) => prev - 1);
-    setGameStats((prev) => {
-      const updatedHistory = [
-        ...prev.history,
-        {
-          playerId: player.id,
-          playerCard: player.roleSrc,
-          reason: t("reasons.killed"),
-          timestamp: {
-            type: gameStats.type,
-            cycle: gameStats.counter,
-          },
-        },
-      ];
-      return {
-        ...prev,
-        type: prev.type,
-        counter: prev.counter,
-        history: updatedHistory,
-      };
-    });
-  };
-
-  const handleDelete = () => {
-    setPlayerStatus((prev) => ({
-      ...prev,
-      isMuted: prev.isMuted ? false : prev.isMuted,
-      isDeleted: !prev.isDeleted,
-    }));
-    setPlayerDead((prev) => prev - 1);
-    setGameStats((prev) => {
-      const updatedHistory = [
-        ...prev.history,
-        {
-          playerId: player.id,
-          playerCard: player.roleSrc,
-          reason: t("reasons.deleted"),
-          timestamp: {
-            type: gameStats.type,
-            cycle: gameStats.counter,
-          },
-        },
-      ];
-      return {
-        ...prev,
-        type: prev.type,
-        counter: prev.counter,
-        history: updatedHistory,
-      };
-    });
-  };
-
-  const handleQueue = useCallback(
-    (playerId: number, isInstantQueue?: boolean) => {
-      if (isInstantQueue) {
-        // handle instant queue
-        setPlayerStatus((prev) => {
-          return {
-            ...prev,
-            isMuted: false,
-            isQueued: isInstantQueue && playerId === player.id ? true : prev.isQueued,
-          };
-        });
-
-        setIsPromoted(false);
-        setQueueingPlayers([]);
-        setIsQueueing(false);
-        setPlayerDead((prev) => {
-          return player.id === playerId ? prev - 1 : prev;
-        });
-        setGameStats((prev) => {
-          const updatedHistory = [...prev.history];
-
-          if (playerId === player.id) {
-            updatedHistory.push({
-              playerId: player.id,
-              playerCard: player.roleSrc,
-              reason: t("reasons.singleQueued"),
-              timestamp: {
-                type: gameStats.type,
-                cycle: gameStats.counter,
-              },
-            });
-          }
-          return {
-            ...prev,
-            type: prev.type,
-            counter: prev.counter,
-            history: updatedHistory,
-          };
-        });
-        return;
-      }
-      setPlayerStatus((prev) => ({
-        ...prev,
-        isMuted: prev.isMuted ? false : prev.isMuted,
-        isQueued: !prev.isQueued,
-      }));
-      setPlayerDead((prev) => prev - 1);
-      setGameStats((prev) => {
-        const updatedHistory = [
-          ...prev.history,
-          {
-            playerId: player.id,
-            playerCard: player.roleSrc,
-            reason: t("reasons.queued"),
-            timestamp: {
-              type: gameStats.type,
-              cycle: gameStats.counter,
-            },
-          },
-        ];
-        return {
-          ...prev,
-          type: prev.type,
-          counter: prev.counter,
-          history: updatedHistory,
-        };
-      });
-    },
-    [
-      gameStats.counter,
-      gameStats.type,
-      player.id,
-      player.roleSrc,
-      setGameStats,
-      setIsQueueing,
-      setPlayerDead,
-      setPlayerStatus,
-      setQueueingPlayers,
-      t,
-    ]
-  );
-
-  const setupOnQueue = () => {
-    if (isQueueing) {
-      return;
-    }
-    if (gameStats.type === "День") {
-      if (!isPromoted) {
-        setIsPromoted((prev) => !prev);
-        setQueueingPlayers((prev) => {
-          return [...prev, player.id];
-        });
-      } else {
-        setIsPromoted((prev) => !prev);
-        setQueueingPlayers((prev) => {
-          const currentArray = [...prev];
-          const indexInArray = currentArray.indexOf(player.id);
-          currentArray.splice(indexInArray, 1);
-          return currentArray;
-        });
-      }
-    }
-  };
-
-  useEffect(() => {
-    if (gameStats.type === "Ночь") {
-      setIsPromoted(false);
-      setQueueingPlayers([]);
-      if (typeof mutedTime === "number" && mutedTime + 2 === gameStats.counter) {
-        setMutedTime(undefined);
-        setPlayerStatus((prev) => ({
-          ...prev,
-          isMuted: false,
-        }));
-      }
-    }
-  }, [mutedTime, gameStats.type, gameStats.counter, setQueueingPlayers]);
-
-  useEffect(() => {
-    if (playerStatus.isMuted) {
-      setMutedTime(gameStats.counter);
-    }
-    // eslint-disable-next-line
-  }, [playerStatus.isMuted]);
-
-  useEffect(() => {
-    if (!isInstantQueue) return;
-
-    handleNotification(true, t("notifications.singlePlayerQueued", { playerId: queueingPlayers[0] }));
-    handleQueue(queueingPlayers[0], isInstantQueue);
-  }, [isInstantQueue, queueingPlayers, handleNotification, handleQueue, t]);
+  const statusVisible = isMuted || isKilled || isDeleted || isQueued;
+  const contextMenuVisible = !(isKilled || isDeleted || isQueued);
+  const queueBlocked = !isDay || isKilled || isDeleted || isQueued || isVotingPanelOpen;
 
   return (
     <motion.div
@@ -261,49 +69,50 @@ const GameDeskCard: FC<GameDeskCardProps> = ({ player, setPlayerDead, handleNoti
       variants={playerCardVariants}
       initial="hidden"
       animate="visible"
-      custom={player.id}
+      custom={playerId}
     >
-      <h3 className="player__title">№{player.id}</h3>
+      <h3 className="player__title">№{playerId}</h3>
       <div className="player__card">
         <span
-          className={`player__queue ${isPromoted ? "pressed" : ""} ${
-            gameStats.type === "Ночь" ||
-            playerStatus.isKilled ||
-            playerStatus.isDeleted ||
-            playerStatus.isQueued ||
-            isQueueing
-              ? "disabled"
-              : ""
-          }`}
-          onClick={setupOnQueue}
+          className={`player__queue ${isPromoted ? "pressed" : ""} ${queueBlocked ? "disabled" : ""}`}
+          onClick={() => dispatch(togglePlayerInQueue({ id: playerId, isDay }))}
         ></span>
+        <div className={`player__context-menu ${contextMenuVisible ? "visible" : ""}`}>
+          <button
+            className="player__button player__button--primary"
+            onClick={() => dispatch(killPlayerThunk(playerId))}
+          >
+            <img src={killBtnSvg} alt="Kill icon" />
+            <span>{t("buttons.kill")}</span>
+          </button>
+          <button
+            className="player__button player__button--secondary"
+            onClick={() => dispatch(queueVoteThunk(playerId))}
+          >
+            <img src={queueBtnSvg} alt="Queue icon" />
+            <span>{t("buttons.queue")}</span>
+          </button>
+          <button
+            className="player__button player__button--third"
+            onClick={() => dispatch(deletePlayerThunk(playerId))}
+          >
+            <img src={deleteBtnSvg} alt="Delete icon" />
+            <span>{t("buttons.delete")}</span>
+          </button>
+        </div>
         <div className="player__actions">
-          <div className={playerContextMenuClassNames}>
-            <button className="player__button player__button--primary" onClick={handleKill}>
-              <img src={killBtnSvg} alt="Kill icon" />
-              <span>{t("buttons.kill")}</span>
-            </button>
-            <button className="player__button player__button--secondary" onClick={() => handleQueue(player.id, false)}>
-              <img src={queueBtnSvg} alt="Queue icon" />
-              <span>{t("buttons.queue")}</span>
-            </button>
-            <button className="player__button player__button--third" onClick={handleDelete}>
-              <img src={deleteBtnSvg} alt="Delete icon" />
-              <span>{t("buttons.delete")}</span>
-            </button>
-          </div>
-          <img className="player__image" src={player.roleSrc} alt={`Card: ${player.role}`} />
-          <div className={playerStatusClassNames}>
+          <img className="player__image" src={getRoleSrc(player.role)} alt={`Card: ${player.role}`} />
+          <div className={`player__status ${statusVisible ? "visible" : ""}`}>
             <AnimatePresence>
-              {playerStatus.isMuted && <motion.img exit={{ opacity: 0 }} src={mutedSvg} alt="Mute status" />}
-              {playerStatus.isKilled && <motion.img exit={{ opacity: 0 }} src={killedSvg} alt="Killed status" />}
-              {playerStatus.isQueued && <motion.img exit={{ opacity: 0 }} src={queuedSvg} alt="Queued status" />}
-              {playerStatus.isDeleted && <motion.img exit={{ opacity: 0 }} src={deletedSvg} alt="Queued status" />}
+              {isMuted && <motion.img exit={{ opacity: 0 }} src={mutedSvg} alt="Mute status" />}
+              {isKilled && <motion.img exit={{ opacity: 0 }} src={killedSvg} alt="Killed status" />}
+              {isQueued && <motion.img exit={{ opacity: 0 }} src={queuedSvg} alt="Queued status" />}
+              {isDeleted && <motion.img exit={{ opacity: 0 }} src={deletedSvg} alt="Deleted status" />}
             </AnimatePresence>
           </div>
         </div>
       </div>
-      <Penalty setPlayerStatus={setPlayerStatus} playerStatus={playerStatus} />
+      <Penalty playerId={playerId} />
     </motion.div>
   );
 };

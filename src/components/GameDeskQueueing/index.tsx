@@ -1,31 +1,39 @@
 import { FC } from "react";
 import { AnimatePresence } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 import Queueing from "../Queueing";
 
-import { IPlayer } from "../../models";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { useAppSelector } from "../../hooks/useAppSelector";
+import { selectIsVotingPanelOpen, selectPlayerOrder, selectQueue } from "../../store/sessionSlice";
+import { confirmInstantQueueThunk } from "../../store/thunks";
 
-import { useSessionContext } from "../../contexts/SessionContext.tsx";
+interface GameDeskQueueingProps {
+  handleNotification: (state: boolean, text: string) => void;
+}
 
-type GameDeskQueueingProps = {
-  listOfPlayers: IPlayer[];
-};
+const GameDeskQueueing: FC<GameDeskQueueingProps> = ({ handleNotification }) => {
+  const { t } = useTranslation();
+  const dispatch = useAppDispatch();
+  const isVotingPanelOpen = useAppSelector(selectIsVotingPanelOpen);
+  const queue = useAppSelector(selectQueue);
+  const amountOfPlayers = useAppSelector((s) => selectPlayerOrder(s).length);
 
-const GameDeskQueueing: FC<GameDeskQueueingProps> = ({ listOfPlayers }) => {
-  const { isQueueing, queueingPlayers, setIsInstantQueue } = useSessionContext();
-
-  const handleInstantQueue = (state: boolean) => {
-    setIsInstantQueue(state);
+  const handleInstantQueueConfirm = () => {
+    if (queue.length !== 1) return;
+    handleNotification(true, t("notifications.singlePlayerQueued", { playerId: queue[0] }));
+    dispatch(confirmInstantQueueThunk());
   };
 
   return (
     <AnimatePresence mode="wait">
-      {isQueueing && (
+      {isVotingPanelOpen && (
         <Queueing
           key="queueing"
-          queueingPlayers={queueingPlayers}
-          amountOfPlayers={listOfPlayers.length}
-          handleInstantQueue={handleInstantQueue}
+          queueingPlayers={queue}
+          amountOfPlayers={amountOfPlayers}
+          onInstantQueueConfirm={handleInstantQueueConfirm}
         />
       )}
     </AnimatePresence>

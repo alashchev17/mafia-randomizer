@@ -1,128 +1,70 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
-import GameDesk from "../index";
-import { IPlayer } from "../../../models";
+import { Provider } from "react-redux";
+import { configureStore } from "@reduxjs/toolkit";
 
-// Mock the GameDeskCard component to focus on testing GameDesk
-import type { IGameDeskPlayer } from "../../../models";
-import type { Dispatch, SetStateAction } from "react";
+import GameDesk from "../index";
+import sessionReducer, { initializeSession } from "../../../store/sessionSlice";
+import statsReducer from "../../../store/statsSlice";
+import { IPlayer } from "../../../models";
+import { ROLES } from "../../../utils/roleAssets";
 
 vi.mock("../../GameDeskCard", () => ({
-  default: ({
-    player,
-    setPlayerDead,
-  }: {
-    player: IGameDeskPlayer;
-    setPlayerDead?: Dispatch<SetStateAction<number>>;
-    handleNotification: (state: boolean, text: string) => void;
-  }) => (
-    <div
-      data-testid={`game-desk-card-${player.id}`}
-      data-player-id={player.id}
-      data-player-role={player.role}
-      data-player-is-mafia={player.isMafia.toString()}
-      data-player-setter={setPlayerDead ? "true" : "false"}
-    >
-      Player Card {player.id}
+  default: ({ playerId }: { playerId: number }) => (
+    <div data-testid={`game-desk-card-${playerId}`} data-player-id={playerId}>
+      Player Card {playerId}
     </div>
   ),
 }));
 
+const testPlayers: IPlayer[] = [
+  { role: ROLES.INNOCENT },
+  { role: ROLES.MAFIA },
+  { role: ROLES.SHERIFF },
+  { role: ROLES.DON },
+  { role: ROLES.INNOCENT },
+  { role: ROLES.DOCTOR },
+];
+
+const renderWithStore = () => {
+  const store = configureStore({ reducer: { session: sessionReducer, stats: statsReducer } });
+  store.dispatch(initializeSession({ players: testPlayers }));
+  return {
+    store,
+    ...render(
+      <Provider store={store}>
+        <GameDesk />
+      </Provider>
+    ),
+  };
+};
+
 describe("GameDesk", () => {
-  const mockSetInnocentPlayersAlive = vi.fn();
-  const mockSetMafiaPlayersAlive = vi.fn();
-  const mockHandleNotification = vi.fn();
-
-  const testPlayers: IPlayer[] = [
-    { role: "Мирный житель", roleSrc: "/cards/innocent.svg" },
-    { role: "Мафия", roleSrc: "/cards/mafia.svg" },
-    { role: "Шериф", roleSrc: "/cards/sheriff.svg" },
-    { role: "Дон", roleSrc: "/cards/headOfMafia.svg" },
-    { role: "Мирный житель", roleSrc: "/cards/innocent.svg" },
-    { role: "Доктор", roleSrc: "/cards/doctor.svg" },
-  ];
-
-  it("renders the correct number of player cards", () => {
-    render(
-      <GameDesk
-        players={testPlayers}
-        setInnocentPlayersAlive={mockSetInnocentPlayersAlive}
-        setMafiaPlayersAlive={mockSetMafiaPlayersAlive}
-        handleNotification={mockHandleNotification}
-      />
-    );
-
-    // Check if all player cards are rendered
-    const playerCards = screen.getAllByTestId(/game-desk-card-/);
-    expect(playerCards.length).toBe(testPlayers.length);
+  it("renders one GameDeskCard per player in playerOrder", () => {
+    renderWithStore();
+    expect(screen.getAllByTestId(/game-desk-card-/).length).toBe(testPlayers.length);
   });
 
-  it("correctly identifies mafia and innocent players", () => {
-    render(
-      <GameDesk
-        players={testPlayers}
-        setInnocentPlayersAlive={mockSetInnocentPlayersAlive}
-        setMafiaPlayersAlive={mockSetMafiaPlayersAlive}
-        handleNotification={mockHandleNotification}
-      />
-    );
-
-    // Check mafia roles
-    const mafiaCards = screen
-      .getAllByTestId(/game-desk-card-/)
-      .filter((card) => card.getAttribute("data-player-is-mafia") === "true");
-    expect(mafiaCards.length).toBe(2); // Should be Дон and Мафия
-
-    // Check innocent roles
-    const innocentCards = screen
-      .getAllByTestId(/game-desk-card-/)
-      .filter((card) => card.getAttribute("data-player-is-mafia") === "false");
-    expect(innocentCards.length).toBe(4); // Should be Мирный житель, Шериф, Мирный житель, Доктор
-  });
-
-  it("passes the correct setter functions based on player role", () => {
-    render(
-      <GameDesk
-        players={testPlayers}
-        setInnocentPlayersAlive={mockSetInnocentPlayersAlive}
-        setMafiaPlayersAlive={mockSetMafiaPlayersAlive}
-        handleNotification={mockHandleNotification}
-      />
-    );
-
-    // Get all cards
-    const cards = screen.getAllByTestId(/game-desk-card-/);
-
-    // Verify that each card has the proper setter based on role
-    cards.forEach((card) => {
-      const isMafia = card.getAttribute("data-player-is-mafia") === "true";
-      const hasSetter = card.getAttribute("data-player-setter") === "true";
-
-      // Every card should have a setter
-      expect(hasSetter).toBe(true);
-
-      // Check that the right setter is used based on isMafia
-      const role = card.getAttribute("data-player-role");
-      if (role === "Мафия" || role === "Дон") {
-        expect(isMafia).toBe(true);
-      } else {
-        expect(isMafia).toBe(false);
-      }
+  it("renders cards with playerIds from 1..N", () => {
+    renderWithStore();
+    testPlayers.forEach((_, idx) => {
+      expect(screen.getByTestId(`game-desk-card-${idx + 1}`)).toBeInTheDocument();
     });
   });
 
-  it("applies the correct class based on number of players", () => {
-    render(
-      <GameDesk
-        players={testPlayers}
-        setInnocentPlayersAlive={mockSetInnocentPlayersAlive}
-        setMafiaPlayersAlive={mockSetMafiaPlayersAlive}
-        handleNotification={mockHandleNotification}
-      />
-    );
+  it("applies the size-suffix class based on player count", () => {
+    renderWithStore();
+    const grid = document.querySelector(".game-desk__cards");
+    expect(grid).toHaveClass(`game-desk__cards--${testPlayers.length}`);
+  });
 
-    // Check if it applies the correct class based on player count
-    const gameDesk = document.querySelector(".game-desk__cards");
-    expect(gameDesk).toHaveClass(`game-desk__cards--${testPlayers.length}`);
+  it("initializeSession marks Дон and Мафия as mafia roles", () => {
+    const { store } = renderWithStore();
+    const players = store.getState().session.players;
+    expect(players[2].isMafia).toBe(true); // index 1 → id 2 → Мафия
+    expect(players[4].isMafia).toBe(true); // index 3 → id 4 → Дон
+    expect(players[1].isMafia).toBe(false);
+    expect(players[3].isMafia).toBe(false);
+    expect(players[6].isMafia).toBe(false); // Доктор
   });
 });

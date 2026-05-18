@@ -10,10 +10,10 @@ import { t } from "i18next";
 interface QueueingProps {
   queueingPlayers: number[];
   amountOfPlayers: number;
-  handleInstantQueue: (state: boolean) => void;
+  onInstantQueueConfirm: () => void;
 }
 
-const Queueing: FC<QueueingProps> = ({ queueingPlayers, amountOfPlayers, handleInstantQueue }) => {
+const Queueing: FC<QueueingProps> = ({ queueingPlayers, amountOfPlayers, onInstantQueueConfirm }) => {
   const queueingVariants = {
     visible: {
       height: "auto",
@@ -28,9 +28,8 @@ const Queueing: FC<QueueingProps> = ({ queueingPlayers, amountOfPlayers, handleI
   };
 
   useEffect(() => {
-    handleInstantQueue(false);
     if (queueingPlayers.length === 1) {
-      handleInstantQueue(true);
+      onInstantQueueConfirm();
     }
     // eslint-disable-next-line
   }, []);

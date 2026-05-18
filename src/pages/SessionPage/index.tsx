@@ -1,6 +1,7 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Navigate, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import Title from "../../components/Title";
 import GameDeskTitle from "../../components/GameDeskTitle";
@@ -12,12 +13,13 @@ import GameOver from "../../components/GameOver";
 
 import { pagesAnimate, pagesInitial, pagesTransition } from "../../utils/pagesAnimation";
 
-import { IPlayer } from "../../models";
-
 import "./index.scss";
 
-import SessionContextProvider from "../../contexts/SessionContext.tsx";
-import { useTranslation } from "react-i18next";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { useAppSelector } from "../../hooks/useAppSelector";
+import { initializeSession, resetSession } from "../../store/sessionSlice";
+import { resetStats } from "../../store/statsSlice";
+import { selectIsGameOver, selectWinnerKey } from "../../store/selectors";
 
 interface SessionPageProps {
   handleNotification: (state: boolean, text: string) => void;
@@ -29,21 +31,23 @@ const PLAYER_COUNT_MAX = 12;
 const SessionPage: FC<SessionPageProps> = ({ handleNotification }) => {
   const { t } = useTranslation();
   const location = useLocation();
+  const dispatch = useAppDispatch();
+  const isGameOver = useAppSelector(selectIsGameOver);
+  const winnerKey = useAppSelector(selectWinnerKey);
 
-  const innocentPlayers: number = location.state?.innocentPlayers ? location.state.innocentPlayers : 0;
-  const mafiaPlayers: number = location.state?.mafiaPlayers ? location.state.mafiaPlayers : 0;
-
-  const [innocentPlayersAlive, setInnocentPlayersAlive] = useState(innocentPlayers);
-  const [mafiaPlayersAlive, setMafiaPlayersAlive] = useState(mafiaPlayers);
-  const [isGameOver, setIsGameOver] = useState(false);
-  const winner = useRef(t("teams.premature"));
+  const players = location.state?.players;
+  const hasValidPlayers =
+    Array.isArray(players) && players.length >= PLAYER_COUNT_MIN && players.length <= PLAYER_COUNT_MAX;
 
   useEffect(() => {
-    if (mafiaPlayersAlive < 1 || mafiaPlayersAlive === innocentPlayersAlive) {
-      winner.current = mafiaPlayersAlive === innocentPlayersAlive ? t("teams.mafia") : t("teams.peaceful");
-      setIsGameOver(true);
-    }
-  }, [isGameOver, mafiaPlayersAlive, innocentPlayersAlive, t]);
+    if (!hasValidPlayers) return;
+    dispatch(initializeSession({ players }));
+    return () => {
+      dispatch(resetSession());
+      dispatch(resetStats());
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (!location.state) {
     return (
@@ -58,32 +62,23 @@ const SessionPage: FC<SessionPageProps> = ({ handleNotification }) => {
     );
   }
 
-  const listOfPlayers: IPlayer[] = location.state.players;
-
-  if (listOfPlayers.length > PLAYER_COUNT_MAX || listOfPlayers.length < PLAYER_COUNT_MIN) {
+  if (!hasValidPlayers) {
     handleNotification(true, t("notifications.invalidPlayerCount"));
     return <Navigate to="/settings" replace={true} />;
   }
 
   return (
-    <SessionContextProvider>
-      <motion.section initial={pagesInitial} animate={pagesAnimate} transition={pagesTransition} className="session">
-        <Title text={t("headers.sessionPage")} />
-        <Timer handleNotification={handleNotification} />
-        <GameDeskTitle />
-        <AnimatePresence>{isGameOver && <GameOver key="gameover" winner={winner.current} />}</AnimatePresence>
-        <div className="session__wrapper">
-          <GameDesk
-            players={listOfPlayers}
-            setInnocentPlayersAlive={setInnocentPlayersAlive}
-            setMafiaPlayersAlive={setMafiaPlayersAlive}
-            handleNotification={handleNotification}
-          />
-          <GameDeskQueueing key="queueing-wrapper" listOfPlayers={listOfPlayers} />
-        </div>
-        <SessionControls setIsGameOver={setIsGameOver} />
-      </motion.section>
-    </SessionContextProvider>
+    <motion.section initial={pagesInitial} animate={pagesAnimate} transition={pagesTransition} className="session">
+      <Title text={t("headers.sessionPage")} />
+      <Timer handleNotification={handleNotification} />
+      <GameDeskTitle />
+      <AnimatePresence>{isGameOver && winnerKey && <GameOver key="gameover" winnerKey={winnerKey} />}</AnimatePresence>
+      <div className="session__wrapper">
+        <GameDesk />
+        <GameDeskQueueing handleNotification={handleNotification} />
+      </div>
+      <SessionControls />
+    </motion.section>
   );
 };
 

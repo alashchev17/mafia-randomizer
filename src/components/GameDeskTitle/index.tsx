@@ -1,12 +1,22 @@
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import Title from "../Title";
-import { useSessionContext } from "../../contexts/SessionContext.tsx";
 import { useTranslation } from "react-i18next";
+import { useAppSelector } from "../../hooks/useAppSelector";
+import { selectCycle, selectIsDay, selectIsNight } from "../../store/statsSlice";
 
 const GameDeskTitle: FC = () => {
-  const { gameStats } = useSessionContext();
+  const isDay = useAppSelector(selectIsDay);
+  const isNight = useAppSelector(selectIsNight);
+  const counter = useAppSelector(selectCycle);
   const { t } = useTranslation();
-  return <Title text={`${gameStats.type === "День" ? t("labels.day") : t("labels.night")} – ${gameStats.counter}`} />;
+
+  const title = useMemo(() => {
+    if (isDay) return `${t("labels.day")} - ${counter}`;
+    if (isNight) return `${t("labels.night")} - ${counter}`;
+    return "";
+  }, [isDay, isNight, counter, t]);
+
+  return <Title text={title} />;
 };
 
 export default GameDeskTitle;

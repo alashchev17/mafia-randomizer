@@ -1,11 +1,12 @@
+import { ROLES, RoleKey } from "./roleAssets";
+
 export const GAME_MODE_CLASSIC = "Классический";
 export const GAME_MODE_EXTENDED = "Расширенный";
 
 export type GameMode = typeof GAME_MODE_CLASSIC | typeof GAME_MODE_EXTENDED;
 
 interface RoleDefinition {
-  role: string;
-  roleSrc: string;
+  role: RoleKey;
   titleKey: string;
   isMafia: boolean;
 }
@@ -15,36 +16,11 @@ export interface RoleDistributionItem extends RoleDefinition {
 }
 
 const ROLE_DEFINITIONS = {
-  innocent: {
-    role: "Мирный житель",
-    roleSrc: "/cards/innocent.svg",
-    titleKey: "roles.1.title",
-    isMafia: false,
-  },
-  sheriff: {
-    role: "Шериф",
-    roleSrc: "/cards/sheriff.svg",
-    titleKey: "roles.2.title",
-    isMafia: false,
-  },
-  mafia: {
-    role: "Мафия",
-    roleSrc: "/cards/mafia.svg",
-    titleKey: "roles.3.title",
-    isMafia: true,
-  },
-  don: {
-    role: "Дон",
-    roleSrc: "/cards/headOfMafia.svg",
-    titleKey: "roles.4.title",
-    isMafia: true,
-  },
-  doctor: {
-    role: "Доктор",
-    roleSrc: "/cards/doctor.svg",
-    titleKey: "roles.5.title",
-    isMafia: false,
-  },
+  innocent: { role: ROLES.INNOCENT, titleKey: "roles.1.title", isMafia: false },
+  sheriff: { role: ROLES.SHERIFF, titleKey: "roles.2.title", isMafia: false },
+  mafia: { role: ROLES.MAFIA, titleKey: "roles.3.title", isMafia: true },
+  don: { role: ROLES.DON, titleKey: "roles.4.title", isMafia: true },
+  doctor: { role: ROLES.DOCTOR, titleKey: "roles.5.title", isMafia: false },
 } satisfies Record<string, RoleDefinition>;
 
 export const normalizeGameMode = (gameMode: string): GameMode => {

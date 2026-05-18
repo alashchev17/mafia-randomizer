@@ -1,60 +1,41 @@
-import React, { FC, useCallback, useEffect } from "react";
+import { FC } from "react";
 import Button from "../Button";
 import { AnimatePresence } from "framer-motion";
-import { useSessionContext } from "../../contexts/SessionContext.tsx";
 import { useTranslation } from "react-i18next";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { useAppSelector } from "../../hooks/useAppSelector";
+import { selectIsVotingPanelOpen, selectQueue, toggleVotingPanel } from "../../store/sessionSlice";
+import { selectIsDay } from "../../store/statsSlice";
+import { advanceCycleThunk, endGamePrematurelyThunk } from "../../store/thunks";
 
-type SessionControlsProps = {
-  setIsGameOver: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
-const SessionControls: FC<SessionControlsProps> = ({ setIsGameOver }) => {
-  const { gameStats, setGameStats, isQueueing, setIsQueueing, queueingPlayers, isInstantQueue, setIsInstantQueue } =
-    useSessionContext();
+const SessionControls: FC = () => {
   const { t } = useTranslation();
-  const handleStats = useCallback(() => {
-    setGameStats((prev) => {
-      return {
-        ...prev,
-        type: prev.type === "Ночь" ? "День" : "Ночь",
-        counter: prev.type === "День" ? prev.counter + 1 : prev.counter,
-        history: [...prev.history],
-      };
-    });
-  }, [setGameStats]);
-
-  const handleQueue = () => {
-    setIsQueueing((prev) => !prev);
-  };
+  const dispatch = useAppDispatch();
+  const isDay = useAppSelector(selectIsDay);
+  const isVotingPanelOpen = useAppSelector(selectIsVotingPanelOpen);
+  const queueLength = useAppSelector((s) => selectQueue(s).length);
 
   const handleGameOver = () => {
     if (window.confirm(t("notifications.confirmPrematureFinish"))) {
-      setIsGameOver((prev) => !prev);
+      dispatch(endGamePrematurelyThunk());
     }
   };
-
-  useEffect(() => {
-    if (isInstantQueue) {
-      handleStats();
-      setIsInstantQueue(false);
-    }
-  }, [isInstantQueue, handleStats, setIsInstantQueue]);
 
   return (
     <div className="session__controls">
       <Button
-        className={gameStats.type === "День" ? "button--third" : "button--primary"}
-        text={gameStats.type === "День" ? t("buttons.nextNight") : t("buttons.nextDay")}
-        clickHandle={handleStats}
-        disabled={isQueueing}
+        className={isDay ? "button--third" : "button--primary"}
+        text={isDay ? t("buttons.nextNight") : t("buttons.nextDay")}
+        clickHandle={() => dispatch(advanceCycleThunk())}
+        disabled={isVotingPanelOpen}
       />
       <AnimatePresence>
-        {gameStats.type === "День" && (
+        {isDay && (
           <Button
             className="button--primary"
-            text={isQueueing ? t("buttons.hideVoting") : t("buttons.showVoting")}
-            clickHandle={handleQueue}
-            disabled={queueingPlayers.length < 1}
+            text={isVotingPanelOpen ? t("buttons.hideVoting") : t("buttons.showVoting")}
+            clickHandle={() => dispatch(toggleVotingPanel())}
+            disabled={queueLength < 1}
           />
         )}
       </AnimatePresence>
