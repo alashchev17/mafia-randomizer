@@ -2,6 +2,8 @@ import { describe, it, expect } from "vitest";
 import { configureStore } from "@reduxjs/toolkit";
 import sessionReducer, { initializeSession, openVotingPanel, togglePlayerInQueue } from "../sessionSlice";
 import statsReducer, { advanceCycle } from "../statsSlice";
+import authReducer from "../authSlice";
+import { baseApi } from "../api/baseApi";
 import {
   advanceCycleThunk,
   confirmInstantQueueThunk,
@@ -22,7 +24,15 @@ const players: IPlayer[] = [
 ];
 
 const makeStore = () => {
-  const store = configureStore({ reducer: { session: sessionReducer, stats: statsReducer } });
+  const store = configureStore({
+    reducer: {
+      session: sessionReducer,
+      stats: statsReducer,
+      auth: authReducer,
+      [baseApi.reducerPath]: baseApi.reducer,
+    },
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(baseApi.middleware),
+  });
   store.dispatch(initializeSession({ players }));
   return store;
 };

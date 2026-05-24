@@ -9,6 +9,8 @@ import SetupPage from "./pages/SetupPage";
 import SettingsPage from "./pages/SettingsPage";
 import SessionPage from "./pages/SessionPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 
 import { INotification, ISettings } from "./models";
 import Notification from "./components/Notification";
@@ -70,6 +72,8 @@ const App: FC = () => {
                 <SettingsPage settings={settings} setSettings={setSettings} handleNotification={handleNotification} />
               }
             />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </div>

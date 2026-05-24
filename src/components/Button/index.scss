@@ -47,4 +47,19 @@
       box-shadow: var(--shadow-white-hover);
     }
   }
+  &--outline {
+    background-color: transparent;
+    color: var(--main-text-color);
+    border: 2px solid var(--main-text-color);
+    padding: 13px 28px;
+    transition:
+      background-color 0.3s ease-in-out,
+      color 0.3s ease-in-out,
+      box-shadow 0.3s ease-in-out;
+    &:hover {
+      background-color: var(--main-text-color);
+      color: var(--secondary-color);
+      box-shadow: var(--shadow-white-hover);
+    }
+  }
 }

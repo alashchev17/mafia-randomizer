@@ -2,6 +2,8 @@ import { describe, it, expect } from "vitest";
 import { configureStore } from "@reduxjs/toolkit";
 import sessionReducer, { initializeSession, killPlayer, setPenaltyCount, setPrematureFinish } from "../sessionSlice";
 import statsReducer, { advanceCycle } from "../statsSlice";
+import authReducer from "../authSlice";
+import { baseApi } from "../api/baseApi";
 import { selectIsGameOver, selectIsMuted, selectWinnerKey } from "../selectors";
 import { IPlayer } from "../../models";
 import { ROLES } from "../../utils/roleAssets";
@@ -18,7 +20,15 @@ const players: IPlayer[] = [
 ];
 
 const makeStore = () => {
-  const store = configureStore({ reducer: { session: sessionReducer, stats: statsReducer } });
+  const store = configureStore({
+    reducer: {
+      session: sessionReducer,
+      stats: statsReducer,
+      auth: authReducer,
+      [baseApi.reducerPath]: baseApi.reducer,
+    },
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(baseApi.middleware),
+  });
   store.dispatch(initializeSession({ players }));
   return store;
 };
@@ -92,7 +102,15 @@ describe("selectWinnerKey", () => {
   });
 
   it("null when session not initialized", () => {
-    const store = configureStore({ reducer: { session: sessionReducer, stats: statsReducer } });
+    const store = configureStore({
+      reducer: {
+        session: sessionReducer,
+        stats: statsReducer,
+        auth: authReducer,
+        [baseApi.reducerPath]: baseApi.reducer,
+      },
+      middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(baseApi.middleware),
+    });
     expect(selectWinnerKey(store.getState())).toBe(null);
   });
 });

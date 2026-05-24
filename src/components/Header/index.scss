@@ -14,4 +14,22 @@
     font-weight: 700;
     line-height: normal;
   }
+  &__actions {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .header {
+    padding: 18px 20px;
+    gap: 16px;
+    &__logo {
+      font-size: 18px;
+    }
+    &__actions {
+      gap: 10px;
+    }
+  }
 }

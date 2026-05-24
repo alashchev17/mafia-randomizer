@@ -4,7 +4,9 @@
     "rolesInfoPage": "Mafia | Roles information",
     "settingsPage": "Mafia | Settings",
     "setupPage": "Mafia | Setup",
-    "page404": "Mafia | Page not found"
+    "page404": "Mafia | Page not found",
+    "loginPage": "Mafia | Sign in",
+    "registerPage": "Mafia | Create account"
   },
   "headers": {
     "mainHeader": "Mafia (roles randomizer)",
@@ -14,7 +16,9 @@
     "vote": "Voting process",
     "gameOver": "Game was finished!",
     "gameResults": "Results of the game",
-    "oops": "Oops!"
+    "oops": "Oops!",
+    "login": "Sign in",
+    "register": "Create account"
   },
   "descriptions": {
     "settings": "Choose the number of players and mode — a preview of the game parameters will appear on the right."
@@ -86,7 +90,12 @@
     "kill": "Shooting",
     "queue": "Gibbet",
     "delete": "Deletion",
-    "showHistory": "View history"
+    "showHistory": "View history",
+    "login": "Sign in",
+    "register": "Register",
+    "logout": "Sign out",
+    "signingIn": "Signing in…",
+    "creatingAccount": "Creating…"
   },
   "labels": {
     "amountOfPlayers": "Amount of players",
@@ -104,7 +113,10 @@
     "gameCycle": "Game cycle",
     "leaveReason": "The reason for the rise",
     "404": "Page not found",
-    "reason404": "The page you are trying to open has been deleted, its name has changed, or it is temporarily unavailable."
+    "reason404": "The page you are trying to open has been deleted, its name has changed, or it is temporarily unavailable.",
+    "email": "Email",
+    "username": "Username",
+    "password": "Password"
   },
   "teams": {
     "peaceful": "Peaceful citizens",
@@ -122,6 +134,14 @@
     "singleQueued": "The only exposed player on the day's voting!",
     "killed": "Shot at night by Mafia representatives",
     "deleted": "Deleted by the presenter after the 4th foul"
+  },
+  "auth": {
+    "loginTitle": "Welcome back",
+    "loginSubtitle": "Sign in to host rooms and track your rating.",
+    "registerTitle": "Create an account",
+    "registerSubtitle": "Pick a username and start climbing the leaderboard.",
+    "noAccount": "No account yet?",
+    "haveAccount": "Already have an account?"
   },
   "notifications": {
     "settingsSaved": "Settings were saved successfully!",

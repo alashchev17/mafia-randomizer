@@ -5,17 +5,25 @@ import { motion } from "framer-motion";
 import "./index.scss";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "../LanguageSwitcher/LanguageSwitcher";
+import { useAppSelector } from "../../hooks/useAppSelector";
+import { selectIsAuthenticated } from "../../store/authSlice";
+import { useLogoutMutation } from "../../store/api/authApi";
 
 const Header: FC = () => {
   const { t } = useTranslation();
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const [logout, { isLoading: isLoggingOut }] = useLogoutMutation();
+
+  const onLogout = () => {
+    if (isLoggingOut) return;
+    void logout();
+  };
 
   const headerVariants = {
     visible: {
-      // height: "auto",
       opacity: 1,
     },
     hidden: {
-      // height: 0,
       opacity: 0,
     },
   };
@@ -35,16 +43,24 @@ const Header: FC = () => {
       <Link className="header__logo" to={"/welcome"} replace={true}>
         {t("headers.mainHeader")}
       </Link>
-      <div
-        style={{
-          display: "flex",
-          gap: "24px",
-          alignItems: "center",
-        }}
-      >
+      <div className="header__actions">
         <Link className="button button--secondary" to={"/settings"}>
           {t("buttons.settings")}
         </Link>
+        {isAuthenticated ? (
+          <button
+            type="button"
+            className={`button button--outline${isLoggingOut ? " disabled" : ""}`}
+            onClick={onLogout}
+            disabled={isLoggingOut}
+          >
+            {t("buttons.logout")}
+          </button>
+        ) : (
+          <Link className="button button--outline" to={"/login"}>
+            {t("buttons.login")}
+          </Link>
+        )}
         <LanguageSwitcher />
       </div>
     </motion.header>
