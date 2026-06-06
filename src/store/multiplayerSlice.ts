@@ -150,6 +150,7 @@ export const multiplayerSlice = createSlice({
         state.log = [];
         state.timer = { state: "idle", endsAt: null, serverOffset: 0 };
         state.lastFinish = null;
+        state.lastError = null;
       }
     },
     applyRoomSnapshot: (state, action: PayloadAction<Room>) => {
