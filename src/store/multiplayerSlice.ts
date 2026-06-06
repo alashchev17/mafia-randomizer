@@ -234,12 +234,15 @@ export const multiplayerSlice = createSlice({
         if (seat) seat.lifeStatus = "KILLED";
       }
     },
-    applyCheckResult: (state, action: PayloadAction<{ targetSeat: number; result: CheckResult["result"] }>) => {
+    applyCheckResult: (
+      state,
+      action: PayloadAction<{ targetSeat: number; result: CheckResult["result"]; cycle?: number }>
+    ) => {
       if (!state.game) return;
-      state.privateChecks.push({
-        ...action.payload,
-        cycle: state.game.cycle,
-      });
+      // Prefer the cycle the server stamped the check with; the local cycle can
+      // already have advanced by the time a delayed ack arrives.
+      const { cycle, ...check } = action.payload;
+      state.privateChecks.push({ ...check, cycle: cycle ?? state.game.cycle });
     },
     applyPlayerStatusChanged: (
       state,
