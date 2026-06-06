@@ -1,7 +1,9 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
+import { Provider } from "react-redux";
 import App from "../App";
+import { store } from "../store";
 
 // Define mockNavigate before any tests
 const mockNavigate = vi.fn();
@@ -56,9 +58,11 @@ describe("App", () => {
 
   it("redirects to /welcome when accessing /", () => {
     render(
-      <MemoryRouter initialEntries={["/"]}>
-        <App />
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter initialEntries={["/"]}>
+          <App />
+        </MemoryRouter>
+      </Provider>
     );
 
     expect(mockNavigate).toHaveBeenCalledWith("/welcome");
@@ -66,9 +70,11 @@ describe("App", () => {
 
   it("renders the Header component except on session page", () => {
     render(
-      <MemoryRouter initialEntries={["/welcome"]}>
-        <App />
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter initialEntries={["/welcome"]}>
+          <App />
+        </MemoryRouter>
+      </Provider>
     );
 
     expect(screen.getByTestId("mocked-header")).toBeInTheDocument();
@@ -76,9 +82,11 @@ describe("App", () => {
 
   it("renders the correct page component based on route", () => {
     render(
-      <MemoryRouter initialEntries={["/welcome"]}>
-        <App />
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter initialEntries={["/welcome"]}>
+          <App />
+        </MemoryRouter>
+      </Provider>
     );
 
     expect(screen.getByTestId("mocked-main-page")).toBeInTheDocument();
@@ -86,9 +94,11 @@ describe("App", () => {
 
   it("renders the not found page for invalid routes", () => {
     render(
-      <MemoryRouter initialEntries={["/invalid-route"]}>
-        <App />
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter initialEntries={["/invalid-route"]}>
+          <App />
+        </MemoryRouter>
+      </Provider>
     );
 
     expect(screen.getByTestId("mocked-not-found-page")).toBeInTheDocument();

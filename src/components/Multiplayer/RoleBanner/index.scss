@@ -1,0 +1,51 @@
+.role-banner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.85rem 1.1rem;
+  border-radius: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.04);
+  color: var(--main-text-color);
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  &__label {
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    color: var(--secondary-text-color);
+  }
+
+  &__role {
+    font-size: 1.6rem;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  &__seat {
+    margin-left: auto;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--secondary-text-color);
+  }
+
+  &--mafia .role-banner__role {
+    color: var(--secondary-color-light);
+  }
+
+  &--host {
+    justify-content: center;
+
+    .role-banner__role {
+      font-size: 1.125rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1rem;
+      color: var(--secondary-text-color);
+    }
+  }
+}

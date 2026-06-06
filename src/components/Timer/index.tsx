@@ -4,13 +4,12 @@ import Button from "../Button";
 
 import "./index.scss";
 import { useTranslation } from "react-i18next";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { pushNotification } from "../../store/notificationSlice";
 
-interface TimerProps {
-  handleNotification: (state: boolean, text: string) => void;
-}
-
-const Timer: FC<TimerProps> = ({ handleNotification }) => {
+const Timer: FC = () => {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   const [initialSeconds, setInitialSeconds] = useState(60);
   const [seconds, setSeconds] = useState(initialSeconds);
   const [isTimerActive, setIsTimerActive] = useState(false);
@@ -28,16 +27,16 @@ const Timer: FC<TimerProps> = ({ handleNotification }) => {
       } else {
         setIsTimerActive((prev) => !prev);
         setSeconds(initialSeconds);
-        handleNotification(true, t("notifications.timerCompleted"));
+        dispatch(pushNotification(t("notifications.timerCompleted")));
       }
     }
-  }, [seconds, isTimerActive, handleNotification, initialSeconds, t]);
+  }, [seconds, isTimerActive, dispatch, initialSeconds, t]);
 
   const skipTimer = () => {
     if (isTimerActive) {
       setIsTimerActive((prev) => !prev);
       setSeconds(initialSeconds);
-      handleNotification(true, t("notifications.timerSkipped"));
+      dispatch(pushNotification(t("notifications.timerSkipped")));
     }
   };
 

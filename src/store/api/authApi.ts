@@ -5,7 +5,6 @@ export interface PublicUser {
   id: string;
   email: string | null;
   username: string;
-  avatarUrl: string | null;
   rating: number;
   gamesPlayed: number;
   wins: number;

@@ -4,15 +4,10 @@ import { motion } from "framer-motion";
 
 import { SetupContent } from "./Content.tsx";
 
-import { ISettings } from "../../models";
 import { pagesAnimate, pagesInitial, pagesTransition } from "../../utils/pagesAnimation.ts";
 import { useTranslation } from "react-i18next";
 
-interface SetupPageProps {
-  settings: ISettings;
-}
-
-const SetupPage: FC<SetupPageProps> = ({ settings }) => {
+const SetupPage: FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { setupId } = useParams();
@@ -30,7 +25,7 @@ const SetupPage: FC<SetupPageProps> = ({ settings }) => {
       animate={pagesAnimate}
       transition={pagesTransition}
     >
-      <SetupContent settings={settings} />
+      <SetupContent />
     </motion.div>
   );
 };

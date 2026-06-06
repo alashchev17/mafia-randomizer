@@ -1,0 +1,38 @@
+.room-code {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 22px;
+  border-radius: 14px;
+  background-color: var(--main-color-transparent);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  &__label {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--secondary-text-color);
+  }
+
+  &__value {
+    font-size: 32px;
+    font-weight: 900;
+    letter-spacing: 4px;
+    color: var(--main-text-color);
+    flex: 1;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .room-code {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+
+    &__value {
+      font-size: 28px;
+      letter-spacing: 3px;
+    }
+  }
+}

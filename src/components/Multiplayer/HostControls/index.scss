@@ -1,0 +1,12 @@
+.host-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+
+  &__advance {
+    flex: 1;
+    min-width: 12rem;
+    text-align: center;
+  }
+}

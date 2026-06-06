@@ -6,7 +6,12 @@
     "setupPage": "Mafia | Setup",
     "page404": "Mafia | Page not found",
     "loginPage": "Mafia | Sign in",
-    "registerPage": "Mafia | Create account"
+    "registerPage": "Mafia | Create account",
+    "profilePage": "Mafia | Personal account",
+    "multiplayerLanding": "Mafia | Multiplayer",
+    "multiplayerJoin": "Mafia | Join a room",
+    "multiplayerRoom": "Mafia | Room",
+    "multiplayerGame": "Mafia | Match"
   },
   "headers": {
     "mainHeader": "Mafia (roles randomizer)",
@@ -71,6 +76,7 @@
   },
   "buttons": {
     "startGame": "Start game",
+    "startMultiplayerGame": "Multiplayer",
     "roleInfo": "Roles information",
     "sourceCode": "Source code",
     "backToMain": "Back to main",
@@ -94,8 +100,22 @@
     "login": "Sign in",
     "register": "Register",
     "logout": "Sign out",
+    "profile": "Profile",
+    "menu": "Menu",
+    "language": "Language",
     "signingIn": "Signing in…",
-    "creatingAccount": "Creating…"
+    "creatingAccount": "Creating…",
+    "multiplayer": "Multiplayer",
+    "createRoom": "Create room",
+    "joinRoom": "Join room",
+    "leaveRoom": "Leave room",
+    "startGameNow": "Start match",
+    "ready": "Ready",
+    "notReady": "Not ready",
+    "copyCode": "Copy code",
+    "advancePhase": "Next phase",
+    "passVote": "Abstain",
+    "openSettings": "Change settings"
   },
   "labels": {
     "amountOfPlayers": "Amount of players",
@@ -142,6 +162,168 @@
     "registerSubtitle": "Pick a username and start climbing the leaderboard.",
     "noAccount": "No account yet?",
     "haveAccount": "Already have an account?"
+  },
+  "multiplayer": {
+    "landing": {
+      "title": "Multiplayer",
+      "subtitle": "Host a room or join one with a 6-digit code.",
+      "createTitle": "Create room",
+      "createDescription": "Host a game with friends. Settings come from your game configuration.",
+      "joinTitle": "Join a room",
+      "joinDescription": "Enter the 6-digit code to take a seat at the table."
+    },
+    "join": {
+      "title": "Enter room code",
+      "subtitle": "Six digits from the host.",
+      "codeLabel": "Room code",
+      "submit": "Join"
+    },
+    "lobby": {
+      "title": "Lobby",
+      "code": "Code",
+      "codeCopied": "Code copied",
+      "players": "Players",
+      "waiting": "Waiting for players…",
+      "minPlayers": "At least 4 players required to start",
+      "notAllReady": "Not all players are ready",
+      "hostBadge": "Host",
+      "leave": "Leave room"
+    },
+    "game": {
+      "phaseLobby": "Waiting",
+      "phaseNight": "Night",
+      "phaseDay": "Day",
+      "phaseVoting": "Voting",
+      "phaseResults": "Results",
+      "yourRole": "Your role",
+      "youAreHost": "You are the host",
+      "seat": "Seat",
+      "noActionsNow": "No action required from you right now",
+      "nominateButton": "Nominate",
+      "voteFor": "Vote",
+      "voteOptions": "Whom to vote out",
+      "passVote": "Abstain",
+      "hostControls": "Host actions",
+      "advancePhase": "Next phase",
+      "finishGame": "Finish match",
+      "penaltyPlus": "+ Foul",
+      "penaltyMinus": "− Foul",
+      "hostNominate": "Nominate",
+      "hostRemove": "Remove",
+      "hostKill": "Kill",
+      "hostNoRemoval": "No removal",
+      "hostNoKill": "No kill",
+      "voteCount": "{{count}} vote(s)",
+      "checkResultTitle": "Checks",
+      "checkResultEmpty": "No checks yet",
+      "checkResultMafia": "Seat #{{seat}} — Mafia",
+      "checkResultCitizen": "Seat #{{seat}} — Citizen",
+      "checkResultSheriff": "Seat #{{seat}} — Sheriff",
+      "checkResultNotSheriff": "Seat #{{seat}} — not Sheriff",
+      "winnerCitizens": "Citizens win",
+      "winnerMafia": "Mafia wins",
+      "hostTerminated": "Match terminated by host",
+      "ratingDelta": "Rating delta: {{delta}}",
+      "bannerNight": "Night falls — the city sleeps",
+      "bannerNightFirst": "First night — acquaintance, no moves",
+      "bannerNightAct": "Night — make your move",
+      "bannerDay": "Day — discuss and nominate",
+      "bannerVoting": "Voting — choose who leaves",
+      "bannerDead": "You're out — spectating",
+      "nominatedBy": "Nominated by {{who}}",
+      "host": "Host",
+      "votedFor": "Voted",
+      "targeted": "Selected ✓",
+      "actionKill": "Shoot",
+      "actionCheck": "Check",
+      "actionProtect": "Heal",
+      "timerSec": "s",
+      "timerSkip": "Skip",
+      "logTitle": "Game log",
+      "logEmpty": "No events yet"
+    },
+    "role": {
+      "INNOCENT": "Citizen",
+      "MAFIA": "Mafia",
+      "DON": "Don",
+      "SHERIFF": "Sheriff",
+      "DOCTOR": "Doctor"
+    },
+    "team": {
+      "CITIZENS": "Citizens",
+      "MAFIA": "Mafia"
+    },
+    "log": {
+      "gameStarted": "Game started",
+      "phaseChange": "{{phaseLabel}} begins",
+      "playerNomination": "#{{actorSeat}} nominated #{{targetSeat}}",
+      "hostNomination": "Host nominated #{{targetSeat}}",
+      "voteRemoval": "#{{targetSeat}} voted out",
+      "hostVoteResult": "Host removed #{{targetSeat}}",
+      "hostNoRemoval": "Host: no removal",
+      "tieNoRemoval": "Tie — no removal",
+      "mafiaKill": "#{{targetSeat}} killed at night",
+      "hostNightKill": "Host: #{{targetSeat}} killed",
+      "hostNoNightKill": "Host: no night kill",
+      "mafiaNoKillTie": "Mafia split — no kill",
+      "doctorSaved": "Doctor saved the target",
+      "checkResult": "#{{actorSeat}} checked #{{targetSeat}}: {{verdict}}",
+      "checkMafia": "Mafia",
+      "checkCitizen": "Citizen",
+      "checkSheriff": "Sheriff",
+      "checkNotSheriff": "not Sheriff",
+      "penalty": "#{{targetSeat}} foul ({{penaltyCount}})",
+      "banned": "#{{targetSeat}} removed (4 fouls)",
+      "gameFinished": "Game over — {{winnerLabel}}",
+      "noWinner": "no winner"
+    },
+    "errors": {
+      "notFound": "Room not found",
+      "gameAlreadyStarted": "Game already started",
+      "full": "Room is full",
+      "notHost": "Only the host can do this",
+      "general": "Action failed"
+    }
+  },
+  "profile": {
+    "memberSince": "Member since {{date}}",
+    "noEmail": "No email",
+    "loading": "Loading…",
+    "userError": "Failed to load profile data",
+    "gamesError": "Failed to load game history",
+    "noGames": "No games played yet",
+    "history": "Game history",
+    "prev": "Prev",
+    "next": "Next",
+    "pageInfo": "{{from}}–{{to}} of {{total}}",
+    "stats": {
+      "rating": "Rating",
+      "gamesPlayed": "Games played",
+      "wins": "Wins",
+      "losses": "Losses",
+      "winrate": "Win rate"
+    },
+    "result": {
+      "won": "Win",
+      "lost": "Loss"
+    },
+    "role": {
+      "INNOCENT": "Citizen",
+      "MAFIA": "Mafia",
+      "DON": "Don",
+      "SHERIFF": "Sheriff",
+      "DOCTOR": "Doctor"
+    },
+    "team": {
+      "CITIZENS": "Citizens",
+      "MAFIA": "Mafia"
+    },
+    "lifeStatus": {
+      "ALIVE": "Survived",
+      "KILLED": "Killed",
+      "REMOVED": "Removed",
+      "BANNED": "Banned"
+    }
   },
   "notifications": {
     "settingsSaved": "Settings were saved successfully!",

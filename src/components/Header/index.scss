@@ -1,35 +1,168 @@
 .header {
+  position: relative;
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: var(--secondary-color);
-  padding: 25px 35px;
+  padding: 1.25rem 2rem;
   box-shadow: var(--shadow-red);
   color: var(--main-text-color);
-  overflow: hidden;
+
   &__logo {
-    font-size: 24px;
-    font-style: normal;
+    font-size: 1.5rem;
     font-weight: 700;
     line-height: normal;
   }
-  &__actions {
-    display: flex;
-    gap: 16px;
+}
+
+.header-menu {
+  position: relative;
+
+  &__trigger {
+    display: inline-flex;
     align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.6rem 0.25rem 0.25rem;
+    border-radius: 999rem;
+    background-color: rgba(0, 0, 0, 0.18);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.32);
+    }
+  }
+
+  &__dots {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    font-size: 1.4rem;
+    line-height: 1;
+  }
+
+  &__caret {
+    width: 0.7rem;
+    height: 0.7rem;
+    transition: transform 0.2s ease;
+
+    &--open {
+      transform: rotate(180deg);
+    }
+  }
+
+  &__panel {
+    position: absolute;
+    top: calc(100% + 0.6rem);
+    right: 0;
+    z-index: 100;
+    min-width: 12rem;
+    display: flex;
+    flex-direction: column;
+    padding: 0.4rem;
+    border-radius: 0.625rem;
+    background-color: var(--main-color);
+    box-shadow: 0 0.5rem 1.5rem 0 rgba(0, 0, 0, 0.45);
+  }
+
+  &__user {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.5rem 0.6rem;
+    margin-bottom: 0.25rem;
+    border-bottom: 0.0625rem solid rgba(255, 255, 255, 0.1);
+  }
+
+  &__username {
+    font-size: 0.9rem;
+    font-weight: 700;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__item {
+    display: block;
+    padding: 0.6rem;
+    border-radius: 0.45rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-align: left;
+    color: var(--main-text-color);
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.07);
+    }
+
+    &--danger {
+      color: var(--secondary-color-light);
+    }
+  }
+
+  &__lang-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+  }
+
+  &__lang-current {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--secondary-text-color);
+  }
+
+  &__lang-list {
+    display: flex;
+    flex-direction: column;
+    margin: 0.1rem 0 0.1rem 0.6rem;
+    padding-left: 0.6rem;
+    border-left: 0.0625rem solid rgba(255, 255, 255, 0.1);
+  }
+
+  &__lang-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0.6rem;
+    border-radius: 0.45rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--secondary-text-color);
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.07);
+    }
+
+    &--active {
+      color: var(--main-text-color);
+    }
+  }
+
+  &__check {
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
   }
 }
 
 @media screen and (max-width: 700px) {
   .header {
-    padding: 18px 20px;
-    gap: 16px;
+    padding: 1rem 1.25rem;
+
     &__logo {
-      font-size: 18px;
-    }
-    &__actions {
-      gap: 10px;
+      font-size: 1.125rem;
     }
   }
 }

@@ -12,6 +12,8 @@ import type { IDatabaseDescription } from "../../assets/database";
 import { pagesAnimate, pagesInitial, pagesTransition } from "../../utils/pagesAnimation";
 import { useLanguage } from "../../contexts/LanguageContext";
 
+import "./index.scss";
+
 const MainPage: FC = () => {
   const { t } = useTranslation();
   const { language } = useLanguage();
@@ -40,16 +42,23 @@ const MainPage: FC = () => {
       <div className="flex-center-column">
         <Title text={t("headers.mainHeader")} />
         <DescriptionParagraph descriptionText={description.text} descriptionStrong={description.title} />
-        <div className="flex-row-wrapper">
-          <Link to={"/setup/1"} className="button button--primary">
-            {t("buttons.startGame")}
-          </Link>
-          <Link to={"/information"} className="button button--secondary">
-            {t("buttons.roleInfo")}
-          </Link>
-          <a href="https://github.com/alashchev17/mafia-randomizer" target="_blank" className="button button--third">
-            {t("buttons.sourceCode")}
-          </a>
+        <div className="mainpage__actions">
+          <div className="mainpage__row">
+            <Link to={"/setup/1"} className="button button--primary">
+              {t("buttons.startGame")}
+            </Link>
+            <Link to={"/multiplayer"} className="button button--primary">
+              {t("buttons.startMultiplayerGame")}
+            </Link>
+          </div>
+          <div className="mainpage__row">
+            <Link to={"/information"} className="button button--secondary">
+              {t("buttons.roleInfo")}
+            </Link>
+            <a href="https://github.com/alashchev17/mafia-randomizer" target="_blank" className="button button--third">
+              {t("buttons.sourceCode")}
+            </a>
+          </div>
         </div>
       </div>
     </motion.div>
