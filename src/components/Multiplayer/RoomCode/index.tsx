@@ -19,7 +19,8 @@ const RoomCode: FC<Props> = ({ code, onCopied }) => {
       onCopied?.();
       setTimeout(() => setCopied(false), 1500);
     } catch {
-      // ignore
+      // clipboard can reject on insecure contexts / denied permission;
+      // the code is shown on screen, so a failed copy is non-fatal.
     }
   };
 
