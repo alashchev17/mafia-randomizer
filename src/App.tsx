@@ -55,14 +55,14 @@ const App: FC = () => {
     }
   }, [location, navigate]);
 
-  const slicedNotification = useAppSelector(selectNotification);
+  const { nonce, text } = useAppSelector(selectNotification);
   const lastNonce = useRef(0);
   useEffect(() => {
-    if (slicedNotification.nonce !== lastNonce.current && slicedNotification.text) {
-      lastNonce.current = slicedNotification.nonce;
-      handleNotification(true, slicedNotification.text);
+    if (nonce !== lastNonce.current && text) {
+      lastNonce.current = nonce;
+      handleNotification(true, text);
     }
-  }, [slicedNotification]);
+  }, [nonce, text]);
 
   const headerHidden = location.pathname === "/session" || location.pathname.startsWith("/multiplayer/game/");
 
