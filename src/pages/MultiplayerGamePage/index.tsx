@@ -8,12 +8,12 @@ import HostControls from "../../components/Multiplayer/HostControls";
 import MultiplayerDesk from "../../components/Multiplayer/MultiplayerDesk";
 import GameLog from "../../components/Multiplayer/GameLog";
 import CheckResults from "../../components/Multiplayer/CheckResults";
-import { selectLastFinish, selectPrivateChecks, selectRoom, setActiveRoomId } from "../../store/multiplayerSlice";
+import { selectLastFinish, selectPrivateChecks, selectRoom } from "../../store/multiplayerSlice";
 import { useGetRoomQuery } from "../../store/api/roomsApi";
 import { useGetGameQuery } from "../../store/api/gamesApi";
-import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import { useMultiplayerConnection } from "../../hooks/useMultiplayerConnection";
+import { useActiveRoom } from "../../hooks/useActiveRoom";
 import { useMultiplayerViewer } from "../../hooks/useMultiplayerViewer";
 import { SocketEvents } from "../../store/socket";
 import { pagesAnimate, pagesInitial, pagesTransition } from "../../utils/pagesAnimation";
@@ -25,8 +25,8 @@ const MultiplayerGamePage: FC = () => {
   const { t } = useTranslation();
   const { roomId = "" } = useParams<{ roomId: string }>();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   useMultiplayerConnection();
+  useActiveRoom(roomId);
 
   const { data: room } = useGetRoomQuery(roomId, { skip: !roomId });
   const stateRoom = useAppSelector(selectRoom);
@@ -41,15 +41,6 @@ const MultiplayerGamePage: FC = () => {
   useEffect(() => {
     document.title = t("titles.multiplayerGame");
   }, [t]);
-
-  useEffect(() => {
-    if (!roomId) return;
-    dispatch(setActiveRoomId(roomId));
-    SocketEvents.roomJoin(roomId);
-    return () => {
-      dispatch(setActiveRoomId(null));
-    };
-  }, [roomId, dispatch]);
 
   const finishTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
