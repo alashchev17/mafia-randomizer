@@ -28,10 +28,10 @@ const CheckResults: FC<Props> = ({ results, currentCycle }) => {
         {recent.length === 0 ? (
           <span className="check-results__empty">{t("multiplayer.game.checkResultEmpty")}</span>
         ) : (
-          recent.map((r, idx) => {
+          recent.map((r) => {
             const { key, tone } = verdictFor(r.result);
             return (
-              <span key={idx} className="check-results__tag">
+              <span key={`${r.cycle}-${r.targetSeat}`} className="check-results__tag">
                 <span className="check-results__seat">#{r.targetSeat}</span>
                 <span className={`check-results__verdict check-results__verdict--${tone}`}>
                   {t(`multiplayer.log.${key}`)}
