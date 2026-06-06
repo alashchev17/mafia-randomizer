@@ -17,11 +17,9 @@ import { useMultiplayerConnection } from "../../hooks/useMultiplayerConnection";
 import { useMultiplayerViewer } from "../../hooks/useMultiplayerViewer";
 import { SocketEvents } from "../../store/socket";
 import { pagesAnimate, pagesInitial, pagesTransition } from "../../utils/pagesAnimation";
-import { capitalize } from "../../utils/format";
+import { capitalize, formatRatingDelta } from "../../utils/format";
 
 import "./index.scss";
-
-const formatDelta = (d: number): string => (d > 0 ? `+${d}` : String(d));
 
 const MultiplayerGamePage: FC = () => {
   const { t } = useTranslation();
@@ -95,7 +93,7 @@ const MultiplayerGamePage: FC = () => {
           {myDelta ? (
             <p>
               {t("multiplayer.game.ratingDelta", {
-                delta: formatDelta(myDelta.delta),
+                delta: formatRatingDelta(myDelta.delta),
               })}
             </p>
           ) : null}
