@@ -17,10 +17,9 @@ import { useMultiplayerConnection } from "../../hooks/useMultiplayerConnection";
 import { useMultiplayerViewer } from "../../hooks/useMultiplayerViewer";
 import { SocketEvents } from "../../store/socket";
 import { pagesAnimate, pagesInitial, pagesTransition } from "../../utils/pagesAnimation";
+import { capitalize } from "../../utils/format";
 
 import "./index.scss";
-
-const capitalize = (s: string): string => s.charAt(0) + s.slice(1).toLowerCase();
 
 const formatDelta = (d: number): string => (d > 0 ? `+${d}` : String(d));
 
