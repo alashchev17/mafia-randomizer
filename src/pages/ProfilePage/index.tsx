@@ -8,6 +8,7 @@ import { useMeQuery } from "../../store/api/authApi";
 import { useListGamesQuery, type GameListItem } from "../../store/api/gamesApi";
 import { useLanguage } from "../../contexts/LanguageContext";
 import { pagesAnimate, pagesInitial, pagesTransition } from "../../utils/pagesAnimation";
+import { formatRatingDelta } from "../../utils/format";
 
 import "./index.scss";
 
@@ -31,11 +32,6 @@ const formatDateTime = (iso: string | null, language: string): string => {
     hour: "2-digit",
     minute: "2-digit",
   }).format(new Date(iso));
-};
-
-const formatDelta = (delta: number): string => {
-  if (delta > 0) return `+${delta}`;
-  return String(delta);
 };
 
 const deltaClass = (delta: number): string => {
@@ -155,7 +151,7 @@ const ProfilePage: FC = () => {
                     </div>
                     <div className="profile__game-right">
                       <span className={deltaClass(delta)}>
-                        {item.participant.ratingEvent ? formatDelta(delta) : "—"}
+                        {item.participant.ratingEvent ? formatRatingDelta(delta) : "—"}
                       </span>
                       <span className="profile__date">{formatDateTime(item.game.finishedAt, language)}</span>
                     </div>
