@@ -31,6 +31,18 @@ import {
   type RoomPlayer,
   type Vote,
 } from "./multiplayerSlice";
+import {
+  guarded,
+  hasTargetSeat,
+  hasUserId,
+  isGameState,
+  isNomination,
+  isNightResult,
+  isRoom,
+  isRoomPlayer,
+  isVote,
+  isVotingResult,
+} from "./socketValidation";
 
 let socket: Socket | null = null;
 // Room the client wants to be in. Tracked so we can re-join after a reconnect,
@@ -79,30 +91,44 @@ export function connectSocket(token: string, dispatch: AppDispatch): Socket {
   });
 
   socket.on("room:state", (payload: RoomStatePayload) => {
-    if (payload.kind === "lobby" && payload.room) {
-      dispatch(applyRoomSnapshot(payload.room));
-    } else if (payload.kind === "game" && payload.state) {
-      dispatch(applyGameSnapshot(payload.state));
+    if (payload.kind === "lobby") {
+      guarded("room:state", payload.room, isRoom(payload.room), () => dispatch(applyRoomSnapshot(payload.room!)));
+    } else if (payload.kind === "game") {
+      guarded("room:state", payload.state, isGameState(payload.state), () =>
+        dispatch(applyGameSnapshot(payload.state!))
+      );
     }
   });
-  socket.on("room:player-joined", (player: RoomPlayer) => dispatch(applyRoomPlayerJoined(player)));
-  socket.on("room:player-left", (p: { userId: string }) => dispatch(applyRoomPlayerLeft(p)));
-  socket.on("room:player-ready", (p: { userId: string; isReady: boolean }) => dispatch(applyRoomPlayerReady(p)));
+  socket.on("room:player-joined", (player: RoomPlayer) =>
+    guarded("room:player-joined", player, isRoomPlayer(player), () => dispatch(applyRoomPlayerJoined(player)))
+  );
+  socket.on("room:player-left", (p: { userId: string }) =>
+    guarded("room:player-left", p, hasUserId(p), () => dispatch(applyRoomPlayerLeft(p)))
+  );
+  socket.on("room:player-ready", (p: { userId: string; isReady: boolean }) =>
+    guarded("room:player-ready", p, hasUserId(p), () => dispatch(applyRoomPlayerReady(p)))
+  );
   socket.on("room:player-disconnected", (p: { userId: string; connectionStatus: RoomPlayer["connectionStatus"] }) =>
-    dispatch(applyRoomPlayerDisconnected(p))
+    guarded("room:player-disconnected", p, hasUserId(p), () => dispatch(applyRoomPlayerDisconnected(p)))
   );
   socket.on("room:player-connected", (p: { userId: string; connectionStatus: RoomPlayer["connectionStatus"] }) =>
-    dispatch(applyRoomPlayerDisconnected(p))
+    guarded("room:player-connected", p, hasUserId(p), () => dispatch(applyRoomPlayerDisconnected(p)))
   );
   socket.on("room:started", (p: { gameId: string }) => dispatch(applyRoomStarted(p)));
 
   socket.on("game:phase-changed", (p: { phase: GameState["phase"]; cycle: number }) => dispatch(applyPhaseChanged(p)));
-  socket.on("game:nominated", (p: Nomination) => dispatch(applyNominated(p)));
-  socket.on("game:vote-cast", (p: Vote) => dispatch(applyVoteCast(p)));
-  socket.on("game:voting-result", (p: { targetSeat: number | null; isTie: boolean }) => dispatch(applyVotingResult(p)));
-  socket.on("game:night-result", (p: { killedSeat: number | null }) => dispatch(applyNightResult(p)));
+  socket.on("game:nominated", (p: Nomination) =>
+    guarded("game:nominated", p, isNomination(p), () => dispatch(applyNominated(p)))
+  );
+  socket.on("game:vote-cast", (p: Vote) => guarded("game:vote-cast", p, isVote(p), () => dispatch(applyVoteCast(p))));
+  socket.on("game:voting-result", (p: { targetSeat: number | null; isTie: boolean }) =>
+    guarded("game:voting-result", p, isVotingResult(p), () => dispatch(applyVotingResult(p)))
+  );
+  socket.on("game:night-result", (p: { killedSeat: number | null }) =>
+    guarded("game:night-result", p, isNightResult(p), () => dispatch(applyNightResult(p)))
+  );
   socket.on("game:check-result", (p: { targetSeat: number; result: { isMafia?: boolean; isSheriff?: boolean } }) =>
-    dispatch(applyCheckResult(p))
+    guarded("game:check-result", p, hasTargetSeat(p), () => dispatch(applyCheckResult(p)))
   );
   socket.on("game:player-status-changed", (p: Parameters<typeof applyPlayerStatusChanged>[0]) =>
     dispatch(applyPlayerStatusChanged(p))
