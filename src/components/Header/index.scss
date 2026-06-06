@@ -139,7 +139,9 @@
     font-weight: 600;
     color: var(--secondary-text-color);
     cursor: pointer;
-    transition: background-color 0.15s ease, color 0.15s ease;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease;
 
     &:hover {
       background-color: rgba(255, 255, 255, 0.07);

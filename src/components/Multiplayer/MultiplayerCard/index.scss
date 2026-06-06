@@ -8,7 +8,9 @@
   background-color: var(--main-color-transparent);
   border: 0.0625rem solid rgba(255, 255, 255, 0.12);
   color: var(--main-text-color);
-  transition: border-color 0.2s ease, opacity 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    opacity 0.2s ease;
 
   &--self {
     border-color: rgba(255, 255, 255, 0.45);
