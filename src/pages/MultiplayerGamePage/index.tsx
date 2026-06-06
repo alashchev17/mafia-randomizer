@@ -31,6 +31,9 @@ const WINNER_TITLE_KEY: Record<GameWinner, string> = {
 const winnerTitleKey = (winner: GameWinner | null): string =>
   winner ? WINNER_TITLE_KEY[winner] : "multiplayer.game.hostTerminated";
 
+// How long the finish screen stays up before redirecting to the profile.
+const FINISH_REDIRECT_MS = 3500;
+
 const MultiplayerGamePage: FC = () => {
   const { t } = useTranslation();
   const { roomId = "" } = useParams<{ roomId: string }>();
@@ -55,7 +58,7 @@ const MultiplayerGamePage: FC = () => {
   const finishTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
     if (!lastFinish) return;
-    finishTimer.current = setTimeout(() => navigate("/profile", { replace: true }), 3500);
+    finishTimer.current = setTimeout(() => navigate("/profile", { replace: true }), FINISH_REDIRECT_MS);
     return () => {
       if (finishTimer.current) clearTimeout(finishTimer.current);
     };
