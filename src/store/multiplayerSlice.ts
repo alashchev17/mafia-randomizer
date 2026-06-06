@@ -158,6 +158,9 @@ export const multiplayerSlice = createSlice({
       state.game = null;
     },
     applyGameSnapshot: (state, action: PayloadAction<GameState>) => {
+      // A snapshot for a different game (rejoin/resync) must not inherit the
+      // previous game's private checks.
+      if (action.payload.id !== state.activeGameId) state.privateChecks = [];
       state.game = action.payload;
       state.activeGameId = action.payload.id;
       state.myNightAction = null;
