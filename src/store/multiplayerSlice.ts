@@ -176,7 +176,7 @@ export const multiplayerSlice = createSlice({
       const p = state.room.players.find((p) => p.userId === action.payload.userId);
       if (p) p.isReady = action.payload.isReady;
     },
-    applyRoomPlayerDisconnected: (
+    applyRoomPlayerConnectionChanged: (
       state,
       action: PayloadAction<{ userId: string; connectionStatus: ConnectionStatus }>
     ) => {
@@ -315,7 +315,7 @@ export const {
   applyRoomPlayerJoined,
   applyRoomPlayerLeft,
   applyRoomPlayerReady,
-  applyRoomPlayerDisconnected,
+  applyRoomPlayerConnectionChanged,
   applyRoomStarted,
   applyPhaseChanged,
   applyNominated,
