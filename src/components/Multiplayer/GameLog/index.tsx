@@ -4,10 +4,9 @@ import type { TFunction } from "i18next";
 
 import { useAppSelector } from "../../../hooks/useAppSelector";
 import { selectLog, type LogEntry } from "../../../store/multiplayerSlice";
+import { capitalize } from "../../../utils/format";
 
 import "./index.scss";
-
-const capitalize = (s: string): string => s.charAt(0) + s.slice(1).toLowerCase();
 
 const formatEntry = (t: TFunction, entry: LogEntry): string => {
   const payload = (entry.payload ?? {}) as Record<string, unknown>;
