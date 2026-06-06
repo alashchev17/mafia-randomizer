@@ -24,14 +24,13 @@ const MultiplayerTimer: FC<Props> = ({ gameId, isHost }) => {
   useEffect(() => {
     if (!running) return;
     const endsAt = timer.endsAt as number;
-    let id: ReturnType<typeof setInterval>;
     const tick = () => {
       setNow(Date.now());
       // Stop ticking once the countdown is spent; otherwise it keeps
       // re-rendering at 00:00 until the next phase change.
       if (endsAt - (Date.now() + timer.serverOffset) <= 0) clearInterval(id);
     };
-    id = setInterval(tick, 250);
+    const id = setInterval(tick, 250);
     return () => clearInterval(id);
   }, [running, timer.endsAt, timer.serverOffset]);
 
