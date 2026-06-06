@@ -65,7 +65,10 @@ export function getSocket(): Socket | null {
 }
 
 export function connectSocket(token: string, dispatch: AppDispatch): Socket {
-  if (socket?.connected) return socket;
+  // Reuse a live socket only if it was opened with the same token; otherwise a
+  // post-login token change would keep authenticating with the stale one.
+  if (socket && (socket.auth as { token?: string }).token === token) return socket;
+  if (socket) disconnectSocket(dispatch);
   dispatch(setSocketStatus("connecting"));
   socket = io(SOCKET_URL, {
     auth: { token },
