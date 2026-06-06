@@ -74,6 +74,7 @@ export function connectSocket(token: string, dispatch: AppDispatch): Socket {
     auth: { token },
     transports: ["websocket"],
     reconnection: true,
+    reconnectionAttempts: 5,
   });
 
   socket.on("connect", () => {
@@ -86,6 +87,10 @@ export function connectSocket(token: string, dispatch: AppDispatch): Socket {
   socket.on("connect_error", (err) => {
     dispatch(setSocketStatus("disconnected"));
     dispatch(setError(err.message));
+    // An auth-rejected handshake will fail identically on every retry; stop
+    // reconnecting so we don't loop on the same bad token (a re-login goes
+    // through connectSocket and opens a fresh socket).
+    if (/unauthor|forbidden|token|auth/i.test(err.message)) disconnectSocket(dispatch);
   });
 
   socket.on("game:error", (payload: { message: string }) => {
