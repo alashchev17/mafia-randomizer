@@ -1,6 +1,5 @@
 import { baseApi } from "./baseApi";
-// Reuse the canonical game enums so role/life-status types never drift from
-// what the backend sends (e.g. DOCTOR, BANNED).
+// Re-export the canonical game enums so consumers can import them from here.
 import type { GameState, GameStatus, GameWinner, LifeStatus, PlayerRole, PlayerTeam } from "../multiplayerSlice";
 
 export type { GameStatus, GameWinner, LifeStatus, PlayerRole, PlayerTeam } from "../multiplayerSlice";

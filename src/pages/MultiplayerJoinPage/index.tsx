@@ -25,7 +25,8 @@ const MultiplayerJoinPage: FC = () => {
       const room = await joinRoom({ code }).unwrap();
       navigate(`/multiplayer/room/${room.id}`);
     } catch {
-      // error shown inline
+      // the mutation's `error` state drives the inline message below; nothing
+      // to do here.
     }
   };
 
