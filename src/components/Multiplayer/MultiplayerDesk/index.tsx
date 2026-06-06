@@ -13,18 +13,18 @@ const MultiplayerDesk: FC = () => {
 
   if (!game) return null;
 
+  const nightBannerKey = () => {
+    if (game.cycle === 0) return "multiplayer.game.bannerNightFirst";
+    return nightActionType ? "multiplayer.game.bannerNightAct" : "multiplayer.game.bannerNight";
+  };
+
   let banner = "";
   if (isHost) {
-    banner = "";
+    // Host gets no phase banner; the guard keeps them out of the branches below.
   } else if (viewerSeat && !isAlive) {
     banner = t("multiplayer.game.bannerDead");
   } else if (game.phase === "NIGHT") {
-    banner =
-      game.cycle === 0
-        ? t("multiplayer.game.bannerNightFirst")
-        : nightActionType
-          ? t("multiplayer.game.bannerNightAct")
-          : t("multiplayer.game.bannerNight");
+    banner = t(nightBannerKey());
   } else if (game.phase === "DAY") {
     banner = t("multiplayer.game.bannerDay");
   } else if (game.phase === "VOTING") {
