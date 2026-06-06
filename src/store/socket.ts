@@ -33,6 +33,9 @@ import {
 } from "./multiplayerSlice";
 
 let socket: Socket | null = null;
+// Room the client wants to be in. Tracked so we can re-join after a reconnect,
+// since the server drops room membership when the socket drops.
+let joinedRoomId: string | null = null;
 
 interface RoomStatePayload {
   kind: "lobby" | "game";
@@ -58,7 +61,12 @@ export function connectSocket(token: string, dispatch: AppDispatch): Socket {
     reconnection: true,
   });
 
-  socket.on("connect", () => dispatch(setSocketStatus("connected")));
+  socket.on("connect", () => {
+    dispatch(setSocketStatus("connected"));
+    // Re-join after a fresh connect or a reconnect; emits made while the
+    // socket was down (or not yet created) would otherwise be lost.
+    if (joinedRoomId) socket?.emit("room:join", { roomId: joinedRoomId });
+  });
   socket.on("disconnect", () => dispatch(setSocketStatus("disconnected")));
   socket.on("connect_error", (err) => {
     dispatch(setSocketStatus("disconnected"));
@@ -122,6 +130,7 @@ export function connectSocket(token: string, dispatch: AppDispatch): Socket {
 }
 
 export function disconnectSocket(dispatch: AppDispatch): void {
+  joinedRoomId = null;
   if (!socket) return;
   socket.disconnect();
   socket = null;
@@ -133,8 +142,14 @@ export function emit<T>(event: string, payload: T): void {
 }
 
 export const SocketEvents = {
-  roomJoin: (roomId: string) => emit("room:join", { roomId }),
-  roomLeave: (roomId: string) => emit("room:leave", { roomId }),
+  roomJoin: (roomId: string) => {
+    joinedRoomId = roomId;
+    emit("room:join", { roomId });
+  },
+  roomLeave: (roomId: string) => {
+    if (joinedRoomId === roomId) joinedRoomId = null;
+    emit("room:leave", { roomId });
+  },
   roomReady: (roomId: string, isReady: boolean) => emit("room:ready", { roomId, isReady }),
   roomStart: (roomId: string) => emit("room:start", { roomId }),
   nominate: (gameId: string, targetSeat: number) => emit("game:nominate", { gameId, targetSeat }),
