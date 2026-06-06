@@ -12,7 +12,7 @@ import {
   applyNominated,
   applyPhaseChanged,
   applyPlayerStatusChanged,
-  applyRoomPlayerDisconnected,
+  applyRoomPlayerConnectionChanged,
   applyRoomPlayerJoined,
   applyRoomPlayerLeft,
   applyRoomPlayerReady,
@@ -109,10 +109,10 @@ export function connectSocket(token: string, dispatch: AppDispatch): Socket {
     guarded("room:player-ready", p, hasUserId(p), () => dispatch(applyRoomPlayerReady(p)))
   );
   socket.on("room:player-disconnected", (p: { userId: string; connectionStatus: RoomPlayer["connectionStatus"] }) =>
-    guarded("room:player-disconnected", p, hasUserId(p), () => dispatch(applyRoomPlayerDisconnected(p)))
+    guarded("room:player-disconnected", p, hasUserId(p), () => dispatch(applyRoomPlayerConnectionChanged(p)))
   );
   socket.on("room:player-connected", (p: { userId: string; connectionStatus: RoomPlayer["connectionStatus"] }) =>
-    guarded("room:player-connected", p, hasUserId(p), () => dispatch(applyRoomPlayerDisconnected(p)))
+    guarded("room:player-connected", p, hasUserId(p), () => dispatch(applyRoomPlayerConnectionChanged(p)))
   );
   socket.on("room:started", (p: { gameId: string }) => dispatch(applyRoomStarted(p)));
 
