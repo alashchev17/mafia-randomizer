@@ -1,7 +1,7 @@
 import { baseApi } from "./baseApi";
 // Reuse the canonical game enums so role/life-status types never drift from
 // what the backend sends (e.g. DOCTOR, BANNED).
-import type { GameStatus, GameWinner, LifeStatus, PlayerRole, PlayerTeam } from "../multiplayerSlice";
+import type { GameState, GameStatus, GameWinner, LifeStatus, PlayerRole, PlayerTeam } from "../multiplayerSlice";
 
 export type { GameStatus, GameWinner, LifeStatus, PlayerRole, PlayerTeam } from "../multiplayerSlice";
 
@@ -54,7 +54,11 @@ export const gamesApi = baseApi.injectEndpoints({
       query: (args) => ({ url: "/games", params: args }),
       providesTags: (_result, _err, arg) => [{ type: "Game", id: `user-${arg.userId}` }, "Game"],
     }),
+    getGame: build.query<GameState, string>({
+      query: (gameId) => ({ url: `/games/${gameId}` }),
+      providesTags: (_r, _e, gameId) => [{ type: "Game", id: gameId }],
+    }),
   }),
 });
 
-export const { useListGamesQuery } = gamesApi;
+export const { useListGamesQuery, useGetGameQuery } = gamesApi;

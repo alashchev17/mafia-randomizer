@@ -1,5 +1,5 @@
 import { baseApi } from "./baseApi";
-import type { GameMode, GameState, Room } from "../multiplayerSlice";
+import type { GameMode, Room } from "../multiplayerSlice";
 
 export interface CreateRoomArgs {
   maxPlayers: number;
@@ -43,10 +43,6 @@ export const roomsApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Room", "Game"],
     }),
-    getGame: build.query<GameState, string>({
-      query: (gameId) => ({ url: `/games/${gameId}` }),
-      providesTags: (_r, _e, gameId) => [{ type: "Game", id: gameId }],
-    }),
   }),
 });
 
@@ -56,5 +52,4 @@ export const {
   useLeaveRoomMutation,
   useGetRoomQuery,
   useStartRoomMutation,
-  useGetGameQuery,
 } = roomsApi;
