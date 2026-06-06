@@ -19,8 +19,17 @@ import { useMultiplayerViewer } from "../../hooks/useMultiplayerViewer";
 import { SocketEvents } from "../../store/socket";
 import { pagesAnimate, pagesInitial, pagesTransition } from "../../utils/pagesAnimation";
 import { capitalize, formatRatingDelta } from "../../utils/format";
+import type { GameWinner } from "../../store/multiplayerSlice";
 
 import "./index.scss";
+
+const WINNER_TITLE_KEY: Record<GameWinner, string> = {
+  CITIZENS: "multiplayer.game.winnerCitizens",
+  MAFIA: "multiplayer.game.winnerMafia",
+};
+
+const winnerTitleKey = (winner: GameWinner | null): string =>
+  winner ? WINNER_TITLE_KEY[winner] : "multiplayer.game.hostTerminated";
 
 const MultiplayerGamePage: FC = () => {
   const { t } = useTranslation();
@@ -75,13 +84,7 @@ const MultiplayerGamePage: FC = () => {
 
       {lastFinish ? (
         <div className="mp-game__finish">
-          <h2 className="mp-game__finish-title">
-            {lastFinish.winner === "CITIZENS"
-              ? t("multiplayer.game.winnerCitizens")
-              : lastFinish.winner === "MAFIA"
-                ? t("multiplayer.game.winnerMafia")
-                : t("multiplayer.game.hostTerminated")}
-          </h2>
+          <h2 className="mp-game__finish-title">{t(winnerTitleKey(lastFinish.winner))}</h2>
           {myDelta ? (
             <p>
               {t("multiplayer.game.ratingDelta", {
