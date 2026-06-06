@@ -127,8 +127,10 @@ export function connectSocket(token: string, dispatch: AppDispatch): Socket {
   socket.on("game:night-result", (p: { killedSeat: number | null }) =>
     guarded("game:night-result", p, isNightResult(p), () => dispatch(applyNightResult(p)))
   );
-  socket.on("game:check-result", (p: { targetSeat: number; result: { isMafia?: boolean; isSheriff?: boolean } }) =>
-    guarded("game:check-result", p, hasTargetSeat(p), () => dispatch(applyCheckResult(p)))
+  socket.on(
+    "game:check-result",
+    (p: { targetSeat: number; result: { isMafia?: boolean; isSheriff?: boolean }; cycle?: number }) =>
+      guarded("game:check-result", p, hasTargetSeat(p), () => dispatch(applyCheckResult(p)))
   );
   socket.on("game:player-status-changed", (p: Parameters<typeof applyPlayerStatusChanged>[0]) =>
     dispatch(applyPlayerStatusChanged(p))
