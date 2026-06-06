@@ -38,8 +38,14 @@ const persistAuth = async (
   promise: Promise<{ data: AuthResponse }>,
   dispatch: (action: ReturnType<typeof setAuthToken>) => void
 ) => {
-  const { data } = await promise;
-  dispatch(setAuthToken(data.session.token));
+  try {
+    const { data } = await promise;
+    dispatch(setAuthToken(data.session.token));
+  } catch {
+    // Request failed (bad credentials, network); the mutation's error state
+    // already carries it for the UI. Swallow here to avoid an unhandled
+    // rejection.
+  }
 };
 
 export const authApi = baseApi.injectEndpoints({
@@ -48,28 +54,28 @@ export const authApi = baseApi.injectEndpoints({
       query: (body) => ({ url: "/auth/register", method: "POST", body }),
       invalidatesTags: ["Me"],
       onQueryStarted: async (_arg, { dispatch, queryFulfilled }) => {
-        await persistAuth(queryFulfilled as Promise<{ data: AuthResponse }>, dispatch);
+        await persistAuth(queryFulfilled, dispatch);
       },
     }),
     login: build.mutation<AuthResponse, LoginPayload>({
       query: (body) => ({ url: "/auth/login", method: "POST", body }),
       invalidatesTags: ["Me"],
       onQueryStarted: async (_arg, { dispatch, queryFulfilled }) => {
-        await persistAuth(queryFulfilled as Promise<{ data: AuthResponse }>, dispatch);
+        await persistAuth(queryFulfilled, dispatch);
       },
     }),
     loginTelegram: build.mutation<AuthResponse, { initData: string }>({
       query: (body) => ({ url: "/auth/telegram", method: "POST", body }),
       invalidatesTags: ["Me"],
       onQueryStarted: async (_arg, { dispatch, queryFulfilled }) => {
-        await persistAuth(queryFulfilled as Promise<{ data: AuthResponse }>, dispatch);
+        await persistAuth(queryFulfilled, dispatch);
       },
     }),
     loginGoogle: build.mutation<AuthResponse, { idToken: string }>({
       query: (body) => ({ url: "/auth/google", method: "POST", body }),
       invalidatesTags: ["Me"],
       onQueryStarted: async (_arg, { dispatch, queryFulfilled }) => {
-        await persistAuth(queryFulfilled as Promise<{ data: AuthResponse }>, dispatch);
+        await persistAuth(queryFulfilled, dispatch);
       },
     }),
     me: build.query<PublicUser, void>({
