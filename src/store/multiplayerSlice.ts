@@ -223,10 +223,9 @@ export const multiplayerSlice = createSlice({
     },
     applyVotingResult: (state, action: PayloadAction<{ targetSeat: number | null; isTie: boolean }>) => {
       if (!state.game) return;
-      if (action.payload.targetSeat !== null) {
-        const seat = state.game.seats.find((s) => s.seatNumber === action.payload.targetSeat);
-        if (seat) seat.lifeStatus = "REMOVED";
-      }
+      if (action.payload.isTie || action.payload.targetSeat === null) return;
+      const seat = state.game.seats.find((s) => s.seatNumber === action.payload.targetSeat);
+      if (seat) seat.lifeStatus = "REMOVED";
     },
     applyNightResult: (state, action: PayloadAction<{ killedSeat: number | null }>) => {
       if (!state.game) return;
