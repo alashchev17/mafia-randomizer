@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import Avatar from "../../components/Avatar";
 import RoomCode from "../../components/Multiplayer/RoomCode";
+import CenteredMessage from "../../components/CenteredMessage";
 import { useMultiplayerConnection } from "../../hooks/useMultiplayerConnection";
 import { useActiveRoom } from "../../hooks/useActiveRoom";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
@@ -62,9 +63,9 @@ const MultiplayerRoomPage: FC = () => {
 
   if (!room) {
     return (
-      <div className="mp-room mp-room--centered">
+      <CenteredMessage base="mp-room">
         <p>{t("multiplayer.lobby.waiting")}</p>
-      </div>
+      </CenteredMessage>
     );
   }
 

@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { skipToken } from "@reduxjs/toolkit/query";
 
 import Avatar from "../../components/Avatar";
+import CenteredMessage from "../../components/CenteredMessage";
 import { useMeQuery } from "../../store/api/authApi";
 import { useListGamesQuery, type GameListItem } from "../../store/api/gamesApi";
 import { useLanguage } from "../../contexts/LanguageContext";
@@ -65,17 +66,17 @@ const ProfilePage: FC = () => {
 
   if (userLoading) {
     return (
-      <div className="profile profile--centered">
+      <CenteredMessage base="profile">
         <p>{t("profile.loading")}</p>
-      </div>
+      </CenteredMessage>
     );
   }
 
   if (userError || !user) {
     return (
-      <div className="profile profile--centered">
+      <CenteredMessage base="profile">
         <p className="profile__error">{t("profile.userError")}</p>
-      </div>
+      </CenteredMessage>
     );
   }
 
