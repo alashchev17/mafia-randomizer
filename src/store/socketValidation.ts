@@ -25,8 +25,7 @@ export const hasTargetSeat = (p: unknown): boolean => isObject(p) && isNumber(p.
 export const isVotingResult = (p: unknown): boolean =>
   isObject(p) && isBool(p.isTie) && (p.targetSeat === null || isNumber(p.targetSeat));
 
-export const isNightResult = (p: unknown): boolean =>
-  isObject(p) && (p.killedSeat === null || isNumber(p.killedSeat));
+export const isNightResult = (p: unknown): boolean => isObject(p) && (p.killedSeat === null || isNumber(p.killedSeat));
 
 export const isVote = (p: unknown): boolean =>
   isObject(p) && isNumber(p.actorSeat) && (p.targetSeat === null || isNumber(p.targetSeat));
@@ -39,5 +38,6 @@ export const guarded = <T>(event: string, payload: T, valid: boolean, run: () =>
     run();
     return;
   }
+  // eslint-disable-next-line no-console -- dev-only diagnostic for dropped frames
   if (import.meta.env.DEV) console.warn(`[socket] dropped malformed "${event}" payload`, payload);
 };
