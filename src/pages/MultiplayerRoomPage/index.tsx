@@ -6,9 +6,10 @@ import { useTranslation } from "react-i18next";
 import Avatar from "../../components/Avatar";
 import RoomCode from "../../components/Multiplayer/RoomCode";
 import { useMultiplayerConnection } from "../../hooks/useMultiplayerConnection";
+import { useActiveRoom } from "../../hooks/useActiveRoom";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { useAppSelector } from "../../hooks/useAppSelector";
-import { selectActiveGameId, selectRoom, setActiveRoomId } from "../../store/multiplayerSlice";
+import { selectActiveGameId, selectRoom } from "../../store/multiplayerSlice";
 import { useGetRoomQuery } from "../../store/api/roomsApi";
 import { useMeQuery } from "../../store/api/authApi";
 import { SocketEvents } from "../../store/socket";
@@ -23,6 +24,7 @@ const MultiplayerRoomPage: FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   useMultiplayerConnection();
+  useActiveRoom(roomId);
 
   const { data: me } = useMeQuery();
   const { data: roomFromQuery } = useGetRoomQuery(roomId, { skip: !roomId });
@@ -32,15 +34,6 @@ const MultiplayerRoomPage: FC = () => {
   useEffect(() => {
     document.title = t("titles.multiplayerRoom");
   }, [t]);
-
-  useEffect(() => {
-    if (!roomId) return;
-    dispatch(setActiveRoomId(roomId));
-    SocketEvents.roomJoin(roomId);
-    return () => {
-      dispatch(setActiveRoomId(null));
-    };
-  }, [roomId, dispatch]);
 
   useEffect(() => {
     if (activeGameId) navigate(`/multiplayer/game/${roomId}`, { replace: true });
