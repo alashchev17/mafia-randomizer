@@ -138,6 +138,7 @@ export const multiplayerSlice = createSlice({
     setSocketStatus: (state, action: PayloadAction<SocketStatus>) => {
       state.socketStatus = action.payload;
     },
+    resetMultiplayer: () => initialState,
     setActiveRoomId: (state, action: PayloadAction<string | null>) => {
       state.activeRoomId = action.payload;
       if (action.payload === null) {
@@ -312,6 +313,7 @@ export const multiplayerSlice = createSlice({
 
 export const {
   setSocketStatus,
+  resetMultiplayer,
   setActiveRoomId,
   applyRoomSnapshot,
   applyGameSnapshot,

@@ -1,5 +1,6 @@
 import { baseApi } from "./baseApi";
 import { setAuthToken, clearAuth } from "../authSlice";
+import { resetMultiplayer } from "../multiplayerSlice";
 
 export interface PublicUser {
   id: string;
@@ -82,7 +83,12 @@ export const authApi = baseApi.injectEndpoints({
         try {
           await queryFulfilled;
         } finally {
+          // Wipe everything tied to the previous user so cached private data
+          // (rooms, games, leaderboard, multiplayer state) is never re-served
+          // to the next account on the same tab.
           dispatch(clearAuth());
+          dispatch(resetMultiplayer());
+          dispatch(baseApi.util.resetApiState());
         }
       },
     }),
