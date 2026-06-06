@@ -35,6 +35,13 @@ const STATUS_SVG: Partial<Record<LifeStatus, string>> = {
   BANNED: deletedSvg,
 };
 
+// Max fouls a host can assign before the 4th triggers an automatic ban.
+const MAX_PENALTIES = 4;
+// Foul dots shown on the card (the 4th foul bans rather than adding a dot).
+const PENALTY_DOTS = 3;
+// A player stays muted for this many cycles after being muted.
+const MUTE_DURATION_CYCLES = 2;
+
 const MultiplayerCard: FC<Props> = ({ seatNumber }) => {
   const { t } = useTranslation();
   const {
@@ -59,7 +66,7 @@ const MultiplayerCard: FC<Props> = ({ seatNumber }) => {
   const dead = seat.lifeStatus !== "ALIVE";
   const roleKey = toRoleKey(seat.role);
   const faceSrc = roleKey ? getRoleSrc(roleKey) : backsideSvg;
-  const muted = seat.mutedSinceCycle !== null && game.cycle - seat.mutedSinceCycle < 2;
+  const muted = seat.mutedSinceCycle !== null && game.cycle - seat.mutedSinceCycle < MUTE_DURATION_CYCLES;
 
   const isNominated = nominatedSeats.has(seat.seatNumber);
   const nominatorSeat = nominationByTarget.get(seat.seatNumber);
@@ -177,7 +184,7 @@ const MultiplayerCard: FC<Props> = ({ seatNumber }) => {
                     type="button"
                     className="player__button player__button--third"
                     onClick={() => SocketEvents.hostPenalty(game.id, seat.seatNumber, 1)}
-                    disabled={seat.penaltyCount >= 4}
+                    disabled={seat.penaltyCount >= MAX_PENALTIES}
                   >
                     <span>{t("multiplayer.game.penaltyPlus")}</span>
                   </button>
@@ -193,7 +200,7 @@ const MultiplayerCard: FC<Props> = ({ seatNumber }) => {
       ) : null}
 
       <div className="mp-card__penalty">
-        {[1, 2, 3].map((n) => (
+        {Array.from({ length: PENALTY_DOTS }, (_, i) => i + 1).map((n) => (
           <span key={n} className={`mp-card__foul${seat.penaltyCount >= n ? " mp-card__foul--on" : ""}`} />
         ))}
       </div>
