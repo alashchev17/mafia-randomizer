@@ -19,6 +19,8 @@ import { pagesAnimate, pagesInitial, pagesTransition } from "../../utils/pagesAn
 
 import "./index.scss";
 
+const MIN_PLAYERS = 4;
+
 const MultiplayerRoomPage: FC = () => {
   const { t } = useTranslation();
   const { roomId = "" } = useParams<{ roomId: string }>();
@@ -43,7 +45,7 @@ const MultiplayerRoomPage: FC = () => {
   const isHost = me?.id === room?.hostId;
   const nonHostPlayers = useMemo(() => room?.players.filter((p) => !p.isHost) ?? [], [room]);
   const allReady = nonHostPlayers.length > 0 && nonHostPlayers.every((p) => p.isReady);
-  const canStart = isHost && nonHostPlayers.length >= 4 && allReady;
+  const canStart = isHost && nonHostPlayers.length >= MIN_PLAYERS && allReady;
 
   const onLeave = () => {
     SocketEvents.roomLeave(roomId);
@@ -119,7 +121,9 @@ const MultiplayerRoomPage: FC = () => {
         </button>
         {!canStart && isHost ? (
           <p className="mp-room__hint">
-            {nonHostPlayers.length < 4 ? t("multiplayer.lobby.minPlayers") : t("multiplayer.lobby.notAllReady")}
+            {nonHostPlayers.length < MIN_PLAYERS
+              ? t("multiplayer.lobby.minPlayers")
+              : t("multiplayer.lobby.notAllReady")}
           </p>
         ) : null}
       </footer>
