@@ -2,6 +2,7 @@ import { FC } from "react";
 import { useTranslation } from "react-i18next";
 
 import type { CheckResult } from "../../../store/multiplayerSlice";
+import { checkVerdict } from "../../../utils/checkVerdict";
 
 import "./index.scss";
 
@@ -9,13 +10,6 @@ interface Props {
   results: CheckResult[];
   currentCycle: number;
 }
-
-const verdictFor = (result: CheckResult["result"]): { key: string; tone: string } => {
-  if (result.isMafia !== undefined) {
-    return result.isMafia ? { key: "checkMafia", tone: "mafia" } : { key: "checkCitizen", tone: "citizen" };
-  }
-  return result.isSheriff ? { key: "checkSheriff", tone: "sheriff" } : { key: "checkNotSheriff", tone: "none" };
-};
 
 const CheckResults: FC<Props> = ({ results, currentCycle }) => {
   const { t } = useTranslation();
@@ -29,7 +23,7 @@ const CheckResults: FC<Props> = ({ results, currentCycle }) => {
           <span className="check-results__empty">{t("multiplayer.game.checkResultEmpty")}</span>
         ) : (
           recent.map((r) => {
-            const { key, tone } = verdictFor(r.result);
+            const { key, tone } = checkVerdict(r.result);
             return (
               <span key={`${r.cycle}-${r.targetSeat}`} className="check-results__tag">
                 <span className="check-results__seat">#{r.targetSeat}</span>

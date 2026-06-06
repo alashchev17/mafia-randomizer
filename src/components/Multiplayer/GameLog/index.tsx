@@ -5,6 +5,7 @@ import type { TFunction } from "i18next";
 import { useAppSelector } from "../../../hooks/useAppSelector";
 import { selectLog, type LogEntry } from "../../../store/multiplayerSlice";
 import { capitalize } from "../../../utils/format";
+import { checkVerdict } from "../../../utils/checkVerdict";
 
 import "./index.scss";
 
@@ -41,15 +42,11 @@ const formatEntry = (t: TFunction, entry: LogEntry): string => {
     case "DOCTOR_SAVED":
       return t("multiplayer.log.doctorSaved");
     case "CHECK_RESULT": {
-      const verdict =
-        payload.isMafia !== undefined
-          ? payload.isMafia
-            ? t("multiplayer.log.checkMafia")
-            : t("multiplayer.log.checkCitizen")
-          : payload.isSheriff
-            ? t("multiplayer.log.checkSheriff")
-            : t("multiplayer.log.checkNotSheriff");
-      return t("multiplayer.log.checkResult", { ...payload, verdict });
+      const { key } = checkVerdict({
+        isMafia: payload.isMafia as boolean | undefined,
+        isSheriff: payload.isSheriff as boolean | undefined,
+      });
+      return t("multiplayer.log.checkResult", { ...payload, verdict: t(`multiplayer.log.${key}`) });
     }
     case "PENALTY":
       return t("multiplayer.log.penalty", payload);
