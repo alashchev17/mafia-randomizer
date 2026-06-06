@@ -15,27 +15,27 @@ describe("Game State Management", () => {
     cy.contains("The game field is only accessible after game initialization!").should("be.visible");
   });
 
-  it("should validate player count when starting a game", () => {
-    // Try with too few players (5)
-    cy.get('input[name="players"]').clear().type("5");
-    cy.contains("Save changes").should("be.disabled");
+  it("should clamp the player count within the allowed range", () => {
+    const decrease = '[aria-label="Amount of players: decrease"]';
+    const increase = '[aria-label="Amount of players: increase"]';
 
-    // Should stay on the settings page
-    cy.url().should("include", "/settings");
+    // Step down from the default of 6 to the minimum of 4
+    cy.get(decrease).click();
+    cy.get(decrease).click();
+    cy.get('input[name="players"]').should("have.value", "4");
+    cy.get(decrease).should("be.disabled");
 
-    // Try with too many players (13)
-    cy.get('input[name="players"]').clear().type("13");
-    cy.contains("Save changes").should("be.disabled");
-
-    // Should stay on the settings page
-    cy.url().should("include", "/settings");
+    // Step up to the maximum of 12
+    for (let i = 0; i < 8; i += 1) cy.get(increase).click();
+    cy.get('input[name="players"]').should("have.value", "12");
+    cy.get(increase).should("be.disabled");
   });
 
   it("should allow changing game mode", () => {
-    cy.contains("Choose mode").click();
     cy.contains("Extended").click();
 
     cy.contains("Save changes").click();
+    cy.url().should("include", "/welcome");
   });
 
   // A more complex test that would require mocking router state
