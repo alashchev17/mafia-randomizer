@@ -8,6 +8,7 @@ import HostControls from "../../components/Multiplayer/HostControls";
 import MultiplayerDesk from "../../components/Multiplayer/MultiplayerDesk";
 import GameLog from "../../components/Multiplayer/GameLog";
 import CheckResults from "../../components/Multiplayer/CheckResults";
+import CenteredMessage from "../../components/CenteredMessage";
 import { selectLastFinish, selectPrivateChecks, selectRoom } from "../../store/multiplayerSlice";
 import { useGetRoomQuery } from "../../store/api/roomsApi";
 import { useGetGameQuery } from "../../store/api/gamesApi";
@@ -53,9 +54,9 @@ const MultiplayerGamePage: FC = () => {
 
   if (!game) {
     return (
-      <div className="mp-game mp-game--centered">
+      <CenteredMessage base="mp-game">
         <p>{t("multiplayer.lobby.waiting")}</p>
-      </div>
+      </CenteredMessage>
     );
   }
 
