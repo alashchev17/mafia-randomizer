@@ -268,8 +268,11 @@ export const multiplayerSlice = createSlice({
         seat.mutedSinceCycle = action.payload.mutedSinceCycle;
       }
     },
-    applyGameFinished: (state, action: PayloadAction<FinishPayload>) => {
-      state.lastFinish = action.payload;
+    applyGameFinished: (state, action: PayloadAction<Omit<FinishPayload, "ratingDeltas"> & Partial<FinishPayload>>) => {
+      // Normalize ratingDeltas so consumers can always iterate it; a finish
+      // event without rating (e.g. host-terminated games) would otherwise
+      // leave it undefined and break .find/.map.
+      state.lastFinish = { ...action.payload, ratingDeltas: action.payload.ratingDeltas ?? [] };
       if (state.game) {
         state.game.status = "FINISHED";
         state.game.phase = "RESULTS";
