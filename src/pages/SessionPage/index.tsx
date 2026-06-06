@@ -46,6 +46,11 @@ const SessionPage: FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const invalidPlayers = Boolean(location.state) && !hasValidPlayers;
+  useEffect(() => {
+    if (invalidPlayers) dispatch(pushNotification(t("notifications.invalidPlayerCount")));
+  }, [invalidPlayers, dispatch, t]);
+
   if (!location.state) {
     return (
       <Navigate
@@ -60,7 +65,6 @@ const SessionPage: FC = () => {
   }
 
   if (!hasValidPlayers) {
-    dispatch(pushNotification(t("notifications.invalidPlayerCount")));
     return <Navigate to="/settings" replace={true} />;
   }
 
