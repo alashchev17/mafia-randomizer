@@ -32,10 +32,16 @@ const HeaderMenu: FC = () => {
   useEffect(() => {
     if (!open) return;
     const onDoc = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+        setLangOpen(false);
+      }
     };
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") {
+        setOpen(false);
+        setLangOpen(false);
+      }
     };
     document.addEventListener("mousedown", onDoc);
     document.addEventListener("keydown", onKey);
@@ -45,7 +51,10 @@ const HeaderMenu: FC = () => {
     };
   }, [open]);
 
-  const close = () => setOpen(false);
+  const close = () => {
+    setOpen(false);
+    setLangOpen(false);
+  };
 
   return (
     <div className="header-menu" ref={ref}>
@@ -116,7 +125,10 @@ const HeaderMenu: FC = () => {
                     className={`header-menu__lang-option${
                       language === lng.code ? " header-menu__lang-option--active" : ""
                     }`}
-                    onClick={() => changeLanguage(lng.code)}
+                    onClick={() => {
+                      changeLanguage(lng.code);
+                      close();
+                    }}
                   >
                     {lng.native}
                     {language === lng.code ? <img className="header-menu__check" src={checkSvg} alt="" /> : null}
