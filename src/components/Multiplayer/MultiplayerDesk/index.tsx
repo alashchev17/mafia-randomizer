@@ -1,0 +1,47 @@
+import { FC } from "react";
+import { useTranslation } from "react-i18next";
+
+import MultiplayerCard from "../MultiplayerCard";
+import MultiplayerTimer from "../MultiplayerTimer";
+import { useMultiplayerViewer } from "../../../hooks/useMultiplayerViewer";
+
+import "./index.scss";
+
+const MultiplayerDesk: FC = () => {
+  const { t } = useTranslation();
+  const { game, viewerSeat, isAlive, isHost, nightActionType } = useMultiplayerViewer();
+
+  if (!game) return null;
+
+  let banner = "";
+  if (isHost) {
+    banner = "";
+  } else if (viewerSeat && !isAlive) {
+    banner = t("multiplayer.game.bannerDead");
+  } else if (game.phase === "NIGHT") {
+    banner =
+      game.cycle === 0
+        ? t("multiplayer.game.bannerNightFirst")
+        : nightActionType
+          ? t("multiplayer.game.bannerNightAct")
+          : t("multiplayer.game.bannerNight");
+  } else if (game.phase === "DAY") {
+    banner = t("multiplayer.game.bannerDay");
+  } else if (game.phase === "VOTING") {
+    banner = t("multiplayer.game.bannerVoting");
+  }
+
+  return (
+    <div className="mp-desk">
+      <MultiplayerTimer gameId={game.id} isHost={isHost} />
+      {banner ? <p className="mp-desk__banner">{banner}</p> : null}
+      <div className="mp-desk__grid">
+        {game.seats.map((s) => (
+          <MultiplayerCard key={s.userId} seatNumber={s.seatNumber} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default MultiplayerDesk;

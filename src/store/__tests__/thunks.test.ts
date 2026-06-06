@@ -3,6 +3,9 @@ import { configureStore } from "@reduxjs/toolkit";
 import sessionReducer, { initializeSession, openVotingPanel, togglePlayerInQueue } from "../sessionSlice";
 import statsReducer, { advanceCycle } from "../statsSlice";
 import authReducer from "../authSlice";
+import multiplayerReducer from "../multiplayerSlice";
+import notificationReducer from "../notificationSlice";
+import settingsReducer from "../settingsSlice";
 import { baseApi } from "../api/baseApi";
 import {
   advanceCycleThunk,
@@ -29,6 +32,9 @@ const makeStore = () => {
       session: sessionReducer,
       stats: statsReducer,
       auth: authReducer,
+      multiplayer: multiplayerReducer,
+      notification: notificationReducer,
+      settings: settingsReducer,
       [baseApi.reducerPath]: baseApi.reducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(baseApi.middleware),

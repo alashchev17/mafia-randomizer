@@ -19,16 +19,13 @@ import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import { initializeSession, resetSession } from "../../store/sessionSlice";
 import { resetStats } from "../../store/statsSlice";
+import { pushNotification } from "../../store/notificationSlice";
 import { selectIsGameOver, selectWinnerKey } from "../../store/selectors";
-
-interface SessionPageProps {
-  handleNotification: (state: boolean, text: string) => void;
-}
 
 const PLAYER_COUNT_MIN = 4;
 const PLAYER_COUNT_MAX = 12;
 
-const SessionPage: FC<SessionPageProps> = ({ handleNotification }) => {
+const SessionPage: FC = () => {
   const { t } = useTranslation();
   const location = useLocation();
   const dispatch = useAppDispatch();
@@ -63,19 +60,19 @@ const SessionPage: FC<SessionPageProps> = ({ handleNotification }) => {
   }
 
   if (!hasValidPlayers) {
-    handleNotification(true, t("notifications.invalidPlayerCount"));
+    dispatch(pushNotification(t("notifications.invalidPlayerCount")));
     return <Navigate to="/settings" replace={true} />;
   }
 
   return (
     <motion.section initial={pagesInitial} animate={pagesAnimate} transition={pagesTransition} className="session">
       <Title text={t("headers.sessionPage")} />
-      <Timer handleNotification={handleNotification} />
+      <Timer />
       <GameDeskTitle />
       <AnimatePresence>{isGameOver && winnerKey && <GameOver key="gameover" winnerKey={winnerKey} />}</AnimatePresence>
       <div className="session__wrapper">
         <GameDesk />
-        <GameDeskQueueing handleNotification={handleNotification} />
+        <GameDeskQueueing />
       </div>
       <SessionControls />
     </motion.section>

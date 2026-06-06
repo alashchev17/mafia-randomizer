@@ -1,4 +1,4 @@
-import { Dispatch, FC, FormEventHandler, SetStateAction, useEffect, useMemo, useState } from "react";
+import { FC, FormEventHandler, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
@@ -7,7 +7,10 @@ import NumberInput from "../../components/NumberInput";
 
 import "./index.scss";
 
-import { ISettings } from "../../models";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { useAppSelector } from "../../hooks/useAppSelector";
+import { selectSettings, setSettings } from "../../store/settingsSlice";
+import { pushNotification } from "../../store/notificationSlice";
 import { pagesAnimate, pagesInitial, pagesTransition } from "../../utils/pagesAnimation.ts";
 import {
   GAME_MODE_CLASSIC,
@@ -17,12 +20,6 @@ import {
   type GameMode,
 } from "../../utils/roleDistribution.ts";
 import { useTranslation } from "react-i18next";
-
-interface SettingsPageProps {
-  settings: ISettings;
-  setSettings: Dispatch<SetStateAction<ISettings>>;
-  handleNotification: (state: boolean, text: string) => void;
-}
 
 const PLAYER_COUNT_MIN = 4;
 const PLAYER_COUNT_MAX = 12;
@@ -44,9 +41,11 @@ const GAME_MODES: {
   },
 ];
 
-const SettingsPage: FC<SettingsPageProps> = ({ settings, setSettings, handleNotification }) => {
+const SettingsPage: FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const settings = useAppSelector(selectSettings);
   const [selectedPlayersAmount, setSelectedPlayersAmount] = useState(settings.amountOfPlayers);
   const [selectedGameMode, setSelectedGameMode] = useState<GameMode>(normalizeGameMode(settings.gameMode));
   const selectedGameModeLabel = t(
@@ -70,17 +69,16 @@ const SettingsPage: FC<SettingsPageProps> = ({ settings, setSettings, handleNoti
     event.preventDefault();
 
     if (selectedPlayersAmount >= PLAYER_COUNT_MIN && selectedPlayersAmount <= PLAYER_COUNT_MAX) {
-      handleNotification(true, t("notifications.settingsSaved"));
-      setSettings((prev: ISettings): ISettings => {
-        return {
-          ...prev,
+      dispatch(pushNotification(t("notifications.settingsSaved")));
+      dispatch(
+        setSettings({
           amountOfPlayers: selectedPlayersAmount,
           gameMode: selectedGameMode,
-        };
-      });
+        })
+      );
       navigate("/");
     } else {
-      handleNotification(true, t("notifications.invalidPlayerCount"));
+      dispatch(pushNotification(t("notifications.invalidPlayerCount")));
     }
   };
 

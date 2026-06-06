@@ -1,0 +1,106 @@
+.mp-room {
+  width: 100%;
+  max-width: 920px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  color: var(--main-text-color);
+
+  &--centered {
+    align-items: center;
+    justify-content: center;
+    min-height: 50vh;
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 900;
+  }
+
+  &__players {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__players-title {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--secondary-text-color);
+  }
+
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    background-color: var(--main-color-transparent);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  &__name {
+    flex: 1;
+    font-weight: 700;
+  }
+
+  &__badge {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background-color: var(--secondary-color-transparent);
+    color: #f0a0a0;
+  }
+
+  &__ready {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--secondary-text-color);
+
+    &--on {
+      color: var(--accent-green);
+    }
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+  }
+
+  &__hint {
+    margin: 0;
+    width: 100%;
+    color: var(--secondary-text-color);
+    font-size: 13px;
+    font-weight: 600;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .mp-room__list {
+    grid-template-columns: 1fr;
+  }
+}

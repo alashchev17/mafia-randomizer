@@ -1,8 +1,10 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, Route, Routes } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 
 import Header from "./components/Header";
+import { useAppSelector } from "./hooks/useAppSelector";
+import { selectNotification } from "./store/notificationSlice";
 import MainPage from "./pages/MainPage";
 import RolesInfoPage from "./pages/RolesInfoPage";
 import SetupPage from "./pages/SetupPage";
@@ -11,13 +13,19 @@ import SessionPage from "./pages/SessionPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import ProfilePage from "./pages/ProfilePage";
+import RequireAuth from "./components/RequireAuth";
 
-import { INotification, ISettings } from "./models";
+import { INotification } from "./models";
 import Notification from "./components/Notification";
 
 import "./App.scss";
 import "./components/Button/index.scss";
 import StatsPage from "./pages/StatsPage";
+import MultiplayerLandingPage from "./pages/MultiplayerLandingPage";
+import MultiplayerRoomPage from "./pages/MultiplayerRoomPage";
+import MultiplayerJoinPage from "./pages/MultiplayerJoinPage";
+import MultiplayerGamePage from "./pages/MultiplayerGamePage";
 
 const App: FC = () => {
   const navigate = useNavigate();
@@ -25,11 +33,6 @@ const App: FC = () => {
 
   const [isNotificationVisible, setIsNotificationVisible] = useState(false);
   const [notificationData, setNotificationData] = useState<INotification>({} as INotification);
-
-  const [settings, setSettings] = useState<ISettings>({
-    amountOfPlayers: 6,
-    gameMode: "Классический",
-  });
 
   const handleNotification = (state: boolean, text: string) => {
     setIsNotificationVisible(state);
@@ -52,9 +55,20 @@ const App: FC = () => {
     }
   }, [location, navigate]);
 
+  const slicedNotification = useAppSelector(selectNotification);
+  const lastNonce = useRef(0);
+  useEffect(() => {
+    if (slicedNotification.nonce !== lastNonce.current && slicedNotification.text) {
+      lastNonce.current = slicedNotification.nonce;
+      handleNotification(true, slicedNotification.text);
+    }
+  }, [slicedNotification]);
+
+  const headerHidden = location.pathname === "/session" || location.pathname.startsWith("/multiplayer/game/");
+
   return (
     <>
-      <AnimatePresence>{location.pathname !== "/session" && <Header />}</AnimatePresence>
+      <AnimatePresence>{!headerHidden && <Header />}</AnimatePresence>
       <div className="wrapper">
         <AnimatePresence>
           {isNotificationVisible && <Notification text={notificationData.text} setVisible={setIsNotificationVisible} />}
@@ -63,17 +77,52 @@ const App: FC = () => {
           <Routes>
             <Route path="/welcome" element={<MainPage />} />
             <Route path="/information" element={<RolesInfoPage />} />
-            <Route path="/setup/:setupId" element={<SetupPage settings={settings} />} />
-            <Route path="/session" element={<SessionPage handleNotification={handleNotification} />} />
+            <Route path="/setup/:setupId" element={<SetupPage />} />
+            <Route path="/session" element={<SessionPage />} />
             <Route path="/stats" element={<StatsPage />} />
-            <Route
-              path="/settings"
-              element={
-                <SettingsPage settings={settings} setSettings={setSettings} handleNotification={handleNotification} />
-              }
-            />
+            <Route path="/settings" element={<SettingsPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route
+              path="/profile"
+              element={
+                <RequireAuth>
+                  <ProfilePage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/multiplayer"
+              element={
+                <RequireAuth>
+                  <MultiplayerLandingPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/multiplayer/join"
+              element={
+                <RequireAuth>
+                  <MultiplayerJoinPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/multiplayer/room/:roomId"
+              element={
+                <RequireAuth>
+                  <MultiplayerRoomPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/multiplayer/game/:roomId"
+              element={
+                <RequireAuth>
+                  <MultiplayerGamePage />
+                </RequireAuth>
+              }
+            />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </div>

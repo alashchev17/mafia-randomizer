@@ -6,7 +6,12 @@
     "setupPage": "Мафия | Раздача ролей",
     "page404": "Мафия | Страница недоступна",
     "loginPage": "Мафия | Вход",
-    "registerPage": "Мафия | Регистрация"
+    "registerPage": "Мафия | Регистрация",
+    "profilePage": "Мафия | Личный кабинет",
+    "multiplayerLanding": "Мафия | Мультиплеер",
+    "multiplayerJoin": "Мафия | Присоединиться",
+    "multiplayerRoom": "Мафия | Комната",
+    "multiplayerGame": "Мафия | Партия"
   },
   "headers": {
     "mainHeader": "Рандомизатор ролей",
@@ -72,6 +77,7 @@
 
   "buttons": {
     "startGame": "Начать игру",
+    "startMultiplayerGame": "Мультиплеер",
     "roleInfo": "Информация о ролях",
     "sourceCode": "Исходный код",
     "backToMain": "Вернуться на главную",
@@ -95,8 +101,22 @@
     "login": "Войти",
     "register": "Регистрация",
     "logout": "Выйти",
+    "profile": "Профиль",
+    "menu": "Меню",
+    "language": "Язык",
     "signingIn": "Входим…",
-    "creatingAccount": "Создаём…"
+    "creatingAccount": "Создаём…",
+    "multiplayer": "Мультиплеер",
+    "createRoom": "Создать комнату",
+    "joinRoom": "Присоединиться",
+    "leaveRoom": "Выйти из комнаты",
+    "startGameNow": "Начать партию",
+    "ready": "Готов",
+    "notReady": "Не готов",
+    "copyCode": "Скопировать код",
+    "advancePhase": "Следующая фаза",
+    "passVote": "Воздержаться",
+    "openSettings": "Изменить настройки"
   },
   "labels": {
     "amountOfPlayers": "Количество игроков",
@@ -143,6 +163,168 @@
     "registerSubtitle": "Выберите имя пользователя и начните путь в таблице лидеров.",
     "noAccount": "Ещё нет аккаунта?",
     "haveAccount": "Уже есть аккаунт?"
+  },
+  "multiplayer": {
+    "landing": {
+      "title": "Мультиплеер",
+      "subtitle": "Создайте комнату как ведущий или присоединитесь по 6-значному коду.",
+      "createTitle": "Создать комнату",
+      "createDescription": "Ведите партию с друзьями. Настройки берутся из вашей конфигурации игры.",
+      "joinTitle": "Присоединиться",
+      "joinDescription": "Введите 6-значный код, чтобы занять место за столом."
+    },
+    "join": {
+      "title": "Введите код комнаты",
+      "subtitle": "Шесть цифр от ведущего.",
+      "codeLabel": "Код комнаты",
+      "submit": "Присоединиться"
+    },
+    "lobby": {
+      "title": "Лобби",
+      "code": "Код",
+      "codeCopied": "Код скопирован",
+      "players": "Игроки",
+      "waiting": "Ожидание игроков…",
+      "minPlayers": "Минимум 4 игрока для старта",
+      "notAllReady": "Не все игроки готовы",
+      "hostBadge": "Ведущий",
+      "leave": "Выйти из комнаты"
+    },
+    "game": {
+      "phaseLobby": "Ожидание",
+      "phaseNight": "Ночь",
+      "phaseDay": "День",
+      "phaseVoting": "Голосование",
+      "phaseResults": "Итоги",
+      "yourRole": "Ваша роль",
+      "youAreHost": "Вы ведущий",
+      "seat": "Место",
+      "noActionsNow": "Сейчас от вас не требуется действий",
+      "nominateButton": "Выставить",
+      "voteFor": "Голосовать",
+      "voteOptions": "Кого снять",
+      "passVote": "Воздержаться",
+      "hostControls": "Действия ведущего",
+      "advancePhase": "Следующая фаза",
+      "finishGame": "Завершить партию",
+      "penaltyPlus": "+ Фол",
+      "penaltyMinus": "− Фол",
+      "hostNominate": "Выставить",
+      "hostRemove": "Снять",
+      "hostKill": "Отстрел",
+      "hostNoRemoval": "Без снятия",
+      "hostNoKill": "Без отстрела",
+      "voteCount": "{{count}} голос(ов)",
+      "checkResultTitle": "Проверки",
+      "checkResultEmpty": "Проверок ещё нет",
+      "checkResultMafia": "Игрок №{{seat}} — Мафия",
+      "checkResultCitizen": "Игрок №{{seat}} — Мирный",
+      "checkResultSheriff": "Игрок №{{seat}} — Шериф",
+      "checkResultNotSheriff": "Игрок №{{seat}} — не Шериф",
+      "winnerCitizens": "Победа мирных",
+      "winnerMafia": "Победа мафии",
+      "hostTerminated": "Партия завершена ведущим",
+      "ratingDelta": "Изменение рейтинга: {{delta}}",
+      "bannerNight": "Наступает ночь — город спит",
+      "bannerNightFirst": "Первая ночь — знакомство, ходов нет",
+      "bannerNightAct": "Ночь — ваш ход",
+      "bannerDay": "День — обсуждение, выставите игрока",
+      "bannerVoting": "Голосование — выберите, кого снять",
+      "bannerDead": "Вы выбыли — наблюдаете",
+      "nominatedBy": "Выставил {{who}}",
+      "host": "Ведущий",
+      "votedFor": "Голос отдан",
+      "targeted": "Выбран ✓",
+      "actionKill": "Выстрел",
+      "actionCheck": "Проверить",
+      "actionProtect": "Лечить",
+      "timerSec": "с",
+      "timerSkip": "Пропустить",
+      "logTitle": "Лог партии",
+      "logEmpty": "Событий пока нет"
+    },
+    "role": {
+      "INNOCENT": "Мирный житель",
+      "MAFIA": "Мафия",
+      "DON": "Дон",
+      "SHERIFF": "Шериф",
+      "DOCTOR": "Доктор"
+    },
+    "team": {
+      "CITIZENS": "Мирные",
+      "MAFIA": "Мафия"
+    },
+    "log": {
+      "gameStarted": "Игра началась",
+      "phaseChange": "Наступает {{phaseLabel}}",
+      "playerNomination": "№{{actorSeat}} выставил №{{targetSeat}}",
+      "hostNomination": "Ведущий выставил №{{targetSeat}}",
+      "voteRemoval": "№{{targetSeat}} снят голосованием",
+      "hostVoteResult": "Ведущий снял №{{targetSeat}}",
+      "hostNoRemoval": "Ведущий: без снятия",
+      "tieNoRemoval": "Ничья — никто не снят",
+      "mafiaKill": "№{{targetSeat}} убит ночью",
+      "hostNightKill": "Ведущий: убит №{{targetSeat}}",
+      "hostNoNightKill": "Ведущий: без ночного убийства",
+      "mafiaNoKillTie": "Мафия не договорилась — нет убийства",
+      "doctorSaved": "Доктор спас цель",
+      "checkResult": "№{{actorSeat}} проверил №{{targetSeat}}: {{verdict}}",
+      "checkMafia": "Мафия",
+      "checkCitizen": "Мирный",
+      "checkSheriff": "Шериф",
+      "checkNotSheriff": "не Шериф",
+      "penalty": "№{{targetSeat}} — фол ({{penaltyCount}})",
+      "banned": "№{{targetSeat}} удалён (4 фола)",
+      "gameFinished": "Игра окончена — {{winnerLabel}}",
+      "noWinner": "без победителя"
+    },
+    "errors": {
+      "notFound": "Комната не найдена",
+      "gameAlreadyStarted": "Игра уже началась",
+      "full": "Комната заполнена",
+      "notHost": "Только ведущий может это сделать",
+      "general": "Не удалось выполнить действие"
+    }
+  },
+  "profile": {
+    "memberSince": "С нами с {{date}}",
+    "noEmail": "Email не указан",
+    "loading": "Загружаем…",
+    "userError": "Не удалось загрузить данные профиля",
+    "gamesError": "Не удалось загрузить историю игр",
+    "noGames": "Вы ещё не сыграли ни одной игры",
+    "history": "История игр",
+    "prev": "Назад",
+    "next": "Вперёд",
+    "pageInfo": "{{from}}–{{to}} из {{total}}",
+    "stats": {
+      "rating": "Рейтинг",
+      "gamesPlayed": "Игр сыграно",
+      "wins": "Победы",
+      "losses": "Поражения",
+      "winrate": "Винрейт"
+    },
+    "result": {
+      "won": "Победа",
+      "lost": "Поражение"
+    },
+    "role": {
+      "INNOCENT": "Мирный житель",
+      "MAFIA": "Мафия",
+      "DON": "Дон",
+      "SHERIFF": "Шериф",
+      "DOCTOR": "Доктор"
+    },
+    "team": {
+      "CITIZENS": "Мирные",
+      "MAFIA": "Мафия"
+    },
+    "lifeStatus": {
+      "ALIVE": "Выжил",
+      "KILLED": "Убит",
+      "REMOVED": "Удалён",
+      "BANNED": "Удалён (фолы)"
+    }
   },
   "notifications": {
     "settingsSaved": "Настройки были сохранены успешно!",

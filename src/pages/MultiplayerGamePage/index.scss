@@ -1,0 +1,67 @@
+.mp-game {
+  width: 100%;
+  max-width: 57.5rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.375rem;
+  color: var(--main-text-color);
+  padding: 1.5rem 0;
+
+  &--centered {
+    align-items: center;
+    justify-content: center;
+    min-height: 50vh;
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  &__phase {
+    display: flex;
+    align-items: baseline;
+    gap: 0.625rem;
+  }
+
+  &__phase-label {
+    font-size: 1.625rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.125rem;
+  }
+
+  &__phase-cycle {
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: var(--secondary-text-color);
+  }
+
+  &__finish {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.25rem 1.5rem;
+    border-radius: 1rem;
+    background-color: var(--secondary-color-transparent);
+    border: 0.0625rem solid var(--secondary-color);
+  }
+
+  &__finish-title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 900;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .mp-game {
+    padding: 1rem 0.75rem;
+
+    &__phase-label {
+      font-size: 1.25rem;
+    }
+  }
+}

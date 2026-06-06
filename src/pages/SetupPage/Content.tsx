@@ -5,16 +5,15 @@ import Title from "../../components/Title";
 import PlayerCard from "../../components/PlayerCard";
 
 import { initialPlayers, rolesRandomizer } from "../../utils/rolesRandomizer.ts";
-import { ISettings, IPlayer } from "../../models";
+import { IPlayer } from "../../models";
+import { useAppSelector } from "../../hooks/useAppSelector";
+import { selectSettings } from "../../store/settingsSlice";
 import { useTranslation } from "react-i18next";
 
-interface SetupContentProps {
-  settings: ISettings;
-}
-
-const SetupContent: FC<SetupContentProps> = ({ settings }) => {
+const SetupContent: FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const settings = useAppSelector(selectSettings);
   const { setupId } = useParams();
 
   const [players, setPlayers] = useState(initialPlayers as IPlayer[]);

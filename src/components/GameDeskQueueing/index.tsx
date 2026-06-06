@@ -7,13 +7,10 @@ import Queueing from "../Queueing";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import { selectIsVotingPanelOpen, selectPlayerOrder, selectQueue } from "../../store/sessionSlice";
+import { pushNotification } from "../../store/notificationSlice";
 import { confirmInstantQueueThunk } from "../../store/thunks";
 
-interface GameDeskQueueingProps {
-  handleNotification: (state: boolean, text: string) => void;
-}
-
-const GameDeskQueueing: FC<GameDeskQueueingProps> = ({ handleNotification }) => {
+const GameDeskQueueing: FC = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const isVotingPanelOpen = useAppSelector(selectIsVotingPanelOpen);
@@ -22,7 +19,7 @@ const GameDeskQueueing: FC<GameDeskQueueingProps> = ({ handleNotification }) => 
 
   const handleInstantQueueConfirm = () => {
     if (queue.length !== 1) return;
-    handleNotification(true, t("notifications.singlePlayerQueued", { playerId: queue[0] }));
+    dispatch(pushNotification(t("notifications.singlePlayerQueued", { playerId: queue[0] })));
     dispatch(confirmInstantQueueThunk());
   };
 

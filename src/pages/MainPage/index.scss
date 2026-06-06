@@ -1,0 +1,30 @@
+.mainpage__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  max-width: 34rem;
+  margin-top: 0.5rem;
+}
+
+.mainpage__row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  .button {
+    flex: 1 1 12rem;
+    text-align: center;
+  }
+}
+
+@media (max-width: 470px) {
+  .mainpage__row {
+    flex-direction: column;
+
+    .button {
+      flex: 1 1 auto;
+    }
+  }
+}
