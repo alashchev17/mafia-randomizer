@@ -5,7 +5,7 @@ import { getRoleSrc } from "../../../utils/roleAssets";
 import { toRoleKey, useMultiplayerViewer } from "../../../hooks/useMultiplayerViewer";
 import { useAppSelector } from "../../../hooks/useAppSelector";
 import { SocketEvents } from "../../../store/socket";
-import { selectMyNightAction, type NightActionType } from "../../../store/multiplayerSlice";
+import { selectMyNightAction, type LifeStatus, type NightActionType } from "../../../store/multiplayerSlice";
 
 import backsideSvg from "../../PlayerCard/PlayerCardBackside/backside.svg";
 import killedSvg from "../../GameDeskCard/assets/killed.svg";
@@ -27,6 +27,12 @@ const NIGHT_ACTION_LABEL: Record<NightActionType, string> = {
   DON_CHECK_SHERIFF: "multiplayer.game.actionCheck",
   SHERIFF_CHECK: "multiplayer.game.actionCheck",
   DOCTOR_PROTECT: "multiplayer.game.actionProtect",
+};
+
+const STATUS_SVG: Partial<Record<LifeStatus, string>> = {
+  KILLED: killedSvg,
+  REMOVED: queuedSvg,
+  BANNED: deletedSvg,
 };
 
 const MultiplayerCard: FC<Props> = ({ seatNumber }) => {
@@ -65,14 +71,7 @@ const MultiplayerCard: FC<Props> = ({ seatNumber }) => {
   const canNightAct =
     !!viewerSeat && isAlive && !isSelf && !dead && phase === "NIGHT" && game.cycle > 0 && nightActionType !== null;
 
-  const statusSvg =
-    seat.lifeStatus === "KILLED"
-      ? killedSvg
-      : seat.lifeStatus === "REMOVED"
-        ? queuedSvg
-        : seat.lifeStatus === "BANNED"
-          ? deletedSvg
-          : null;
+  const statusSvg = STATUS_SVG[seat.lifeStatus] ?? null;
 
   const hostActions = isHost && !dead;
   const playerActions = !isHost && (canNominate || canVote || canNightAct);
