@@ -94,7 +94,7 @@ const MultiplayerRoomPage: FC = () => {
         <ul className="mp-room__list">
           {room.players.map((p) => (
             <li key={p.userId} className="mp-room__item">
-              <Avatar username={p.username} size="sm" />
+              <Avatar username={p.username} avatarUrl={p.avatarUrl} size="sm" />
               <span className="mp-room__name">{p.username}</span>
               {p.isHost ? (
                 <span className="mp-room__badge">{t("multiplayer.lobby.hostBadge")}</span>

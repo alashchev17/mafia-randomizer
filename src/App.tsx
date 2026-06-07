@@ -4,6 +4,7 @@ import { AnimatePresence } from "framer-motion";
 
 import Header from "./components/Header";
 import { useAppSelector } from "./hooks/useAppSelector";
+import { useTelegramAuth } from "./hooks/useTelegramAuth";
 import { selectNotification } from "./store/notificationSlice";
 import MainPage from "./pages/MainPage";
 import RolesInfoPage from "./pages/RolesInfoPage";
@@ -30,6 +31,8 @@ import MultiplayerGamePage from "./pages/MultiplayerGamePage";
 const App: FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+
+  useTelegramAuth();
 
   const [isNotificationVisible, setIsNotificationVisible] = useState(false);
   const [notificationData, setNotificationData] = useState<INotification>({} as INotification);

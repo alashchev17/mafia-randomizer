@@ -89,7 +89,7 @@ const ProfilePage: FC = () => {
   return (
     <motion.section className="profile" initial={pagesInitial} animate={pagesAnimate} transition={pagesTransition}>
       <header className="profile__identity">
-        <Avatar username={user.username} size="lg" />
+        <Avatar username={user.username} avatarUrl={user.avatarUrl} size="lg" />
         <div className="profile__identity-text">
           <h1 className="profile__username">{user.username}</h1>
           <p className="profile__email">{user.email ?? t("profile.noEmail")}</p>

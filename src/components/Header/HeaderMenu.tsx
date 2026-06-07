@@ -67,7 +67,7 @@ const HeaderMenu: FC = () => {
         aria-label={t("buttons.menu")}
       >
         {isAuthenticated && user ? (
-          <Avatar username={user.username} size="sm" />
+          <Avatar username={user.username} avatarUrl={user.avatarUrl} size="sm" />
         ) : (
           <span className="header-menu__dots">⋯</span>
         )}
@@ -86,7 +86,7 @@ const HeaderMenu: FC = () => {
           >
             {isAuthenticated && user ? (
               <div className="header-menu__user">
-                <Avatar username={user.username} size="sm" />
+                <Avatar username={user.username} avatarUrl={user.avatarUrl} size="sm" />
                 <span className="header-menu__username">{user.username}</span>
               </div>
             ) : null}

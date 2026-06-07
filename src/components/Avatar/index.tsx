@@ -1,9 +1,10 @@
-import { FC, useMemo } from "react";
+import { FC, useMemo, useState } from "react";
 
 import "./index.scss";
 
 interface Props {
   username: string;
+  avatarUrl?: string | null;
   size?: "sm" | "md" | "lg";
   className?: string;
 }
@@ -28,15 +29,22 @@ const buildInitials = (username: string): string => {
   return trimmed.slice(0, 2).toUpperCase();
 };
 
-const Avatar: FC<Props> = ({ username, size = "md", className }) => {
+const Avatar: FC<Props> = ({ username, avatarUrl, size = "md", className }) => {
   const initials = useMemo(() => buildInitials(username), [username]);
   const background = useMemo(() => PALETTE[hashString(username) % PALETTE.length], [username]);
+
+  const [imageFailed, setImageFailed] = useState(false);
+  const showImage = Boolean(avatarUrl) && !imageFailed;
 
   const rootClassName = `avatar avatar--${size}${className ? ` ${className}` : ""}`;
 
   return (
     <div className={rootClassName} style={{ backgroundColor: background }} aria-label={username} role="img">
-      <span className="avatar__initials">{initials}</span>
+      {showImage ? (
+        <img className="avatar__image" src={avatarUrl!} alt={username} onError={() => setImageFailed(true)} />
+      ) : (
+        <span className="avatar__initials">{initials}</span>
+      )}
     </div>
   );
 };

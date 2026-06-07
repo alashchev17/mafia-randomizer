@@ -14,6 +14,7 @@ export type NightActionType = "MAFIA_KILL_VOTE" | "DON_CHECK_SHERIFF" | "SHERIFF
 export interface RoomPlayer {
   userId: string;
   username: string;
+  avatarUrl: string | null;
   seatNumber: number;
   isHost: boolean;
   isReady: boolean;
@@ -28,7 +29,7 @@ export interface Room {
   gameMode: GameMode;
   maxPlayers: number;
   hostId: string;
-  host: { id: string; username: string };
+  host: { id: string; username: string; avatarUrl: string | null };
   players: RoomPlayer[];
   gameId: string | null;
   createdAt: string;
@@ -38,6 +39,7 @@ export interface Room {
 export interface GameSeat {
   userId: string;
   username: string;
+  avatarUrl: string | null;
   seatNumber: number;
   lifeStatus: LifeStatus;
   connectionStatus: ConnectionStatus;
@@ -67,6 +69,7 @@ export interface GameState {
   finishReason: string | null;
   hostId: string;
   hostUsername: string;
+  hostAvatarUrl: string | null;
   seats: GameSeat[];
   currentNominations: Nomination[];
   currentVotes: Vote[];

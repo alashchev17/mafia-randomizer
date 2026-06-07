@@ -3,27 +3,12 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 
-import { useLoginMutation, useLoginTelegramMutation } from "../../store/api/authApi";
+import { useLoginMutation } from "../../store/api/authApi";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import { selectIsAuthenticated } from "../../store/authSlice";
 import { pagesAnimate, pagesInitial, pagesTransition } from "../../utils/pagesAnimation";
 
 import "../AuthPage/index.scss";
-
-interface TelegramWebApp {
-  initData?: string;
-  ready?: () => void;
-}
-
-interface TelegramGlobal {
-  WebApp?: TelegramWebApp;
-}
-
-declare global {
-  interface Window {
-    Telegram?: TelegramGlobal;
-  }
-}
 
 const LoginPage: FC = () => {
   const { t } = useTranslation();
@@ -34,12 +19,9 @@ const LoginPage: FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [login, { isLoading: isLoginLoading, error: loginError }] = useLoginMutation();
-  const [loginTelegram, { isLoading: isTelegramLoading, error: telegramError }] = useLoginTelegramMutation();
+  const [login, { isLoading, error }] = useLoginMutation();
 
-  const error = loginError ?? telegramError;
   const redirectTo = (location.state as { from?: string } | null)?.from ?? "/welcome";
-  const isLoading = isLoginLoading || isTelegramLoading;
 
   useEffect(() => {
     document.title = t("titles.loginPage");
@@ -48,11 +30,6 @@ const LoginPage: FC = () => {
   useEffect(() => {
     if (isAuthenticated) navigate(redirectTo, { replace: true });
   }, [isAuthenticated, navigate, redirectTo]);
-
-  useEffect(() => {
-    const initData = window.Telegram?.WebApp?.initData;
-    if (initData) void loginTelegram({ initData });
-  }, [loginTelegram]);
 
   const onSubmit = (event: FormEvent) => {
     event.preventDefault();

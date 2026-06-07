@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.12.0",
+    "@telegram-apps/sdk-react": "^3.3.9",
     "@testing-library/dom": "^10.4.0",
     "@types/react-router-dom": "^5.3.3",
     "framer-motion": "^10.16.5",
