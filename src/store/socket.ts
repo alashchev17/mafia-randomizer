@@ -15,6 +15,7 @@ import {
   applyRoomPlayerConnectionChanged,
   applyRoomPlayerJoined,
   applyRoomPlayerLeft,
+  applyRoomClosed,
   applyRoomPlayerReady,
   applyRoomSnapshot,
   applyRoomStarted,
@@ -113,6 +114,10 @@ export function connectSocket(token: string, dispatch: AppDispatch): Socket {
   socket.on("room:player-left", (p: { userId: string }) =>
     guarded("room:player-left", p, hasUserId(p), () => dispatch(applyRoomPlayerLeft(p)))
   );
+  socket.on("room:closed", () => {
+    joinedRoomId = null;
+    dispatch(applyRoomClosed());
+  });
   socket.on("room:player-ready", (p: { userId: string; isReady: boolean }) =>
     guarded("room:player-ready", p, hasUserId(p), () => dispatch(applyRoomPlayerReady(p)))
   );

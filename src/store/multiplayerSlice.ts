@@ -113,6 +113,7 @@ interface MultiplayerState {
   timer: TimerState;
   lastFinish: FinishPayload | null;
   lastError: string | null;
+  roomClosed: boolean;
 }
 
 const initialTimer: TimerState = { state: "idle", endsAt: null, serverOffset: 0 };
@@ -129,6 +130,7 @@ const initialState: MultiplayerState = {
   timer: initialTimer,
   lastFinish: null,
   lastError: null,
+  roomClosed: false,
 };
 
 export const multiplayerSlice = createSlice({
@@ -151,12 +153,20 @@ export const multiplayerSlice = createSlice({
         state.timer = { state: "idle", endsAt: null, serverOffset: 0 };
         state.lastFinish = null;
         state.lastError = null;
+        state.roomClosed = false;
       }
     },
     applyRoomSnapshot: (state, action: PayloadAction<Room>) => {
       state.room = action.payload;
       state.activeGameId = action.payload.gameId;
       state.game = null;
+      state.roomClosed = false;
+    },
+    applyRoomClosed: (state) => {
+      state.roomClosed = true;
+      state.room = null;
+      state.game = null;
+      state.activeGameId = null;
     },
     applyGameSnapshot: (state, action: PayloadAction<GameState>) => {
       // A snapshot for a different game (rejoin/resync) must not inherit the
@@ -315,6 +325,7 @@ export const multiplayerSlice = createSlice({
     selectLog: (state) => state.log,
     selectTimer: (state) => state.timer,
     selectLastFinish: (state) => state.lastFinish,
+    selectRoomClosed: (state) => state.roomClosed,
   },
 });
 
@@ -323,6 +334,7 @@ export const {
   resetMultiplayer,
   setActiveRoomId,
   applyRoomSnapshot,
+  applyRoomClosed,
   applyGameSnapshot,
   applyRoomPlayerJoined,
   applyRoomPlayerLeft,
@@ -354,6 +366,7 @@ export const {
   selectLog,
   selectTimer,
   selectLastFinish,
+  selectRoomClosed,
 } = multiplayerSlice.selectors;
 
 export default multiplayerSlice.reducer;

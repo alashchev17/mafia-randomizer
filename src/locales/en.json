@@ -187,7 +187,8 @@
       "minPlayers": "At least 4 players required to start",
       "notAllReady": "Not all players are ready",
       "hostBadge": "Host",
-      "leave": "Leave room"
+      "leave": "Leave room",
+      "closedByHost": "The host closed the room"
     },
     "game": {
       "phaseLobby": "Waiting",

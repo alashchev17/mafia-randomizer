@@ -10,7 +10,7 @@ import { useMultiplayerConnection } from "../../hooks/useMultiplayerConnection";
 import { useActiveRoom } from "../../hooks/useActiveRoom";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { useAppSelector } from "../../hooks/useAppSelector";
-import { selectActiveGameId, selectRoom } from "../../store/multiplayerSlice";
+import { selectActiveGameId, selectRoom, selectRoomClosed } from "../../store/multiplayerSlice";
 import { useGetRoomQuery } from "../../store/api/roomsApi";
 import { useMeQuery } from "../../store/api/authApi";
 import { SocketEvents } from "../../store/socket";
@@ -33,6 +33,7 @@ const MultiplayerRoomPage: FC = () => {
   const { data: roomFromQuery } = useGetRoomQuery(roomId, { skip: !roomId });
   const room = useAppSelector(selectRoom) ?? roomFromQuery ?? null;
   const activeGameId = useAppSelector(selectActiveGameId);
+  const roomClosed = useAppSelector(selectRoomClosed);
 
   useEffect(() => {
     document.title = t("titles.multiplayerRoom");
@@ -41,6 +42,12 @@ const MultiplayerRoomPage: FC = () => {
   useEffect(() => {
     if (activeGameId) navigate(`/multiplayer/game/${roomId}`, { replace: true });
   }, [activeGameId, roomId, navigate]);
+
+  useEffect(() => {
+    if (!roomClosed) return;
+    dispatch(pushNotification(t("multiplayer.lobby.closedByHost")));
+    navigate("/multiplayer", { replace: true });
+  }, [roomClosed, dispatch, navigate, t]);
 
   const isHost = me?.id === room?.hostId;
   const nonHostPlayers = useMemo(() => room?.players.filter((p) => !p.isHost) ?? [], [room]);
