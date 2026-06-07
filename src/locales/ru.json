@@ -185,7 +185,7 @@
       "codeCopied": "Код скопирован",
       "players": "Игроки",
       "waiting": "Ожидание игроков…",
-      "minPlayers": "Минимум 4 игрока для старта",
+      "waitingForAll": "Ожидаем всех игроков: {{current}} из {{required}}",
       "notAllReady": "Не все игроки готовы",
       "hostBadge": "Ведущий",
       "leave": "Выйти из комнаты",

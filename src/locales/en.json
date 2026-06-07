@@ -184,7 +184,7 @@
       "codeCopied": "Code copied",
       "players": "Players",
       "waiting": "Waiting for players…",
-      "minPlayers": "At least 4 players required to start",
+      "waitingForAll": "Waiting for all players: {{current}} of {{required}}",
       "notAllReady": "Not all players are ready",
       "hostBadge": "Host",
       "leave": "Leave room",
