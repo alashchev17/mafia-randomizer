@@ -69,6 +69,12 @@ export const useDatabaseTexts = (): IDatabase => {
         roleDescription: t("roles.5.description"),
         roleSrc: t("roles.5.src"),
       },
+      {
+        id: 6,
+        title: t("roles.6.title"),
+        roleDescription: t("roles.6.description"),
+        roleSrc: t("roles.6.src"),
+      },
     ],
     gameModes: [
       {
