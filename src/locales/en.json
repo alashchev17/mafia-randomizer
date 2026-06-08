@@ -60,6 +60,11 @@
       "title": "Doctor",
       "description": "Plays for the team of peaceful residents. The doctor's task is to protect the sheriff from mafia attacks. Each night, they have the right to secretly go on night duty and save someone's life. Available only in the extended game mode.",
       "src": "/cards/doctor.svg"
+    },
+    "6": {
+      "title": "Escort",
+      "description": "Plays for the team of peaceful residents. Each night she visits one player and blocks their night action — the chosen player cannot shoot, check or heal that night. Available only in the extended game mode.",
+      "src": "/cards/putana.svg"
     }
   },
   "gameModes": {
@@ -101,6 +106,7 @@
     "register": "Register",
     "logout": "Sign out",
     "profile": "Profile",
+    "adminPanel": "Admin panel",
     "menu": "Menu",
     "language": "Language",
     "signingIn": "Signing in…",
@@ -199,6 +205,12 @@
       "yourRole": "Your role",
       "youAreHost": "You are the host",
       "seat": "Seat",
+      "disconnected": "Connection lost",
+      "reconnect": "Reconnect",
+      "statusOffline": "offline",
+      "statusLeft": "left",
+      "giveFloor": "Give floor",
+      "hasFloor": "Speaking",
       "noActionsNow": "No action required from you right now",
       "nominateButton": "Nominate",
       "voteFor": "Vote",
@@ -223,6 +235,8 @@
       "checkResultNotSheriff": "Seat #{{seat}} — not Sheriff",
       "winnerCitizens": "Citizens win",
       "winnerMafia": "Mafia wins",
+      "backToLobby": "Back to lobby",
+      "playAgain": "Play again",
       "hostTerminated": "Match terminated by host",
       "ratingDelta": "Rating delta: {{delta}}",
       "bannerNight": "Night falls — the city sleeps",
@@ -238,17 +252,32 @@
       "actionKill": "Shoot",
       "actionCheck": "Check",
       "actionProtect": "Heal",
+      "actionRoleblock": "Visit",
       "timerSec": "s",
       "timerSkip": "Skip",
       "logTitle": "Game log",
-      "logEmpty": "No events yet"
+      "logEmpty": "No events yet",
+      "nightChoicesTitle": "Night actions",
+      "nightChoicesEmpty": "No moves submitted yet"
+    },
+    "chat": {
+      "channel": {
+        "GENERAL": "General",
+        "MAFIA": "Mafia",
+        "DEAD": "Dead"
+      },
+      "empty": "No messages yet",
+      "placeholder": "Type a message…",
+      "closed": "Chat is closed right now",
+      "send": "Send"
     },
     "role": {
       "INNOCENT": "Citizen",
       "MAFIA": "Mafia",
       "DON": "Don",
       "SHERIFF": "Sheriff",
-      "DOCTOR": "Doctor"
+      "DOCTOR": "Doctor",
+      "PUTANA": "Escort"
     },
     "team": {
       "CITIZENS": "Citizens",
@@ -286,6 +315,28 @@
       "general": "Action failed"
     }
   },
+  "admin": {
+    "eyebrow": "Case file",
+    "title": "Admin panel",
+    "hint": "Pick a player to see their profile, match history and tune role chances. 100% is neutral; higher = more likely, lower = less.",
+    "roster": "Players · {{count}}",
+    "selectUser": "Select a player on the left",
+    "adminTag": "Admin",
+    "noEmail": "No email",
+    "loading": "Loading…",
+    "save": "Save",
+    "reset": "Reset",
+    "rating": "Rating",
+    "gamesLabel": "Games",
+    "wins": "Wins",
+    "losses": "Losses",
+    "winrate": "Win rate",
+    "history": "Match history",
+    "chances": "Role chances",
+    "chancesHint": "Likelihood multiplier per role. 100% is the normal chance.",
+    "noGames": "No games played yet",
+    "games": "games"
+  },
   "profile": {
     "memberSince": "Member since {{date}}",
     "noEmail": "No email",
@@ -313,7 +364,8 @@
       "MAFIA": "Mafia",
       "DON": "Don",
       "SHERIFF": "Sheriff",
-      "DOCTOR": "Doctor"
+      "DOCTOR": "Doctor",
+      "PUTANA": "Escort"
     },
     "team": {
       "CITIZENS": "Citizens",

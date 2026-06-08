@@ -26,6 +26,11 @@
   padding: 1rem 2rem;
 }
 
+.game-container {
+  width: 100%;
+  color: var(--main-text-color);
+}
+
 .flex-center-column {
   display: flex;
   flex-direction: column;

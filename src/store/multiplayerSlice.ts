@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export type PlayerRole = "INNOCENT" | "MAFIA" | "DON" | "SHERIFF" | "DOCTOR";
+export type PlayerRole = "INNOCENT" | "MAFIA" | "DON" | "SHERIFF" | "DOCTOR" | "PUTANA";
 export type PlayerTeam = "CITIZENS" | "MAFIA";
 export type LifeStatus = "ALIVE" | "KILLED" | "REMOVED" | "BANNED";
 export type ConnectionStatus = "ONLINE" | "OFFLINE" | "LEFT";
@@ -9,7 +9,12 @@ export type GameStatus = "WAITING" | "IN_PROGRESS" | "FINISHED" | "CANCELLED";
 export type GameMode = "CLASSIC" | "EXTENDED";
 export type GameWinner = "CITIZENS" | "MAFIA";
 export type RoomStatus = "WAITING" | "IN_GAME" | "FINISHED" | "CANCELLED";
-export type NightActionType = "MAFIA_KILL_VOTE" | "DON_CHECK_SHERIFF" | "SHERIFF_CHECK" | "DOCTOR_PROTECT";
+export type NightActionType =
+  | "MAFIA_KILL_VOTE"
+  | "DON_CHECK_SHERIFF"
+  | "SHERIFF_CHECK"
+  | "DOCTOR_PROTECT"
+  | "ROLEBLOCK";
 
 export interface RoomPlayer {
   userId: string;
@@ -65,6 +70,7 @@ export interface GameState {
   status: GameStatus;
   phase: GamePhase;
   cycle: number;
+  speakerSeat: number | null;
   winner: GameWinner | null;
   finishReason: string | null;
   hostId: string;
@@ -89,6 +95,17 @@ export interface FinishPayload {
 
 export type SocketStatus = "idle" | "connecting" | "connected" | "disconnected";
 
+export type ChatChannel = "GENERAL" | "MAFIA" | "DEAD";
+
+export interface ChatMessage {
+  id: string;
+  channel: ChatChannel;
+  userId: string;
+  username: string;
+  text: string;
+  createdAt: string;
+}
+
 export interface LogEntry {
   id: string;
   type: string;
@@ -112,6 +129,9 @@ interface MultiplayerState {
   game: GameState | null;
   privateChecks: CheckResult[];
   myNightAction: { type: NightActionType; targetSeat: number } | null;
+  // Host-only: every player's locked night choice for the current cycle.
+  nightChoices: { actorSeat: number; type: NightActionType; targetSeat: number }[];
+  chat: ChatMessage[];
   log: LogEntry[];
   timer: TimerState;
   lastFinish: FinishPayload | null;
@@ -129,6 +149,8 @@ const initialState: MultiplayerState = {
   game: null,
   privateChecks: [],
   myNightAction: null,
+  nightChoices: [],
+  chat: [],
   log: [],
   timer: initialTimer,
   lastFinish: null,
@@ -152,6 +174,8 @@ export const multiplayerSlice = createSlice({
         state.game = null;
         state.privateChecks = [];
         state.myNightAction = null;
+        state.nightChoices = [];
+        state.chat = [];
         state.log = [];
         state.timer = { state: "idle", endsAt: null, serverOffset: 0 };
         state.lastFinish = null;
@@ -178,6 +202,7 @@ export const multiplayerSlice = createSlice({
       state.game = action.payload;
       state.activeGameId = action.payload.id;
       state.myNightAction = null;
+      state.nightChoices = [];
     },
     applyRoomPlayerJoined: (state, action: PayloadAction<RoomPlayer>) => {
       if (!state.room) return;
@@ -218,11 +243,17 @@ export const multiplayerSlice = createSlice({
       const cycleChanged = state.game.cycle !== action.payload.cycle;
       state.game.phase = action.payload.phase;
       state.game.cycle = action.payload.cycle;
+      state.game.speakerSeat = null;
       state.myNightAction = null;
       if (cycleChanged) {
         state.game.currentNominations = [];
         state.game.currentVotes = [];
+        state.nightChoices = [];
       }
+    },
+    applySpeaker: (state, action: PayloadAction<{ speakerSeat: number | null }>) => {
+      if (!state.game) return;
+      state.game.speakerSeat = action.payload.speakerSeat;
     },
     applyNominated: (state, action: PayloadAction<Nomination>) => {
       if (!state.game) return;
@@ -286,6 +317,10 @@ export const multiplayerSlice = createSlice({
       // event without rating (e.g. host-terminated games) would otherwise
       // leave it undefined and break .find/.map.
       state.lastFinish = { ...action.payload, ratingDeltas: action.payload.ratingDeltas ?? [] };
+      // The game is over: drop the active-game pointer so the lobby (which
+      // redirects to the game whenever activeGameId is set) doesn't bounce the
+      // player straight back here after the return-to-lobby navigation.
+      state.activeGameId = null;
       if (state.game) {
         state.game.status = "FINISHED";
         state.game.phase = "RESULTS";
@@ -295,6 +330,23 @@ export const multiplayerSlice = createSlice({
     },
     applyNightActionAck: (state, action: PayloadAction<{ type: NightActionType; targetSeat: number }>) => {
       state.myNightAction = action.payload;
+    },
+    applyNightChoice: (
+      state,
+      action: PayloadAction<{ actorSeat: number; type: NightActionType; targetSeat: number }>
+    ) => {
+      const i = state.nightChoices.findIndex(
+        (c) => c.actorSeat === action.payload.actorSeat && c.type === action.payload.type
+      );
+      if (i >= 0) state.nightChoices[i] = action.payload;
+      else state.nightChoices.push(action.payload);
+    },
+    applyChatHistory: (state, action: PayloadAction<ChatMessage[]>) => {
+      state.chat = action.payload;
+    },
+    applyChatMessage: (state, action: PayloadAction<ChatMessage>) => {
+      if (state.chat.some((m) => m.id === action.payload.id)) return;
+      state.chat.push(action.payload);
     },
     applyLog: (state, action: PayloadAction<LogEntry[]>) => {
       state.log = action.payload;
@@ -325,6 +377,8 @@ export const multiplayerSlice = createSlice({
     selectSocketStatus: (state) => state.socketStatus,
     selectPrivateChecks: (state) => state.privateChecks,
     selectMyNightAction: (state) => state.myNightAction,
+    selectNightChoices: (state) => state.nightChoices,
+    selectChat: (state) => state.chat,
     selectLog: (state) => state.log,
     selectTimer: (state) => state.timer,
     selectLastFinish: (state) => state.lastFinish,
@@ -345,6 +399,7 @@ export const {
   applyRoomPlayerConnectionChanged,
   applyRoomStarted,
   applyPhaseChanged,
+  applySpeaker,
   applyNominated,
   applyVoteCast,
   applyVotingResult,
@@ -353,6 +408,9 @@ export const {
   applyPlayerStatusChanged,
   applyGameFinished,
   applyNightActionAck,
+  applyNightChoice,
+  applyChatHistory,
+  applyChatMessage,
   applyLog,
   applyTimer,
   setError,
@@ -366,6 +424,8 @@ export const {
   selectSocketStatus,
   selectPrivateChecks,
   selectMyNightAction,
+  selectNightChoices,
+  selectChat,
   selectLog,
   selectTimer,
   selectLastFinish,

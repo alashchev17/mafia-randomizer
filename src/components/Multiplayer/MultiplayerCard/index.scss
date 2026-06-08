@@ -24,6 +24,15 @@
     opacity: 0.55;
   }
 
+  &--left {
+    opacity: 0.6;
+  }
+
+  &--speaker {
+    border-color: var(--accent-color, #f5c542);
+    box-shadow: 0 0 0 0.0625rem var(--accent-color, #f5c542);
+  }
+
   &__title {
     display: flex;
     align-items: center;
@@ -35,27 +44,130 @@
   }
 
   &__seat {
+    flex-shrink: 0;
     color: var(--secondary-text-color);
   }
 
   &__name {
+    flex: 1;
+    min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  &__offline {
-    margin-left: auto;
-    width: 0.55rem;
-    height: 0.55rem;
-    border-radius: 50%;
-    background-color: var(--secondary-color);
+  // Connection chip in its own fixed slot — never overlaps a long nickname.
+  &__conn {
     flex-shrink: 0;
+    padding: 0.1rem 0.4rem;
+    border-radius: 0.4rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03rem;
+    white-space: nowrap;
+
+    &--offline {
+      color: var(--main-text-color);
+      background-color: rgba(255, 255, 255, 0.18);
+      animation: mp-card-pulse 1.4s ease-in-out infinite;
+    }
+
+    &--left {
+      color: #fff;
+      background-color: var(--secondary-color);
+    }
+  }
+
+  // Vote tally tray overlaid on the bottom of the card art (absolute → no
+  // layout shift): a count chip with a check mark + the voter-seat chips.
+  &__votes {
+    position: absolute;
+    left: 0.4rem;
+    right: 0.4rem;
+    bottom: 0.4rem;
+    z-index: 13;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem;
+    border-radius: 0.6rem;
+    background: rgba(12, 12, 12, 0.72);
+    backdrop-filter: blur(3px);
+    box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.45);
+    pointer-events: none;
+  }
+
+  &__votes-count {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.15rem;
+    height: 1.5rem;
+    padding: 0 0.5rem 0 0.35rem;
+    border-radius: 0.75rem;
+    font-weight: 800;
+    font-size: 0.9rem;
+    color: #fff;
+    background: var(--secondary-color);
+
+    svg {
+      width: 0.85rem;
+      height: 0.85rem;
+    }
+  }
+
+  &__votes-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    min-width: 0;
+    max-height: 3.2rem;
+    overflow: hidden;
+  }
+
+  &__votes-chip {
+    flex-shrink: 0;
+    padding: 0.1rem 0.4rem;
+    border-radius: 0.4rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--main-text-color);
+    background: rgba(255, 255, 255, 0.14);
   }
 
   &__card {
     position: relative;
     width: 100%;
+    overflow: hidden;
+    border-radius: 0.5rem;
+  }
+
+  // Diagonal corner ribbon — single-player nomination indicator. Outlined (a
+  // faint white slat) when not nominated, solid white when nominated.
+  &__queue {
+    position: absolute;
+    top: -1.4rem;
+    right: 0.45rem;
+    z-index: 12;
+    width: 0.95rem;
+    height: 4.7rem;
+    transform: rotate(-45deg);
+    background-color: var(--third-color);
+    border: 0.125rem solid var(--main-text-color);
+    transition:
+      background-color 0.15s ease-in-out,
+      border-color 0.15s ease-in-out;
+
+    &--on {
+      background-color: var(--main-text-color);
+    }
+
+    // Night: nominations are closed — dim, solid slat (single-player disabled).
+    &--disabled {
+      background-color: var(--main-color);
+      z-index: 10;
+    }
   }
 
   &__image {
@@ -123,6 +235,9 @@
     font-size: 0.75rem;
     font-weight: 700;
     color: var(--secondary-text-color);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   &__penalty {
@@ -146,5 +261,15 @@
   .mp-card__menu {
     opacity: 1;
     pointer-events: auto;
+  }
+}
+
+@keyframes mp-card-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
   }
 }

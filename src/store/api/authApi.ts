@@ -11,6 +11,7 @@ export interface PublicUser {
   gamesPlayed: number;
   wins: number;
   losses: number;
+  isAdmin: boolean;
   createdAt: string;
 }
 

@@ -27,6 +27,7 @@ import MultiplayerLandingPage from "./pages/MultiplayerLandingPage";
 import MultiplayerRoomPage from "./pages/MultiplayerRoomPage";
 import MultiplayerJoinPage from "./pages/MultiplayerJoinPage";
 import MultiplayerGamePage from "./pages/MultiplayerGamePage";
+import AdminPage from "./pages/AdminPage";
 
 const App: FC = () => {
   const navigate = useNavigate();
@@ -76,7 +77,15 @@ const App: FC = () => {
         <AnimatePresence>
           {isNotificationVisible && <Notification text={notificationData.text} setVisible={setIsNotificationVisible} />}
         </AnimatePresence>
-        <div className={location.pathname === "/settings" ? "settings-container" : "container"}>
+        <div
+          className={
+            location.pathname.startsWith("/multiplayer/game/")
+              ? "game-container"
+              : location.pathname === "/settings" || location.pathname === "/admin"
+                ? "settings-container"
+                : "container"
+          }
+        >
           <Routes>
             <Route path="/welcome" element={<MainPage />} />
             <Route path="/information" element={<RolesInfoPage />} />
@@ -123,6 +132,14 @@ const App: FC = () => {
               element={
                 <RequireAuth>
                   <MultiplayerGamePage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/admin"
+              element={
+                <RequireAuth>
+                  <AdminPage />
                 </RequireAuth>
               }
             />

@@ -27,6 +27,7 @@ const NIGHT_ACTION_LABEL: Record<NightActionType, string> = {
   DON_CHECK_SHERIFF: "multiplayer.game.actionCheck",
   SHERIFF_CHECK: "multiplayer.game.actionCheck",
   DOCTOR_PROTECT: "multiplayer.game.actionProtect",
+  ROLEBLOCK: "multiplayer.game.actionRoleblock",
 };
 
 const STATUS_SVG: Partial<Record<LifeStatus, string>> = {
@@ -41,21 +42,13 @@ const MAX_PENALTIES = 4;
 const PENALTY_DOTS = 3;
 // A player stays muted for this many cycles after being muted.
 const MUTE_DURATION_CYCLES = 2;
+// Default speech timer started when the host hands a seat the floor.
+const FLOOR_DURATION_MS = 60_000;
 
 const MultiplayerCard: FC<Props> = ({ seatNumber }) => {
   const { t } = useTranslation();
-  const {
-    game,
-    meId,
-    viewerSeat,
-    isHost,
-    isAlive,
-    nightActionType,
-    nominatedSeats,
-    nominationByTarget,
-    myNomination,
-    myVote,
-  } = useMultiplayerViewer();
+  const { game, meId, viewerSeat, isHost, isAlive, nightActionType, nominatedSeats, myNomination, myVote } =
+    useMultiplayerViewer();
   const myNightAction = useAppSelector(selectMyNightAction);
 
   const seat = game?.seats.find((s) => s.seatNumber === seatNumber);
@@ -69,43 +62,99 @@ const MultiplayerCard: FC<Props> = ({ seatNumber }) => {
   const muted = seat.mutedSinceCycle !== null && game.cycle - seat.mutedSinceCycle < MUTE_DURATION_CYCLES;
 
   const isNominated = nominatedSeats.has(seat.seatNumber);
-  const nominatorSeat = nominationByTarget.get(seat.seatNumber);
   const isMyVoteTarget = myVote?.targetSeat === seat.seatNumber;
   const targeted = myNightAction?.targetSeat === seat.seatNumber;
+  // Who voted for this seat — votes are public (everyone, host included, sees
+  // the tally and the voters).
+  const voterSeats = game.currentVotes.filter((v) => v.targetSeat === seat.seatNumber).map((v) => v.actorSeat);
 
-  const canNominate = !!viewerSeat && isAlive && !myNomination && !isNominated && !isSelf && !dead && phase === "DAY";
+  // Only the seat holding the floor may nominate ("дали слово"). viewerSeat is
+  // the seat object — compare its number to the speaker seat.
+  const hasFloor = !!viewerSeat && viewerSeat.seatNumber === game.speakerSeat;
+  const canNominate =
+    !!viewerSeat && hasFloor && isAlive && !myNomination && !isNominated && !isSelf && !dead && phase === "DAY";
   const canVote = !!viewerSeat && isAlive && phase === "VOTING" && isNominated && !dead;
   const canNightAct =
-    !!viewerSeat && isAlive && !isSelf && !dead && phase === "NIGHT" && game.cycle > 0 && nightActionType !== null;
+    !!viewerSeat &&
+    isAlive &&
+    !isSelf &&
+    !dead &&
+    phase === "NIGHT" &&
+    game.cycle > 0 &&
+    nightActionType !== null &&
+    // The night choice is final — once submitted, no re-pick.
+    !myNightAction;
 
   const statusSvg = STATUS_SVG[seat.lifeStatus] ?? null;
+  // Diagonal corner ribbon (single-player style): on alive cards — outlined
+  // when not nominated, filled when nominated, and a disabled look at night
+  // when nominations aren't possible.
+  const showQueueRibbon = !dead && phase !== "RESULTS";
+  const queueDisabled = phase === "NIGHT";
 
   const hostActions = isHost && !dead;
   const playerActions = !isHost && (canNominate || canVote || canNightAct);
   const hasMenu = hostActions || playerActions;
 
-  const nominatorLabel = nominatorSeat === 0 ? t("multiplayer.game.host") : `#${nominatorSeat ?? ""}`;
-
   return (
     <div
       className={`mp-card${isSelf ? " mp-card--self" : ""}${
         dead ? " mp-card--dead" : ""
-      }${targeted ? " mp-card--targeted" : ""}`}
+      }${targeted ? " mp-card--targeted" : ""}${seat.connectionStatus === "LEFT" ? " mp-card--left" : ""}${
+        viewerSeat && game.speakerSeat === seat.seatNumber ? " mp-card--speaker" : ""
+      }`}
     >
       <h3 className="mp-card__title">
         <span className="mp-card__seat">#{seat.seatNumber}</span>
         <span className="mp-card__name">{seat.username}</span>
-        {seat.connectionStatus !== "ONLINE" ? (
-          <span className="mp-card__offline" title={seat.connectionStatus} />
+        {seat.connectionStatus === "OFFLINE" ? (
+          <span className="mp-card__conn mp-card__conn--offline">{t("multiplayer.game.statusOffline")}</span>
+        ) : seat.connectionStatus === "LEFT" ? (
+          <span className="mp-card__conn mp-card__conn--left">{t("multiplayer.game.statusLeft")}</span>
         ) : null}
       </h3>
 
       <div className="mp-card__card">
         <img className="mp-card__image" src={faceSrc} alt="" />
+        {showQueueRibbon ? (
+          <span
+            className={`mp-card__queue${isNominated ? " mp-card__queue--on" : ""}${
+              queueDisabled ? " mp-card__queue--disabled" : ""
+            }`}
+            aria-hidden
+          />
+        ) : null}
         {muted ? <img className="mp-card__muted" src={muteSvg} alt="" /> : null}
         {statusSvg ? (
           <div className="mp-card__status">
             <img src={statusSvg} alt="" />
+          </div>
+        ) : null}
+
+        {/* Vote tally tray overlaid on the bottom of the card art (only when
+            votes exist). Absolute, so it never shifts the grid layout. */}
+        {phase === "VOTING" && voterSeats.length > 0 ? (
+          <div className="mp-card__votes" title={voterSeats.map((s) => `#${s}`).join(" ")}>
+            <span className="mp-card__votes-count">
+              <svg viewBox="0 0 24 24" aria-hidden focusable="false">
+                <path
+                  d="M5 11.5 10 16.5 19 7"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              {voterSeats.length}
+            </span>
+            <div className="mp-card__votes-chips">
+              {voterSeats.map((s) => (
+                <span key={s} className="mp-card__votes-chip">
+                  #{s}
+                </span>
+              ))}
+            </div>
           </div>
         ) : null}
         {hasMenu ? (
@@ -146,6 +195,21 @@ const MultiplayerCard: FC<Props> = ({ seatNumber }) => {
 
             {isHost ? (
               <>
+                {phase === "DAY" ? (
+                  <button
+                    type="button"
+                    className={`player__button ${
+                      game.speakerSeat === seat.seatNumber ? "player__button--primary" : "player__button--secondary"
+                    }`}
+                    onClick={() => SocketEvents.giveFloor(game.id, seat.seatNumber, FLOOR_DURATION_MS)}
+                  >
+                    <span>
+                      {game.speakerSeat === seat.seatNumber
+                        ? t("multiplayer.game.hasFloor")
+                        : t("multiplayer.game.giveFloor")}
+                    </span>
+                  </button>
+                ) : null}
                 <button
                   type="button"
                   className="player__button player__button--primary"
@@ -194,10 +258,6 @@ const MultiplayerCard: FC<Props> = ({ seatNumber }) => {
           </div>
         ) : null}
       </div>
-
-      {(phase === "DAY" || phase === "VOTING") && isNominated ? (
-        <span className="mp-card__nominated-by">{t("multiplayer.game.nominatedBy", { who: nominatorLabel })}</span>
-      ) : null}
 
       <div className="mp-card__penalty">
         {Array.from({ length: PENALTY_DOTS }, (_, i) => i + 1).map((n) => (

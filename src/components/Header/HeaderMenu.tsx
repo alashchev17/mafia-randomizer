@@ -97,6 +97,12 @@ const HeaderMenu: FC = () => {
               </Link>
             ) : null}
 
+            {isAuthenticated && user?.isAdmin ? (
+              <Link className="header-menu__item" to="/admin" onClick={close}>
+                {t("buttons.adminPanel")}
+              </Link>
+            ) : null}
+
             <Link className="header-menu__item" to="/settings" onClick={close}>
               {t("buttons.settings")}
             </Link>

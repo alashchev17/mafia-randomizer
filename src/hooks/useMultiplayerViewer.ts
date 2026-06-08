@@ -19,6 +19,7 @@ const NIGHT_ACTION_BY_ROLE: Record<PlayerRole, NightActionType | null> = {
   DON: "MAFIA_KILL_VOTE",
   SHERIFF: "SHERIFF_CHECK",
   DOCTOR: "DOCTOR_PROTECT",
+  PUTANA: "ROLEBLOCK",
 };
 
 const ROLE_KEY_BY_PLAYER_ROLE: Record<PlayerRole, RoleKey> = {
@@ -27,6 +28,7 @@ const ROLE_KEY_BY_PLAYER_ROLE: Record<PlayerRole, RoleKey> = {
   DON: ROLES.DON,
   SHERIFF: ROLES.SHERIFF,
   DOCTOR: ROLES.DOCTOR,
+  PUTANA: ROLES.PUTANA,
 };
 
 export const toRoleKey = (role: PlayerRole | null): RoleKey | null => (role ? ROLE_KEY_BY_PLAYER_ROLE[role] : null);

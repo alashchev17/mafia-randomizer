@@ -16,7 +16,7 @@ export const rolesRandomizer = (playersAmount: number, gameMode: string) => {
 
   const roleDistribution = getRoleDistribution(playersAmount, gameMode);
   const generatedArray = shuffleArray(
-    roleDistribution.flatMap(({ count, role }) => Array.from({ length: Math.max(count, 0) }, () => ({ role })))
+    roleDistribution.flatMap(({ count, role }) => Array.from({ length: count }, () => ({ role })))
   );
   const mafiaPlayers = roleDistribution.reduce((total, { count, isMafia }) => {
     return isMafia ? total + count : total;

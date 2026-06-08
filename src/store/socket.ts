@@ -7,10 +7,14 @@ import {
   applyGameFinished,
   applyGameSnapshot,
   applyLog,
+  applyChatHistory,
+  applyChatMessage,
   applyNightActionAck,
+  applyNightChoice,
   applyNightResult,
   applyNominated,
   applyPhaseChanged,
+  applySpeaker,
   applyPlayerStatusChanged,
   applyRoomPlayerConnectionChanged,
   applyRoomPlayerJoined,
@@ -24,6 +28,8 @@ import {
   applyVotingResult,
   setError,
   setSocketStatus,
+  type ChatChannel,
+  type ChatMessage,
   type GameState,
   type LogEntry,
   type Nomination,
@@ -47,8 +53,16 @@ import {
 
 let socket: Socket | null = null;
 // Room the client wants to be in. Tracked so we can re-join after a reconnect,
-// since the server drops room membership when the socket drops.
-let joinedRoomId: string | null = null;
+// since the server drops room membership when the socket drops. Persisted to
+// sessionStorage so a full page reload mid-game still re-joins automatically.
+const JOINED_ROOM_KEY = "mp.joinedRoomId";
+let joinedRoomId: string | null = sessionStorage.getItem(JOINED_ROOM_KEY);
+
+function setJoinedRoomId(roomId: string | null): void {
+  joinedRoomId = roomId;
+  if (roomId) sessionStorage.setItem(JOINED_ROOM_KEY, roomId);
+  else sessionStorage.removeItem(JOINED_ROOM_KEY);
+}
 
 interface RoomStatePayload {
   kind: "lobby" | "game";
@@ -75,7 +89,11 @@ export function connectSocket(token: string, dispatch: AppDispatch): Socket {
     auth: { token },
     transports: ["websocket"],
     reconnection: true,
-    reconnectionAttempts: 5,
+    // Keep retrying indefinitely: a player who dropped mid-game must be able to
+    // get back in once the network recovers, not give up after a few seconds.
+    reconnectionAttempts: Infinity,
+    reconnectionDelay: 1000,
+    reconnectionDelayMax: 5000,
   });
 
   socket.on("connect", () => {
@@ -115,7 +133,7 @@ export function connectSocket(token: string, dispatch: AppDispatch): Socket {
     guarded("room:player-left", p, hasUserId(p), () => dispatch(applyRoomPlayerLeft(p)))
   );
   socket.on("room:closed", () => {
-    joinedRoomId = null;
+    setJoinedRoomId(null);
     dispatch(applyRoomClosed());
   });
   socket.on("room:player-ready", (p: { userId: string; isReady: boolean }) =>
@@ -130,6 +148,7 @@ export function connectSocket(token: string, dispatch: AppDispatch): Socket {
   socket.on("room:started", (p: { gameId: string }) => dispatch(applyRoomStarted(p)));
 
   socket.on("game:phase-changed", (p: { phase: GameState["phase"]; cycle: number }) => dispatch(applyPhaseChanged(p)));
+  socket.on("game:speaker", (p: { speakerSeat: number | null }) => dispatch(applySpeaker(p)));
   socket.on("game:nominated", (p: Nomination) =>
     guarded("game:nominated", p, isNomination(p), () => dispatch(applyNominated(p)))
   );
@@ -156,7 +175,12 @@ export function connectSocket(token: string, dispatch: AppDispatch): Socket {
   socket.on("game:night-action-ack", (p: { type: NightActionType; targetSeat: number }) =>
     dispatch(applyNightActionAck(p))
   );
+  socket.on("game:night-choice", (p: { actorSeat: number; type: NightActionType; targetSeat: number }) =>
+    dispatch(applyNightChoice(p))
+  );
   socket.on("game:log", (entries: LogEntry[]) => dispatch(applyLog(entries)));
+  socket.on("chat:history", (messages: ChatMessage[]) => dispatch(applyChatHistory(messages)));
+  socket.on("chat:message", (message: ChatMessage) => dispatch(applyChatMessage(message)));
   socket.on("game:timer", (p: { state: "idle" | "running"; endsAt?: number; serverNow: number }) =>
     dispatch(
       applyTimer({
@@ -171,11 +195,20 @@ export function connectSocket(token: string, dispatch: AppDispatch): Socket {
 }
 
 export function disconnectSocket(dispatch: AppDispatch): void {
-  joinedRoomId = null;
+  setJoinedRoomId(null);
   if (!socket) return;
   socket.disconnect();
   socket = null;
   dispatch(setSocketStatus("idle"));
+}
+
+// Manually kick a reconnection attempt — used by the "Disconnected" banner so a
+// player isn't stuck waiting on backoff after the network recovers.
+export function reconnectSocket(dispatch: AppDispatch): void {
+  if (!socket) return;
+  dispatch(setSocketStatus("connecting"));
+  if (!socket.connected) socket.connect();
+  else if (joinedRoomId) socket.emit("room:join", { roomId: joinedRoomId });
 }
 
 export function emit<T>(event: string, payload: T): void {
@@ -184,11 +217,11 @@ export function emit<T>(event: string, payload: T): void {
 
 export const SocketEvents = {
   roomJoin: (roomId: string) => {
-    joinedRoomId = roomId;
+    setJoinedRoomId(roomId);
     emit("room:join", { roomId });
   },
   roomLeave: (roomId: string) => {
-    if (joinedRoomId === roomId) joinedRoomId = null;
+    if (joinedRoomId === roomId) setJoinedRoomId(null);
     emit("room:leave", { roomId });
   },
   roomReady: (roomId: string, isReady: boolean) => emit("room:ready", { roomId, isReady }),
@@ -206,4 +239,8 @@ export const SocketEvents = {
   hostFinish: (gameId: string) => emit("game:host-finish", { gameId }),
   timerStart: (gameId: string, durationMs: number) => emit("game:host-timer-start", { gameId, durationMs }),
   timerSkip: (gameId: string) => emit("game:host-timer-skip", { gameId }),
+  giveFloor: (gameId: string, seat: number | null, durationMs?: number) =>
+    emit("game:host-give-floor", { gameId, seat, durationMs }),
+  chatSend: (roomId: string, channel: ChatChannel, text: string) => emit("chat:send", { roomId, channel, text }),
+  chatHistory: (roomId: string) => emit("chat:history", { roomId }),
 };

@@ -31,7 +31,9 @@ describe("rolesRandomizer", () => {
     expect(roles).toContain(ROLES.MAFIA);
     expect(roles).toContain(ROLES.SHERIFF);
     expect(roles).toContain(ROLES.DOCTOR);
-    expect(roles.filter((role) => role === ROLES.INNOCENT).length).toBe(2);
+    expect(roles).toContain(ROLES.PUTANA);
+    // Extended now also seats one профурсетка, so plain innocents drop to 1.
+    expect(roles.filter((role) => role === ROLES.INNOCENT).length).toBe(1);
   });
 
   it("should correctly distribute roles for larger games with 9 players", () => {
@@ -60,10 +62,21 @@ describe("rolesRandomizer", () => {
     const distribution = getRoleDistribution(6, "Расширенный");
     const countsByRole = Object.fromEntries(distribution.map(({ role, count }) => [role, count]));
 
-    expect(countsByRole[ROLES.INNOCENT]).toBe(2);
+    expect(countsByRole[ROLES.INNOCENT]).toBe(1);
     expect(countsByRole[ROLES.SHERIFF]).toBe(1);
     expect(countsByRole[ROLES.DON]).toBe(1);
     expect(countsByRole[ROLES.MAFIA]).toBe(1);
     expect(countsByRole[ROLES.DOCTOR]).toBe(1);
+    expect(countsByRole[ROLES.PUTANA]).toBe(1);
+  });
+
+  it("always produces exactly one role per player across sizes and modes", () => {
+    for (const mode of ["Классический", "Расширенный"] as const) {
+      for (let n = 4; n <= 12; n += 1) {
+        const total = getRoleDistribution(n, mode).reduce((acc, r) => acc + r.count, 0);
+        expect(total).toBe(n);
+        expect(rolesRandomizer(n, mode).generatedArray.length).toBe(n);
+      }
+    }
   });
 });
