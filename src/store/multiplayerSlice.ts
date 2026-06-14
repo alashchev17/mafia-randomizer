@@ -256,6 +256,7 @@ export const multiplayerSlice = createSlice({
     applyRoomStarted: (state, action: PayloadAction<{ gameId: string }>) => {
       state.activeGameId = action.payload.gameId;
       if (state.room) state.room.gameId = action.payload.gameId;
+      state.chat = [];
     },
     applyPhaseChanged: (state, action: PayloadAction<{ phase: GamePhase; cycle: number }>) => {
       if (!state.game) return;
