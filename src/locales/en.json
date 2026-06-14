@@ -241,7 +241,8 @@
       "ratingDelta": "Rating delta: {{delta}}",
       "bannerNight": "Night falls — the city sleeps",
       "bannerNightFirst": "First night — acquaintance, no moves",
-      "bannerNightAct": "Night — make your move",
+      "bannerNightAct": "Night — wait for your turn",
+      "bannerYourTurn": "Your turn — make your move",
       "bannerDay": "Day — discuss and nominate",
       "bannerVoting": "Voting — choose who leaves",
       "bannerDead": "You're out — spectating",
@@ -258,7 +259,13 @@
       "logTitle": "Game log",
       "logEmpty": "No events yet",
       "nightChoicesTitle": "Night actions",
-      "nightChoicesEmpty": "No moves submitted yet"
+      "nightChoicesEmpty": "No moves submitted yet",
+      "nightFloorTitle": "Night turns",
+      "nightFloorMafia": "Mafia's turn",
+      "nightFloorSheriff": "Sheriff's turn",
+      "nightFloorDoctor": "Doctor's turn",
+      "nightFloorPutana": "Putana's turn",
+      "nightFloorClear": "End turn"
     },
     "chat": {
       "channel": {
@@ -297,6 +304,7 @@
       "hostNoNightKill": "Host: no night kill",
       "mafiaNoKillTie": "Mafia split — no kill",
       "doctorSaved": "Doctor saved the target",
+      "roleblocked": "#{{actorSeat}} visited #{{targetSeat}}",
       "checkResult": "#{{actorSeat}} checked #{{targetSeat}}: {{verdict}}",
       "checkMafia": "Mafia",
       "checkCitizen": "Citizen",

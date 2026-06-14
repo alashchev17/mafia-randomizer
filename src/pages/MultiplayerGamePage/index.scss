@@ -23,18 +23,19 @@
     flex: 1;
     min-height: 0;
     display: grid;
-    grid-template-columns: 1fr minmax(16rem, 22rem);
+    grid-template-columns: minmax(0, 1fr) minmax(16rem, 22rem);
     gap: 1rem;
 
     // Player: one column, the grid (main) flexes and scrolls, chat is capped.
     @media (max-width: 48rem) {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
       grid-template-rows: 1fr auto;
     }
   }
 
   &__main {
     min-height: 0;
+    min-width: 0;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
@@ -43,6 +44,7 @@
 
   &__side {
     min-height: 0;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     gap: 0.75rem;

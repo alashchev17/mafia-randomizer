@@ -83,7 +83,9 @@ export interface GameState {
 
 export interface CheckResult {
   targetSeat: number;
-  result: { isMafia?: boolean; isSheriff?: boolean };
+  // role: the checked player's exact role (sheriff/don checks). Drives the
+  // card-flip reveal. May be absent on older payloads.
+  result: { isMafia?: boolean; isSheriff?: boolean; role?: PlayerRole };
   cycle: number;
 }
 
@@ -129,6 +131,14 @@ interface MultiplayerState {
   game: GameState | null;
   privateChecks: CheckResult[];
   myNightAction: { type: NightActionType; targetSeat: number } | null;
+  // My last *committed* night action, kept across the phase change so the FE can
+  // hide the "same target two nights running" button for doctor/putana.
+  lastNightAction: { type: NightActionType; targetSeat: number; cycle: number } | null;
+  // The cycle whose day I should show the "you were visited" marker for.
+  myVisitedCycle: number | null;
+  // The night role/team the host has handed the floor to ("дать ход"); gates
+  // who may act this turn.
+  nightFloor: NightActionType | null;
   // Host-only: every player's locked night choice for the current cycle.
   nightChoices: { actorSeat: number; type: NightActionType; targetSeat: number }[];
   chat: ChatMessage[];
@@ -149,6 +159,9 @@ const initialState: MultiplayerState = {
   game: null,
   privateChecks: [],
   myNightAction: null,
+  lastNightAction: null,
+  myVisitedCycle: null,
+  nightFloor: null,
   nightChoices: [],
   chat: [],
   log: [],
@@ -174,6 +187,9 @@ export const multiplayerSlice = createSlice({
         state.game = null;
         state.privateChecks = [];
         state.myNightAction = null;
+        state.lastNightAction = null;
+        state.myVisitedCycle = null;
+        state.nightFloor = null;
         state.nightChoices = [];
         state.chat = [];
         state.log = [];
@@ -202,6 +218,9 @@ export const multiplayerSlice = createSlice({
       state.game = action.payload;
       state.activeGameId = action.payload.id;
       state.myNightAction = null;
+      state.lastNightAction = null;
+      state.myVisitedCycle = null;
+      state.nightFloor = null;
       state.nightChoices = [];
     },
     applyRoomPlayerJoined: (state, action: PayloadAction<RoomPlayer>) => {
@@ -245,6 +264,10 @@ export const multiplayerSlice = createSlice({
       state.game.cycle = action.payload.cycle;
       state.game.speakerSeat = null;
       state.myNightAction = null;
+      state.nightFloor = null;
+      // The visited marker only shows during the day after the visit; once a new
+      // night begins it's stale, so clear it.
+      if (action.payload.phase === "NIGHT") state.myVisitedCycle = null;
       if (cycleChanged) {
         state.game.currentNominations = [];
         state.game.currentVotes = [];
@@ -330,6 +353,15 @@ export const multiplayerSlice = createSlice({
     },
     applyNightActionAck: (state, action: PayloadAction<{ type: NightActionType; targetSeat: number }>) => {
       state.myNightAction = action.payload;
+      // Remember the committed target (stamped with the current cycle) so the
+      // "no same target two nights" guard can hide that seat's button next night.
+      state.lastNightAction = { ...action.payload, cycle: state.game?.cycle ?? 0 };
+    },
+    applyVisited: (state, action: PayloadAction<{ cycle: number }>) => {
+      state.myVisitedCycle = action.payload.cycle;
+    },
+    applyNightFloor: (state, action: PayloadAction<{ actionType: NightActionType | null }>) => {
+      state.nightFloor = action.payload.actionType;
     },
     applyNightChoice: (
       state,
@@ -377,6 +409,9 @@ export const multiplayerSlice = createSlice({
     selectSocketStatus: (state) => state.socketStatus,
     selectPrivateChecks: (state) => state.privateChecks,
     selectMyNightAction: (state) => state.myNightAction,
+    selectLastNightAction: (state) => state.lastNightAction,
+    selectMyVisitedCycle: (state) => state.myVisitedCycle,
+    selectNightFloor: (state) => state.nightFloor,
     selectNightChoices: (state) => state.nightChoices,
     selectChat: (state) => state.chat,
     selectLog: (state) => state.log,
@@ -408,6 +443,8 @@ export const {
   applyPlayerStatusChanged,
   applyGameFinished,
   applyNightActionAck,
+  applyVisited,
+  applyNightFloor,
   applyNightChoice,
   applyChatHistory,
   applyChatMessage,
@@ -424,6 +461,9 @@ export const {
   selectSocketStatus,
   selectPrivateChecks,
   selectMyNightAction,
+  selectLastNightAction,
+  selectMyVisitedCycle,
+  selectNightFloor,
   selectNightChoices,
   selectChat,
   selectLog,

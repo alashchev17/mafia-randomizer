@@ -10,6 +10,8 @@ import {
   applyChatHistory,
   applyChatMessage,
   applyNightActionAck,
+  applyVisited,
+  applyNightFloor,
   applyNightChoice,
   applyNightResult,
   applyNominated,
@@ -34,6 +36,7 @@ import {
   type LogEntry,
   type Nomination,
   type NightActionType,
+  type PlayerRole,
   type Room,
   type RoomPlayer,
   type Vote,
@@ -161,9 +164,14 @@ export function connectSocket(token: string, dispatch: AppDispatch): Socket {
   );
   socket.on(
     "game:check-result",
-    (p: { targetSeat: number; result: { isMafia?: boolean; isSheriff?: boolean }; cycle?: number }) =>
-      guarded("game:check-result", p, hasTargetSeat(p), () => dispatch(applyCheckResult(p)))
+    (p: {
+      targetSeat: number;
+      result: { isMafia?: boolean; isSheriff?: boolean; role?: PlayerRole };
+      cycle?: number;
+    }) => guarded("game:check-result", p, hasTargetSeat(p), () => dispatch(applyCheckResult(p)))
   );
+  socket.on("game:visited", (p: { cycle: number }) => dispatch(applyVisited(p)));
+  socket.on("game:night-floor", (p: { actionType: NightActionType | null }) => dispatch(applyNightFloor(p)));
   socket.on("game:player-status-changed", (p: Parameters<typeof applyPlayerStatusChanged>[0]) =>
     dispatch(applyPlayerStatusChanged(p))
   );
@@ -241,6 +249,8 @@ export const SocketEvents = {
   timerSkip: (gameId: string) => emit("game:host-timer-skip", { gameId }),
   giveFloor: (gameId: string, seat: number | null, durationMs?: number) =>
     emit("game:host-give-floor", { gameId, seat, durationMs }),
+  nightFloor: (gameId: string, actionType: NightActionType | null, durationMs?: number) =>
+    emit("game:host-night-floor", { gameId, actionType, durationMs }),
   chatSend: (roomId: string, channel: ChatChannel, text: string) => emit("chat:send", { roomId, channel, text }),
   chatHistory: (roomId: string) => emit("chat:history", { roomId }),
 };

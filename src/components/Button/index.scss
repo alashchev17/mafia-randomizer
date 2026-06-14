@@ -39,7 +39,7 @@
     }
   }
   &--third {
-    background-color: transparent;
+    background-color: var(--main-color);
     color: var(--third-color);
     box-shadow: var(--shadow-white);
     &:hover {

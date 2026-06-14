@@ -38,9 +38,11 @@
     align-items: center;
     gap: 0.4rem;
     width: 100%;
+    min-width: 0;
     margin: 0;
     font-size: 1.125rem;
     font-weight: 700;
+    flex-wrap: nowrap;
   }
 
   &__seat {
@@ -170,10 +172,39 @@
     }
   }
 
+  // Front (role) of the two-step check reveal: rotates in only after the
+  // backside has rotated out — the transition-delay sequences the two halves.
   &__image {
     display: block;
     width: 100%;
     height: auto;
+    backface-visibility: hidden;
+    transform: rotate3d(0, 1, 0, 0deg);
+    transition: transform 0.35s ease-in-out;
+    transition-delay: 0.35s;
+
+    &--hidden {
+      transition-delay: 0s;
+      transform: rotate3d(0, 1, 0, 90deg);
+    }
+  }
+
+  // Back (hidden card) of the two-step reveal: rotates out first (no delay).
+  &__reveal-back {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 8;
+    backface-visibility: hidden;
+    transform: rotate3d(0, 1, 0, 0deg);
+    transition: transform 0.35s ease-in-out;
+    transition-delay: 0.35s;
+
+    &--flipped {
+      transition-delay: 0s;
+      transform: rotate3d(0, 1, 0, 90deg);
+    }
   }
 
   &__muted {
@@ -261,6 +292,17 @@
   .mp-card__menu {
     opacity: 1;
     pointer-events: auto;
+  }
+}
+
+@media (max-width: 470px) {
+  .mp-card__title {
+    font-size: 1rem;
+  }
+
+  .mp-card__conn {
+    font-size: 0.62rem;
+    padding: 0.1rem 0.3rem;
   }
 }
 

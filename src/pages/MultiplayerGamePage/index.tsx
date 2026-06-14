@@ -8,15 +8,9 @@ import HostControls from "../../components/Multiplayer/HostControls";
 import MultiplayerDesk from "../../components/Multiplayer/MultiplayerDesk";
 import GameLog from "../../components/Multiplayer/GameLog";
 import Chat from "../../components/Multiplayer/Chat";
-import CheckResults from "../../components/Multiplayer/CheckResults";
+import NightFloorControls from "../../components/Multiplayer/NightFloorControls";
 import CenteredMessage from "../../components/CenteredMessage";
-import {
-  selectLastFinish,
-  selectNightChoices,
-  selectPrivateChecks,
-  selectRoom,
-  selectSocketStatus,
-} from "../../store/multiplayerSlice";
+import { selectLastFinish, selectNightChoices, selectRoom, selectSocketStatus } from "../../store/multiplayerSlice";
 import { useGetRoomQuery } from "../../store/api/roomsApi";
 import { useGetGameQuery } from "../../store/api/gamesApi";
 import { useAppSelector } from "../../hooks/useAppSelector";
@@ -63,10 +57,9 @@ const MultiplayerGamePage: FC = () => {
   const { data: room } = useGetRoomQuery(roomId, { skip: !roomId });
   const stateRoom = useAppSelector(selectRoom);
   const lastFinish = useAppSelector(selectLastFinish);
-  const checks = useAppSelector(selectPrivateChecks);
   const nightChoices = useAppSelector(selectNightChoices);
 
-  const { game, meId, viewerSeat, viewerRole, isHost, nominatedSeats } = useMultiplayerViewer();
+  const { game, meId, viewerSeat, isHost, nominatedSeats } = useMultiplayerViewer();
 
   const effectiveGameId = game?.id ?? room?.gameId ?? stateRoom?.gameId ?? null;
   useGetGameQuery(effectiveGameId ?? "", { skip: !effectiveGameId });
@@ -94,7 +87,6 @@ const MultiplayerGamePage: FC = () => {
   }
 
   const myDelta = meId ? lastFinish?.ratingDeltas.find((d) => d.userId === meId) : undefined;
-  const showChecks = viewerRole === "SHERIFF";
 
   return (
     <motion.section
@@ -142,11 +134,11 @@ const MultiplayerGamePage: FC = () => {
 
       <div className="mp-game__body">
         <div className="mp-game__main">
-          {showChecks ? <CheckResults results={checks} currentCycle={game.cycle} /> : null}
           <MultiplayerDesk />
         </div>
 
         <aside className="mp-game__side">
+          {isHost && game.phase === "NIGHT" && game.cycle > 0 ? <NightFloorControls /> : null}
           {isHost && game.phase === "NIGHT" ? (
             <div className="mp-game__night-choices">
               <h3>{t("multiplayer.game.nightChoicesTitle")}</h3>

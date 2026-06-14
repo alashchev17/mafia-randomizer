@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo } from "react";
+import { FC, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
@@ -64,10 +64,23 @@ const MultiplayerRoomPage: FC = () => {
     SocketEvents.roomStart(roomId);
   };
 
+  // Debounce the ready toggle so rapid taps can't spam room:ready and flicker
+  // the status. One effective toggle per lockout window.
+  const [readyBusy, setReadyBusy] = useState(false);
+  const readyTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(
+    () => () => {
+      if (readyTimer.current) clearTimeout(readyTimer.current);
+    },
+    []
+  );
+
   const onToggleReady = () => {
-    if (!me || !room) return;
+    if (!me || !room || readyBusy) return;
     const self = room.players.find((p) => p.userId === me.id);
     SocketEvents.roomReady(roomId, !(self?.isReady ?? false));
+    setReadyBusy(true);
+    readyTimer.current = setTimeout(() => setReadyBusy(false), 700);
   };
 
   if (!room) {
@@ -119,7 +132,7 @@ const MultiplayerRoomPage: FC = () => {
             {t("buttons.startGameNow")}
           </button>
         ) : (
-          <button type="button" className="button button--secondary" onClick={onToggleReady}>
+          <button type="button" className="button button--secondary" onClick={onToggleReady} disabled={readyBusy}>
             {selfPlayer?.isReady ? t("buttons.notReady") : t("buttons.ready")}
           </button>
         )}

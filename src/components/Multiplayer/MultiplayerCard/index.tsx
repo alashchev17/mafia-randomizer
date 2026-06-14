@@ -5,13 +5,22 @@ import { getRoleSrc } from "../../../utils/roleAssets";
 import { toRoleKey, useMultiplayerViewer } from "../../../hooks/useMultiplayerViewer";
 import { useAppSelector } from "../../../hooks/useAppSelector";
 import { SocketEvents } from "../../../store/socket";
-import { selectMyNightAction, type LifeStatus, type NightActionType } from "../../../store/multiplayerSlice";
+import {
+  selectLastNightAction,
+  selectMyNightAction,
+  selectMyVisitedCycle,
+  selectNightFloor,
+  selectPrivateChecks,
+  type LifeStatus,
+  type NightActionType,
+} from "../../../store/multiplayerSlice";
 
 import backsideSvg from "../../PlayerCard/PlayerCardBackside/backside.svg";
 import killedSvg from "../../GameDeskCard/assets/killed.svg";
 import deletedSvg from "../../GameDeskCard/assets/deleted.svg";
 import queuedSvg from "../../GameDeskCard/assets/queued.svg";
 import muteSvg from "../../GameDeskCard/assets/mute.svg";
+import putanaVisitedSvg from "../../GameDeskCard/assets/putana_visited.svg";
 import killBtnSvg from "../../GameDeskCard/assets/buttons/kill.svg";
 import queueBtnSvg from "../../GameDeskCard/assets/buttons/queue.svg";
 import deleteBtnSvg from "../../GameDeskCard/assets/buttons/delete.svg";
@@ -47,9 +56,13 @@ const FLOOR_DURATION_MS = 60_000;
 
 const MultiplayerCard: FC<Props> = ({ seatNumber }) => {
   const { t } = useTranslation();
-  const { game, meId, viewerSeat, isHost, isAlive, nightActionType, nominatedSeats, myNomination, myVote } =
+  const { game, meId, viewerSeat, viewerRole, isHost, isAlive, nightActionType, nominatedSeats, myNomination, myVote } =
     useMultiplayerViewer();
   const myNightAction = useAppSelector(selectMyNightAction);
+  const lastNightAction = useAppSelector(selectLastNightAction);
+  const nightFloor = useAppSelector(selectNightFloor);
+  const myVisitedCycle = useAppSelector(selectMyVisitedCycle);
+  const privateChecks = useAppSelector(selectPrivateChecks);
 
   const seat = game?.seats.find((s) => s.seatNumber === seatNumber);
   if (!game || !seat) return null;
@@ -60,6 +73,17 @@ const MultiplayerCard: FC<Props> = ({ seatNumber }) => {
   const roleKey = toRoleKey(seat.role);
   const faceSrc = roleKey ? getRoleSrc(roleKey) : backsideSvg;
   const muted = seat.mutedSinceCycle !== null && game.cycle - seat.mutedSinceCycle < MUTE_DURATION_CYCLES;
+
+  // Sheriff/Don check reveal: once this viewer has checked this seat, flip the
+  // card to the target's true role (latest check wins).
+  const canFlip = viewerRole === "SHERIFF" || viewerRole === "DON";
+  const checkedRole = canFlip
+    ? (privateChecks.filter((c) => c.targetSeat === seat.seatNumber && c.result.role).at(-1)?.result.role ?? null)
+    : null;
+  const revealed = checkedRole !== null;
+  const revealedSrc = checkedRole ? getRoleSrc(toRoleKey(checkedRole)!) : faceSrc;
+
+  const showVisited = isSelf && phase === "DAY" && myVisitedCycle === game.cycle;
 
   const isNominated = nominatedSeats.has(seat.seatNumber);
   const isMyVoteTarget = myVote?.targetSeat === seat.seatNumber;
@@ -74,14 +98,25 @@ const MultiplayerCard: FC<Props> = ({ seatNumber }) => {
   const canNominate =
     !!viewerSeat && hasFloor && isAlive && !myNomination && !isNominated && !isSelf && !dead && phase === "DAY";
   const canVote = !!viewerSeat && isAlive && phase === "VOTING" && isNominated && !dead;
+  // Doctor/Putana can't pick the same player two nights running — hide that
+  // seat's button this night rather than letting the click error out.
+  const repeatBlocked =
+    (nightActionType === "DOCTOR_PROTECT" || nightActionType === "ROLEBLOCK") &&
+    lastNightAction?.type === nightActionType &&
+    lastNightAction.targetSeat === seat.seatNumber &&
+    game.cycle === lastNightAction.cycle + 1;
   const canNightAct =
     !!viewerSeat &&
     isAlive &&
-    !isSelf &&
+    // Doctor may heal self; every other night role still can't self-target.
+    (!isSelf || nightActionType === "DOCTOR_PROTECT") &&
     !dead &&
     phase === "NIGHT" &&
     game.cycle > 0 &&
     nightActionType !== null &&
+    // Gated: only act when the host has handed your role/team the floor.
+    nightFloor === nightActionType &&
+    !repeatBlocked &&
     // The night choice is final — once submitted, no re-pick.
     !myNightAction;
 
@@ -115,7 +150,25 @@ const MultiplayerCard: FC<Props> = ({ seatNumber }) => {
       </h3>
 
       <div className="mp-card__card">
-        <img className="mp-card__image" src={faceSrc} alt="" />
+        {/* Two-step check reveal (sheriff/don): backside rotates out first, then
+            the role front rotates in (sequenced via transition-delay). */}
+        <img
+          className={`mp-card__image${canFlip && !revealed ? " mp-card__image--hidden" : ""}`}
+          src={revealedSrc}
+          alt=""
+        />
+        {canFlip ? (
+          <img
+            className={`mp-card__reveal-back${revealed ? " mp-card__reveal-back--flipped" : ""}`}
+            src={faceSrc}
+            alt=""
+          />
+        ) : null}
+        {showVisited ? (
+          <div className="mp-card__status">
+            <img src={putanaVisitedSvg} alt="" />
+          </div>
+        ) : null}
         {showQueueRibbon ? (
           <span
             className={`mp-card__queue${isNominated ? " mp-card__queue--on" : ""}${

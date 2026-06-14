@@ -41,6 +41,8 @@ const formatEntry = (t: TFunction, entry: LogEntry): string => {
       return t("multiplayer.log.mafiaNoKillTie");
     case "DOCTOR_SAVED":
       return t("multiplayer.log.doctorSaved");
+    case "ROLEBLOCKED":
+      return t("multiplayer.log.roleblocked", payload);
     case "CHECK_RESULT": {
       const { key } = checkVerdict({
         isMafia: payload.isMafia as boolean | undefined,

@@ -4,18 +4,25 @@ import { useTranslation } from "react-i18next";
 import MultiplayerCard from "../MultiplayerCard";
 import MultiplayerTimer from "../MultiplayerTimer";
 import { useMultiplayerViewer } from "../../../hooks/useMultiplayerViewer";
+import { useAppSelector } from "../../../hooks/useAppSelector";
+import { selectMyNightAction, selectNightFloor } from "../../../store/multiplayerSlice";
 
 import "./index.scss";
 
 const MultiplayerDesk: FC = () => {
   const { t } = useTranslation();
   const { game, viewerSeat, isAlive, isHost, nightActionType } = useMultiplayerViewer();
+  const nightFloor = useAppSelector(selectNightFloor);
+  const myNightAction = useAppSelector(selectMyNightAction);
 
   if (!game) return null;
 
   const nightBannerKey = () => {
     if (game.cycle === 0) return "multiplayer.game.bannerNightFirst";
-    return nightActionType ? "multiplayer.game.bannerNightAct" : "multiplayer.game.bannerNight";
+    if (!nightActionType) return "multiplayer.game.bannerNight";
+    // It's my role's turn and I haven't acted yet → prompt me.
+    if (nightFloor === nightActionType && !myNightAction) return "multiplayer.game.bannerYourTurn";
+    return "multiplayer.game.bannerNightAct";
   };
 
   let banner = "";

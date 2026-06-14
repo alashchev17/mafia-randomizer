@@ -242,7 +242,8 @@
       "ratingDelta": "Изменение рейтинга: {{delta}}",
       "bannerNight": "Наступает ночь — город спит",
       "bannerNightFirst": "Первая ночь — знакомство, ходов нет",
-      "bannerNightAct": "Ночь — ваш ход",
+      "bannerNightAct": "Ночь — ждите своего хода",
+      "bannerYourTurn": "Ваш ход — действуйте",
       "bannerDay": "День — обсуждение, выставите игрока",
       "bannerVoting": "Голосование — выберите, кого снять",
       "bannerDead": "Вы выбыли — наблюдаете",
@@ -259,7 +260,13 @@
       "logTitle": "Лог партии",
       "logEmpty": "Событий пока нет",
       "nightChoicesTitle": "Ночные действия",
-      "nightChoicesEmpty": "Игроки ещё не сделали ход"
+      "nightChoicesEmpty": "Игроки ещё не сделали ход",
+      "nightFloorTitle": "Ночные ходы",
+      "nightFloorMafia": "Ход мафии",
+      "nightFloorSheriff": "Ход шерифа",
+      "nightFloorDoctor": "Ход доктора",
+      "nightFloorPutana": "Ход профурсетки",
+      "nightFloorClear": "Закончить ход"
     },
     "chat": {
       "channel": {
@@ -298,6 +305,7 @@
       "hostNoNightKill": "Ведущий: без ночного убийства",
       "mafiaNoKillTie": "Мафия не договорилась — нет убийства",
       "doctorSaved": "Доктор спас цель",
+      "roleblocked": "№{{actorSeat}} навестил(а) №{{targetSeat}}",
       "checkResult": "№{{actorSeat}} проверил №{{targetSeat}}: {{verdict}}",
       "checkMafia": "Мафия",
       "checkCitizen": "Мирный",
