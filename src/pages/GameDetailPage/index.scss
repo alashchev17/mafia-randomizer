@@ -1,0 +1,253 @@
+.game-detail {
+  // The parent .container is a centering flexbox; without an explicit width the
+  // section sizes to max-content and overflows the viewport. Match ProfilePage.
+  width: 100%;
+  max-width: 920px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding-bottom: 40px;
+
+  &--centered {
+    justify-content: center;
+    min-height: 50vh;
+  }
+
+  &__summary {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__winner {
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: 28px;
+    font-weight: 900;
+    border-radius: 18px;
+    border: 2px solid var(--main-text-color);
+    &--innocent {
+      background-color: var(--secondary-color);
+    }
+    &--mafia {
+      background-color: var(--main-color);
+    }
+    &--none {
+      background-color: var(--main-color-transparent);
+    }
+  }
+
+  &__reason {
+    font-size: 15px;
+    color: var(--secondary-text-color);
+  }
+
+  &__subtitle {
+    margin-top: 12px;
+    font-size: 24px;
+    font-weight: 700;
+  }
+
+  &__seats {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 18px;
+    width: 100%;
+    max-width: 760px;
+  }
+
+  &__seat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+    padding: 16px 12px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background-color: var(--main-color-transparent);
+    text-align: center;
+  }
+
+  &__seat-num {
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--secondary-text-color);
+  }
+
+  &__seat-card {
+    width: 64px;
+    height: 83px;
+    object-fit: contain;
+  }
+
+  &__seat-name {
+    font-size: 14px;
+    font-weight: 700;
+    word-break: break-word;
+  }
+
+  &__seat-role {
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  &__seat-life {
+    font-size: 12px;
+    color: var(--secondary-text-color);
+  }
+
+  &__log {
+    list-style: none;
+    margin: 0;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    max-width: 760px;
+    border-radius: 14px;
+    background-color: var(--main-color-transparent);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  &__log-item {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    font-size: 15px;
+  }
+
+  &__log-phase {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 6px 0;
+  }
+
+  &__log-phase-line {
+    flex: 1;
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.14);
+  }
+
+  &__log-phase-label {
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08rem;
+    color: var(--secondary-text-color);
+    white-space: nowrap;
+  }
+
+  &__log-cycle {
+    flex-shrink: 0;
+    min-width: 24px;
+    height: 24px;
+    padding: 0 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.1);
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--secondary-text-color);
+  }
+
+  &__log-text {
+    flex: 1;
+    min-width: 0;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+  }
+
+  &__log-time {
+    flex-shrink: 0;
+    font-size: 12px;
+    color: var(--secondary-text-color);
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__hint,
+  &__error {
+    color: var(--secondary-text-color);
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .game-detail {
+    gap: 16px;
+    padding: 0 4px 28px;
+
+    &__winner {
+      padding: 10px 18px;
+      font-size: 22px;
+      border-radius: 14px;
+    }
+
+    &__reason {
+      font-size: 13px;
+      text-align: center;
+    }
+
+    &__subtitle {
+      margin-top: 8px;
+      font-size: 20px;
+    }
+
+    &__seats {
+      grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+      gap: 10px;
+    }
+
+    &__seat {
+      padding: 12px 8px;
+      gap: 4px;
+      border-radius: 12px;
+    }
+
+    &__seat-card {
+      width: 52px;
+      height: 67px;
+    }
+
+    &__seat-name {
+      font-size: 13px;
+    }
+
+    &__log {
+      padding: 12px 14px;
+    }
+
+    &__log-item {
+      gap: 10px;
+      font-size: 14px;
+    }
+
+    &__log-cycle {
+      min-width: 20px;
+      height: 20px;
+    }
+
+    // Drop the absolute timestamp on narrow screens — the cycle marker and
+    // phase dividers already carry the ordering, and the row stays one line.
+    &__log-time {
+      display: none;
+    }
+  }
+}
+
+@media screen and (max-width: 470px) {
+  .game-detail {
+    // Two even columns read better than cramped auto-fill thirds on phones.
+    &__seats {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+}

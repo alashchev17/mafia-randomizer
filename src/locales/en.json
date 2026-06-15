@@ -11,7 +11,8 @@
     "multiplayerLanding": "Mafia | Multiplayer",
     "multiplayerJoin": "Mafia | Join a room",
     "multiplayerRoom": "Mafia | Room",
-    "multiplayerGame": "Mafia | Match"
+    "multiplayerGame": "Mafia | Match",
+    "gameDetailPage": "Mafia | Game details"
   },
   "headers": {
     "mainHeader": "Mafia (roles randomizer)",
@@ -124,6 +125,7 @@
     "openSettings": "Change settings"
   },
   "labels": {
+    "404": "Page not found",
     "amountOfPlayers": "Amount of players",
     "amountOfPlayersRange": "from 4 to 12",
     "playersEntity": "players",
@@ -138,7 +140,6 @@
     "gameTime": "Time of day",
     "gameCycle": "Game cycle",
     "leaveReason": "The reason for the rise",
-    "404": "Page not found",
     "reason404": "The page you are trying to open has been deleted, its name has changed, or it is temporarily unavailable.",
     "email": "Email",
     "username": "Username",
@@ -312,7 +313,7 @@
       "checkNotSheriff": "not Sheriff",
       "penalty": "#{{targetSeat}} foul ({{penaltyCount}})",
       "banned": "#{{targetSeat}} removed (4 fouls)",
-      "gameFinished": "Game over — {{winnerLabel}}",
+      "gameFinished": "Game over",
       "noWinner": "no winner"
     },
     "errors": {
@@ -382,8 +383,18 @@
     "lifeStatus": {
       "ALIVE": "Survived",
       "KILLED": "Killed",
-      "REMOVED": "Removed",
+      "REMOVED": "Voted out",
       "BANNED": "Banned"
+    },
+    "noHostedGames": "No hosted games yet",
+    "tabs": {
+      "played": "Played games",
+      "hosted": "Hosted games"
+    },
+    "hosted": {
+      "players": "Players: {{n}}",
+      "winner": "{{team}} won",
+      "noWinner": "No winner"
     }
   },
   "notifications": {
@@ -395,5 +406,20 @@
     "timerSkipped": "The timer was successfully skipped!",
     "singlePlayerQueued": "Player №{{playerId}} - the only player queued!",
     "confirmPrematureFinish": "Do you really want to finish the game?"
+  },
+  "gameDetail": {
+    "title": "Game details",
+    "loading": "Loading…",
+    "error": "Failed to load this game",
+    "back": "Back to profile",
+    "players": "Players",
+    "log": "Game log",
+    "logEmpty": "No log entries",
+    "noWinner": "No winner",
+    "finishReason": {
+      "ALL_MAFIA_ELIMINATED": "All mafia eliminated",
+      "MAFIA_PARITY": "Mafia reached parity",
+      "HOST_TERMINATED": "Ended by host"
+    }
   }
 }

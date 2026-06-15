@@ -1,4 +1,5 @@
 import { FC, useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { skipToken } from "@reduxjs/toolkit/query";
@@ -6,7 +7,12 @@ import { skipToken } from "@reduxjs/toolkit/query";
 import Avatar from "../../components/Avatar";
 import CenteredMessage from "../../components/CenteredMessage";
 import { useMeQuery } from "../../store/api/authApi";
-import { useListGamesQuery, type GameListItem } from "../../store/api/gamesApi";
+import {
+  useListGamesQuery,
+  useListHostedGamesQuery,
+  type GameListItem,
+  type HostedGameListItem,
+} from "../../store/api/gamesApi";
 import { useLanguage } from "../../contexts/LanguageContext";
 import { pagesAnimate, pagesInitial, pagesTransition } from "../../utils/pagesAnimation";
 import { formatRatingDelta } from "../../utils/format";
@@ -14,6 +20,8 @@ import { formatRatingDelta } from "../../utils/format";
 import "./index.scss";
 
 const DEFAULT_LIMIT = 20;
+
+type HistoryTab = "played" | "hosted";
 
 const formatDate = (iso: string | null, language: string): string => {
   if (!iso) return "—";
@@ -45,15 +53,21 @@ const ProfilePage: FC = () => {
   const { t } = useTranslation();
   const { language } = useLanguage();
   const { data: user, isLoading: userLoading, error: userError } = useMeQuery();
+  const [tab, setTab] = useState<HistoryTab>("played");
   const [offset, setOffset] = useState(0);
 
-  const gamesArg = user ? { userId: user.id, limit: DEFAULT_LIMIT, offset } : skipToken;
-  const {
-    data: games,
-    isLoading: gamesLoading,
-    isFetching: gamesFetching,
-    error: gamesError,
-  } = useListGamesQuery(gamesArg);
+  const playedArg = user && tab === "played" ? { userId: user.id, limit: DEFAULT_LIMIT, offset } : skipToken;
+  const hostedArg = user && tab === "hosted" ? { userId: user.id, limit: DEFAULT_LIMIT, offset } : skipToken;
+  const played = useListGamesQuery(playedArg);
+  const hosted = useListHostedGamesQuery(hostedArg);
+  const active = tab === "played" ? played : hosted;
+  const { data: games, isLoading: gamesLoading, isFetching: gamesFetching, error: gamesError } = active;
+
+  const selectTab = (next: HistoryTab) => {
+    if (next === tab) return;
+    setTab(next);
+    setOffset(0);
+  };
 
   useEffect(() => {
     document.title = t("titles.profilePage");
@@ -121,44 +135,95 @@ const ProfilePage: FC = () => {
       </section>
 
       <section className="profile__history">
-        <h2 className="profile__history-title">{t("profile.history")}</h2>
+        <div className="profile__tabs" role="tablist">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={tab === "played"}
+            className={`profile__tab${tab === "played" ? " profile__tab--active" : ""}`}
+            onClick={() => selectTab("played")}
+          >
+            {t("profile.tabs.played")}
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={tab === "hosted"}
+            className={`profile__tab${tab === "hosted" ? " profile__tab--active" : ""}`}
+            onClick={() => selectTab("hosted")}
+          >
+            {t("profile.tabs.hosted")}
+          </button>
+        </div>
 
         {gamesLoading ? <p className="profile__hint">{t("profile.loading")}</p> : null}
 
         {gamesError ? <p className="profile__error">{t("profile.gamesError")}</p> : null}
 
-        {!gamesLoading && !gamesError && total === 0 ? <p className="profile__hint">{t("profile.noGames")}</p> : null}
+        {!gamesLoading && !gamesError && total === 0 ? (
+          <p className="profile__hint">{tab === "played" ? t("profile.noGames") : t("profile.noHostedGames")}</p>
+        ) : null}
 
         {!gamesError && total > 0 ? (
           <>
             <ul className={`profile__games${gamesFetching ? " profile__games--fetching" : ""}`}>
-              {games?.items.map((item: GameListItem) => {
-                const delta = item.participant.ratingEvent?.delta ?? 0;
-                const teamClass = `profile__team profile__team--${item.participant.team.toLowerCase()}`;
-                const resultClass = item.participant.won
-                  ? "profile__result profile__result--won"
-                  : "profile__result profile__result--lost";
-                return (
-                  <li className="profile__game" key={item.game.id}>
-                    <div className="profile__game-left">
-                      <span className="profile__seat">#{item.participant.seatNumber}</span>
-                      <span className={teamClass}>{t(`profile.role.${item.participant.role}`)}</span>
-                      <span className="profile__life">{t(`profile.lifeStatus.${item.participant.lifeStatus}`)}</span>
-                    </div>
-                    <div className="profile__game-middle">
-                      <span className={resultClass}>
-                        {item.participant.won ? t("profile.result.won") : t("profile.result.lost")}
-                      </span>
-                    </div>
-                    <div className="profile__game-right">
-                      <span className={deltaClass(delta)}>
-                        {item.participant.ratingEvent ? formatRatingDelta(delta) : "—"}
-                      </span>
-                      <span className="profile__date">{formatDateTime(item.game.finishedAt, language)}</span>
-                    </div>
-                  </li>
-                );
-              })}
+              {tab === "played"
+                ? played.data?.items.map((item: GameListItem) => {
+                    const delta = item.participant.ratingEvent?.delta ?? 0;
+                    const teamClass = `profile__team profile__team--${item.participant.team.toLowerCase()}`;
+                    const resultClass = item.participant.won
+                      ? "profile__result profile__result--won"
+                      : "profile__result profile__result--lost";
+                    return (
+                      <li className="profile__game" key={item.game.id}>
+                        <Link className="profile__game-link" to={`/games/${item.game.id}`}>
+                          <div className="profile__game-left">
+                            <span className="profile__seat">#{item.participant.seatNumber}</span>
+                            <span className={teamClass}>{t(`profile.role.${item.participant.role}`)}</span>
+                            <span className="profile__life">
+                              {t(`profile.lifeStatus.${item.participant.lifeStatus}`)}
+                            </span>
+                          </div>
+                          <div className="profile__game-middle">
+                            <span className={resultClass}>
+                              {item.participant.won ? t("profile.result.won") : t("profile.result.lost")}
+                            </span>
+                          </div>
+                          <div className="profile__game-right">
+                            <span className={deltaClass(delta)}>
+                              {item.participant.ratingEvent ? formatRatingDelta(delta) : "—"}
+                            </span>
+                            <span className="profile__date">{formatDateTime(item.game.finishedAt, language)}</span>
+                          </div>
+                        </Link>
+                      </li>
+                    );
+                  })
+                : hosted.data?.items.map((item: HostedGameListItem) => {
+                    const winnerKey = item.game.winner === "MAFIA" ? "mafia" : "citizens";
+                    const winnerClass = `profile__team profile__team--${winnerKey}`;
+                    return (
+                      <li className="profile__game" key={item.game.id}>
+                        <Link className="profile__game-link" to={`/games/${item.game.id}`}>
+                          <div className="profile__game-left">
+                            <span className="profile__players">
+                              {t("profile.hosted.players", { n: item.playersCount })}
+                            </span>
+                          </div>
+                          <div className="profile__game-middle">
+                            <span className={winnerClass}>
+                              {item.game.winner
+                                ? t("profile.hosted.winner", { team: t(`profile.team.${item.game.winner}`) })
+                                : t("profile.hosted.noWinner")}
+                            </span>
+                          </div>
+                          <div className="profile__game-right">
+                            <span className="profile__date">{formatDateTime(item.game.finishedAt, language)}</span>
+                          </div>
+                        </Link>
+                      </li>
+                    );
+                  })}
             </ul>
 
             <div className="profile__pagination">

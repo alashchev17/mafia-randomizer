@@ -1,8 +1,16 @@
 import { baseApi } from "./baseApi";
 // Re-export the canonical game enums so consumers can import them from here.
-import type { GameState, GameStatus, GameWinner, LifeStatus, PlayerRole, PlayerTeam } from "../multiplayerSlice";
+import type {
+  GameState,
+  GameStatus,
+  GameWinner,
+  LifeStatus,
+  LogEntry,
+  PlayerRole,
+  PlayerTeam,
+} from "../multiplayerSlice";
 
-export type { GameStatus, GameWinner, LifeStatus, PlayerRole, PlayerTeam } from "../multiplayerSlice";
+export type { GameStatus, GameWinner, LifeStatus, LogEntry, PlayerRole, PlayerTeam } from "../multiplayerSlice";
 
 export interface GameSummary {
   id: string;
@@ -47,17 +55,37 @@ export interface ListGamesArgs {
   offset?: number;
 }
 
+export interface HostedGameListItem {
+  game: GameSummary;
+  playersCount: number;
+}
+
+export interface HostedGamesPage {
+  items: HostedGameListItem[];
+  total: number;
+  limit: number;
+  offset: number;
+}
+
 export const gamesApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     listGames: build.query<GamesPage, ListGamesArgs>({
       query: (args) => ({ url: "/games", params: args }),
       providesTags: (_result, _err, arg) => [{ type: "Game", id: `user-${arg.userId}` }, "Game"],
     }),
+    listHostedGames: build.query<HostedGamesPage, ListGamesArgs>({
+      query: (args) => ({ url: "/games/hosted", params: args }),
+      providesTags: (_result, _err, arg) => [{ type: "Game", id: `host-${arg.userId}` }, "Game"],
+    }),
     getGame: build.query<GameState, string>({
       query: (gameId) => ({ url: `/games/${gameId}` }),
       providesTags: (_r, _e, gameId) => [{ type: "Game", id: gameId }],
     }),
+    getGameLog: build.query<LogEntry[], string>({
+      query: (gameId) => ({ url: `/games/${gameId}/log` }),
+      providesTags: (_r, _e, gameId) => [{ type: "Game", id: `log-${gameId}` }],
+    }),
   }),
 });
 
-export const { useListGamesQuery, useGetGameQuery } = gamesApi;
+export const { useListGamesQuery, useListHostedGamesQuery, useGetGameQuery, useGetGameLogQuery } = gamesApi;

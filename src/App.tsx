@@ -15,6 +15,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ProfilePage from "./pages/ProfilePage";
+import GameDetailPage from "./pages/GameDetailPage";
 import RequireAuth from "./components/RequireAuth";
 
 import { INotification } from "./models";
@@ -100,6 +101,14 @@ const App: FC = () => {
               element={
                 <RequireAuth>
                   <ProfilePage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/games/:gameId"
+              element={
+                <RequireAuth>
+                  <GameDetailPage />
                 </RequireAuth>
               }
             />

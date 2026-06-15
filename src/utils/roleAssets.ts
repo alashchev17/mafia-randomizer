@@ -31,6 +31,8 @@ export const ROLE_TITLE_KEY_MAP: Record<RoleKey, string> = {
 
 export const getRoleSrc = (role: RoleKey): string => ROLE_SRC_MAP[role] ?? "";
 
+export const getRoleSrcByKey = (role: keyof typeof ROLES): string => getRoleSrc(ROLES[role]);
+
 export const getRoleTitleKey = (role: RoleKey): string => ROLE_TITLE_KEY_MAP[role] ?? "";
 
 export const isMafiaRole = (role: RoleKey): boolean => MAFIA_ROLES.includes(role);

@@ -11,7 +11,8 @@
     "multiplayerLanding": "Мафия | Мультиплеер",
     "multiplayerJoin": "Мафия | Присоединиться",
     "multiplayerRoom": "Мафия | Комната",
-    "multiplayerGame": "Мафия | Партия"
+    "multiplayerGame": "Мафия | Партия",
+    "gameDetailPage": "Мафия | Детали игры"
   },
   "headers": {
     "mainHeader": "Рандомизатор ролей",
@@ -79,7 +80,6 @@
       "shortDescription": "Классический + Доктор"
     }
   },
-
   "buttons": {
     "startGame": "Начать игру",
     "startMultiplayerGame": "Мультиплеер",
@@ -125,6 +125,7 @@
     "openSettings": "Изменить настройки"
   },
   "labels": {
+    "404": "Страница не найдена",
     "amountOfPlayers": "Количество игроков",
     "amountOfPlayersRange": "от 4 до 12",
     "playersEntity": "игроков",
@@ -139,7 +140,6 @@
     "gameTime": "Время суток",
     "gameCycle": "Игровой круг",
     "leaveReason": "Причина подъёма",
-    "404": "Страница не найдена",
     "reason404": "Страница, которую вы пытаетесь открыть, была удалена, её имя изменилось или она является временно недоступной.",
     "email": "Email",
     "username": "Имя пользователя",
@@ -313,7 +313,7 @@
       "checkNotSheriff": "не Шериф",
       "penalty": "№{{targetSeat}} — фол ({{penaltyCount}})",
       "banned": "№{{targetSeat}} удалён (4 фола)",
-      "gameFinished": "Игра окончена — {{winnerLabel}}",
+      "gameFinished": "Игра окончена",
       "noWinner": "без победителя"
     },
     "errors": {
@@ -383,8 +383,18 @@
     "lifeStatus": {
       "ALIVE": "Выжил",
       "KILLED": "Убит",
-      "REMOVED": "Удалён",
+      "REMOVED": "Повешен",
       "BANNED": "Удалён (фолы)"
+    },
+    "noHostedGames": "Пока нет проведённых игр",
+    "tabs": {
+      "played": "Сыгранные игры",
+      "hosted": "Проведённые игры"
+    },
+    "hosted": {
+      "players": "Игроков: {{n}}",
+      "winner": "Победа: {{team}}",
+      "noWinner": "Без победителя"
     }
   },
   "notifications": {
@@ -396,5 +406,20 @@
     "timerSkipped": "Таймер был пропущен успешно!",
     "singlePlayerQueued": "Игрок №{{playerId}} - единственный выставленный игрок!",
     "confirmPrematureFinish": "Вы действительно хотите завершить партию?"
+  },
+  "gameDetail": {
+    "title": "Детали игры",
+    "loading": "Загрузка…",
+    "error": "Не удалось загрузить игру",
+    "back": "Назад в профиль",
+    "players": "Игроки",
+    "log": "Журнал игры",
+    "logEmpty": "Нет записей",
+    "noWinner": "Без победителя",
+    "finishReason": {
+      "ALL_MAFIA_ELIMINATED": "Вся мафия выбыла",
+      "MAFIA_PARITY": "Мафия сравнялась по числу",
+      "HOST_TERMINATED": "Завершено ведущим"
+    }
   }
 }
