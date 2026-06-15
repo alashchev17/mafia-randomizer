@@ -176,7 +176,7 @@ const ProfilePage: FC = () => {
                       : "profile__result profile__result--lost";
                     return (
                       <li className="profile__game" key={item.game.id}>
-                        <Link className="profile__game-link" to={`/games/${item.game.id}`}>
+                        <Link className="profile__game-link" to={`/profile/games/${item.game.id}`}>
                           <div className="profile__game-left">
                             <span className="profile__seat">#{item.participant.seatNumber}</span>
                             <span className={teamClass}>{t(`profile.role.${item.participant.role}`)}</span>
@@ -204,7 +204,7 @@ const ProfilePage: FC = () => {
                     const winnerClass = `profile__team profile__team--${winnerKey}`;
                     return (
                       <li className="profile__game" key={item.game.id}>
-                        <Link className="profile__game-link" to={`/games/${item.game.id}`}>
+                        <Link className="profile__game-link" to={`/profile/games/${item.game.id}`}>
                           <div className="profile__game-left">
                             <span className="profile__players">
                               {t("profile.hosted.players", { n: item.playersCount })}

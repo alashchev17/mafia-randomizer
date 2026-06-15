@@ -105,7 +105,7 @@ const App: FC = () => {
               }
             />
             <Route
-              path="/games/:gameId"
+              path="/profile/games/:gameId"
               element={
                 <RequireAuth>
                   <GameDetailPage />
