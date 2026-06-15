@@ -201,7 +201,10 @@ const ProfilePage: FC = () => {
                   })
                 : hosted.data?.items.map((item: HostedGameListItem) => {
                     const winnerKey = item.game.winner === "MAFIA" ? "mafia" : "citizens";
-                    const winnerClass = `profile__team profile__team--${winnerKey}`;
+                    const noWinner = item.game.winner === null;
+                    const winnerClass = noWinner
+                      ? `profile__team profile__team--no-winner`
+                      : `profile__team profile__team--${winnerKey}`;
                     return (
                       <li className="profile__game" key={item.game.id}>
                         <Link className="profile__game-link" to={`/profile/games/${item.game.id}`}>
